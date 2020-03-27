@@ -1,0 +1,178 @@
+<!doctype html>
+<html class="no-js" lang="de">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>sample web-app</title>
+  <link rel="stylesheet" type="text/css" href="https://cdn.gr.ch/redesign2016/css/main.v2.css">
+  <link rel="stylesheet" type="text/css" href="./css/app.css?d=2020-02-11-1356">
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="web-app">
+    <script src="https://kendo.cdn.telerik.com/2020.1.114/js/kendo.all.min.js"></script>
+    <h1>Hello World</h1>
+    <div class="demo-section k-content wide">
+      <div id="tabstrip">
+      <ul>
+        <li class="k-state-active">
+          Fische
+        </li>
+        <li>
+          Gesuche
+        </li>
+        <li>
+          Bestimmungen
+        </li>
+      </ul>
+      <div class="panel panel-1">
+        <h2>Fische</h2>
+        <div id="chart"></div>
+      </div>
+      <div class="panel">
+        <h2>Gesuche</h2>
+        <div id="chart-2"></div>
+      </div>
+      <div class="panel">
+        <h2>Bestimmungen</h2>
+        <div class="container">
+          <div class="k-card">
+            <div class="k-card-header">
+                <h5 class="k-card-title">Gesuche Einheimische</h5>
+                <h6 class="k-card-subtitle">Wohnsitz in Graubünden</h6>
+            </div>
+
+            <div class="k-card-body">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat.</p>
+            </div>
+            <div class="k-card-actions k-card-actions-stretched">
+                <span class="k-card-action"><span class="k-button k-flat k-primary">Gesuch einreichen</span></span>
+                <span class="k-card-action"><span class="k-button k-flat k-primary">Nachweis</span></span>
+            </div>
+        </div>
+
+        <div class="k-card">
+            <div class="k-card-header">
+                <h5 class="k-card-title">Gesuche Ausserkantonal</h5>
+            </div>
+
+            <div class="k-card-body">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat.</p>
+                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+            <div class="k-card-actions k-card-actions-stretched">
+                <span class="k-card-action"><span class="k-button k-flat k-primary">Gesuch einreichen</span></span>
+                <span class="k-card-action"><span class="k-button k-flat k-primary">Datei Upload</span></span>
+            </div>
+        </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <script>
+    function createChart(data) {
+      $("#chart").kendoChart({
+        title: {
+          text: "Fische"
+        },
+        legend: {
+          position: "bottom"
+        },
+        seriesDefaults: {
+          type: "column",
+          stack: true
+        },
+        series: data,
+        valueAxis: {
+          line: {
+            visible: false
+          }
+        },
+        categoryAxis: {
+          categories: ["Januar", "Februar", "März", "April", "Mai", "Juni"],
+          majorGridLines: {
+            visible: false
+          }
+        },
+        tooltip: {
+          visible: true,
+          format: "{0}"
+        }
+      });
+    }
+
+    function createChart2(data) {
+            $("#chart-2").kendoChart({
+                title: {
+                    text: "Fischerei Gesuche"
+                },
+                legend: {
+                    visible: false
+                },
+                seriesDefaults: {
+                    type: "bar"
+                },
+                series: data,
+                valueAxis: {
+                    max: 140000,
+                    line: {
+                        visible: false
+                    },
+                    minorGridLines: {
+                        visible: true
+                    },
+                    labels: {
+                        rotation: "auto"
+                    }
+                },
+                categoryAxis: {
+                    categories:["Januar", "Februar", "März", "April", "Mai", "Juni"],
+                    majorGridLines: {
+                        visible: false
+                    }
+                },
+                tooltip: {
+                    visible: true,
+                    template: "#= series.name #: #= value #"
+                }
+            });
+        }
+
+    $(document).ready(function() {
+      // cache buster
+      var cb = "?d=" + Date.now();
+      var urlPrefix = "https://cdn.gr.ch/dev-redesign2016/web-app/sample-app-1/";
+      var series = $.getJSON( urlPrefix + "feeds/data.json" + cb);
+      var series2 = $.getJSON(urlPrefix + "feeds/data2.json" + cb);
+      series.then(function(data) {
+        console.log(data);
+        createChart(data);
+      });
+      series2.then(function(data) {
+        createChart2(data);
+      });
+
+      $("#tabstrip").kendoTabStrip({
+        animation:  {
+              open: {
+                effects: "fadeIn"
+              }
+            }
+          });
+    });
+    </script>
+  </div>
+</body>
+
+</html>
