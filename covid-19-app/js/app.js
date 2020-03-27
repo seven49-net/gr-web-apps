@@ -6,7 +6,7 @@
       function leadingZero(t) {
         var o = (t < 10 ? '0' : '') + t;
         return o;
-      };
+      }
       var date = new Date(d);
       return leadingZero(date.getDate()) + "." + leadingZero((date.getMonth() + 1)) + "." + date.getFullYear();
     }
