@@ -2,6 +2,48 @@
   window.ca = (function () {
     var url = "https://www.gr.ch/DE/institutionen/verwaltung/djsg/ga/coronavirus/_layouts/15/GenericDataFeed/feed.aspx?PageID=26&ID=g_1175d522_e609_4287_93af_d14c9efd5218&FORMAT=JSONRAW";
 
+    var texts = {
+      title: {
+        de: "COVID-19 Entwicklung im Kanton Graubünden",
+        it: "",
+        rm: ""
+      },
+      ncumul_conf: {
+        de: "Infiziert",
+        it: "Casi confermati",
+        rm: "Cas confermads"
+      },
+      ncumul_hosp: {
+        de: "Hospitalisiert",
+        it: "Persone in ospedale",
+        rm: "Persunas ospitalisadas"
+      },
+      ncumul_deceased: {
+        de: "Todesfälle",
+        it: "Persone decedute",
+        rm: "Persunas mortas"
+      }
+    };
+
+    function getlangIsoCode() {
+      var path  = location.pathname;
+      var pathArr = path.split("/");
+      var langIso = pathArr[1];
+      return langIso.length == 2 ? langIso.toLowerCase() : "de";
+    }
+
+    function getText(prop,langIso) {
+      return texts[prop].hasOwnProperty(langIso) ? texts[prop][langIso] : texts[prop].de;
+    }
+
+    var langIso = getlangIsoCode();
+
+    var title = getText("title", langIso);
+    var conf = getText("ncumul_conf", langIso);
+    var hosp = getText("ncumul_hosp", langIso);
+    var deceased = getText("ncumul_deceased", langIso);
+
+
     function renderDate(d,y) {
       var year  = typeof y === undefined ? true : y;
       // console.log(year)
@@ -41,14 +83,19 @@
       feed.done(function (data) {
 
 
-        createChart(buildData(data));
+        createChart(buildData(data),{
+          title: title,
+          conf: conf,
+          hosp: hosp,
+          deceased: deceased
+        });
       });
     }
 
-    function createChart(obj) {
+    function createChart(obj, params) {
       $("#chart").kendoChart({
         title: {
-          text: "COVID-19 Entwicklung im Kanton Graubünden"
+          text: params.title
         },
         legend: {
           position: "bottom"
@@ -63,13 +110,13 @@
         },
         seriesColors: ["rgb(255, 202, 21)", "rgb(255, 179, 21)", "rgb(187, 0, 0)"],
         series: [{
-          name: "Infiziert",
+          name: params.conf,
           data: obj.ncumul_conf
         }, {
-          name: "Hospitalisiert",
+          name: params.hosp,
           data: obj.ncumul_hosp
         }, {
-          name: "Todesfälle",
+          name: params.deceased,
           data: obj.ncumul_deceased
         }],
         valueAxis: {
