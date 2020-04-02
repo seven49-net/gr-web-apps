@@ -2,13 +2,15 @@
   window.ca = (function () {
     var url = "https://www.gr.ch/DE/institutionen/verwaltung/djsg/ga/coronavirus/_layouts/15/GenericDataFeed/feed.aspx?PageID=26&ID=g_1175d522_e609_4287_93af_d14c9efd5218&FORMAT=JSONRAW";
 
-    function renderDate(d) {
+    function renderDate(d,y) {
+      var year  = typeof y === undefined ? true : y;
+      // console.log(year)
       function leadingZero(t) {
         var o = (t < 10 ? '0' : '') + t;
         return o;
       }
       var date = new Date(d);
-      return leadingZero(date.getDate()) + "." + leadingZero((date.getMonth() + 1)) + "." + date.getFullYear();
+      return leadingZero(date.getDate()) + "." + leadingZero((date.getMonth() + 1)) + "." + (year ? date.getFullYear() : '');
     }
 
     function buildData(data) {
@@ -20,7 +22,7 @@
 
       if (data.length) {
         $.each(data, function (k, v) {
-          dates.push(renderDate(v.date));
+          dates.push(renderDate(v.date, false));
           ncumul_conf.push(v.ncumul_conf);
           ncumul_hosp.push(v.ncumul_hosp);
           ncumul_deceased.push(v.ncumul_deceased);
