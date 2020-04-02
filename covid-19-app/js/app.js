@@ -8,23 +8,23 @@
 
       title: {
         de: "COVID-19 Entwicklung im Kanton Graubünden",
-        it: "",
-        rm: ""
+        it: "COVID-19: evoluzione nel Cantone dei Grigioni",
+        rm: "COVID-19: svilup en il chantun Grischun"
       },
       ncumul_conf: {
         de: "Infiziert",
         it: "Casi confermati",
-        rm: "Cas confermads"
+        rm: "cas confermads"
       },
       ncumul_hosp: {
         de: "Hospitalisiert",
         it: "Persone in ospedale",
-        rm: "Persunas ospitalisadas"
+        rm: "persunas ospitalisadas"
       },
       ncumul_deceased: {
         de: "Todesfälle",
         it: "Persone decedute",
-        rm: "Persunas mortas"
+        rm: "persunas mortas"
       }
 
     };
