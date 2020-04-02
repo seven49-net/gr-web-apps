@@ -4,11 +4,7 @@
 
     function renderDate(d,y) {
       var year  = typeof y === undefined ? true : y;
-<<<<<<< HEAD
       // console.log(year)
-=======
-      console.log(year)
->>>>>>> 3a4217e76884ab3e18a76b8e7d0234feecc19c69
       function leadingZero(t) {
         var o = (t < 10 ? '0' : '') + t;
         return o;
