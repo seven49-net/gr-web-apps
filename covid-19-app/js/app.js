@@ -1,8 +1,11 @@
-(function ($) {
-  window.ca = (function () {
+(function($) {
+
+  window.ca = (function() {
+
     var url = "https://www.gr.ch/DE/institutionen/verwaltung/djsg/ga/coronavirus/_layouts/15/GenericDataFeed/feed.aspx?PageID=26&ID=g_1175d522_e609_4287_93af_d14c9efd5218&FORMAT=JSONRAW";
 
     var texts = {
+
       title: {
         de: "COVID-19 Entwicklung im Kanton Graubünden",
         it: "",
@@ -23,35 +26,34 @@
         it: "Persone decedute",
         rm: "Persunas mortas"
       }
+
     };
 
     function getlangIsoCode() {
-      var path  = location.pathname;
+
+      var path = location.pathname;
       var pathArr = path.split("/");
       var langIso = pathArr[1];
       return langIso.length == 2 ? langIso.toLowerCase() : "de";
     }
 
-    function getText(prop,langIso) {
+    function getText(prop, langIso) {
+
       return texts[prop].hasOwnProperty(langIso) ? texts[prop][langIso] : texts[prop].de;
+
     }
 
-    var langIso = getlangIsoCode();
+    function renderDate(d, y) {
 
-    var title = getText("title", langIso);
-    var conf = getText("ncumul_conf", langIso);
-    var hosp = getText("ncumul_hosp", langIso);
-    var deceased = getText("ncumul_deceased", langIso);
+      var year = typeof y === undefined ? true : y;
 
-
-    function renderDate(d,y) {
-      var year  = typeof y === undefined ? true : y;
-      // console.log(year)
       function leadingZero(t) {
         var o = (t < 10 ? '0' : '') + t;
         return o;
       }
+
       var date = new Date(d);
+
       return leadingZero(date.getDate()) + "." + leadingZero((date.getMonth() + 1)) + "." + (year ? date.getFullYear() : '');
     }
 
@@ -63,7 +65,7 @@
       var ncumul_deceased = [];
 
       if (data.length) {
-        $.each(data, function (k, v) {
+        $.each(data, function(k, v) {
           dates.push(renderDate(v.date, false));
           ncumul_conf.push(v.ncumul_conf);
           ncumul_hosp.push(v.ncumul_hosp);
@@ -76,23 +78,33 @@
           "ncumul_deceased": ncumul_deceased
         };
       }
+
     }
 
+    var langIso = getlangIsoCode();
+    var title = getText("title", langIso);
+    var conf = getText("ncumul_conf", langIso);
+    var hosp = getText("ncumul_hosp", langIso);
+    var deceased = getText("ncumul_deceased", langIso);
+
     function init() {
+
       var feed = $.getJSON(url);
-      feed.done(function (data) {
+      feed.done(function(data) {
 
 
-        createChart(buildData(data),{
+        createChart(buildData(data), {
           title: title,
           conf: conf,
           hosp: hosp,
           deceased: deceased
         });
       });
+
     }
 
     function createChart(obj, params) {
+
       $("#chart").kendoChart({
         title: {
           text: params.title
@@ -143,6 +155,7 @@
           template: "#= series.name #: #= value #"
         }
       });
+
     }
 
     return {
@@ -150,7 +163,7 @@
     };
   })();
 
-  $(function () {
+  $(function() {
     ca.init();
   });
 
