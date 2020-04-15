@@ -1,10 +1,11 @@
 (function($) {
 
   window.ca = (function() {
-    // var url = "https://intwww.gr.ch/DE/institutionen/verwaltung/djsg/ga/coronavirus/_layouts/15/GenericDataFeed/feed.aspx?PageID=26&ID=g_1175d522_e609_4287_93af_d14c9efd5218&FORMAT=JSONRAW" // int
+    // int
+    var url = "https://intwww.gr.ch/DE/institutionen/verwaltung/djsg/ga/coronavirus/_layouts/15/GenericDataFeed/feed.aspx?PageID=26&ID=g_1175d522_e609_4287_93af_d14c9efd5218&FORMAT=JSONRAW"
 
     // prod
-    var url = "https://www.gr.ch/DE/institutionen/verwaltung/djsg/ga/coronavirus/_layouts/15/GenericDataFeed/feed.aspx?PageID=26&ID=g_1175d522_e609_4287_93af_d14c9efd5218&FORMAT=JSONRAW";
+    //var url = "https://www.gr.ch/DE/institutionen/verwaltung/djsg/ga/coronavirus/_layouts/15/GenericDataFeed/feed.aspx?PageID=26&ID=g_1175d522_e609_4287_93af_d14c9efd5218&FORMAT=JSONRAW";
 
     var texts = {
 
@@ -45,7 +46,7 @@
 
     }
 
-    function renderDate(d, y) {
+    function renderDate(d, y,c) {
 
       var year = typeof y === undefined ? true : y;
 
@@ -55,8 +56,10 @@
       }
 
       var date = new Date(d);
-
-      return leadingZero(date.getDate()) + "." + leadingZero((date.getMonth() + 1)) + "." + (year ? date.getFullYear() : '');
+      var out = '';
+      var day = date.getDay();
+      if (c== 0 || day == 1) out = leadingZero(date.getDate()) + "." + leadingZero((date.getMonth() + 1)) + "." + (year ? date.getFullYear() : '');
+      return out;
     }
 
     function buildData(data) {
@@ -67,11 +70,15 @@
       var ncumul_deceased = [];
 
       if (data.length) {
+        var count = 0;
         $.each(data, function(k, v) {
-          dates.push(renderDate(v.date, false));
+
+          dates.push(renderDate(v.date, false, count));
           ncumul_conf.push(v.ncumul_conf);
           ncumul_hosp.push(v.ncumul_hosp);
           ncumul_deceased.push(v.ncumul_deceased);
+
+          count++;
         });
         return {
           "dates": dates,
