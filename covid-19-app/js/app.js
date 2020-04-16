@@ -46,9 +46,9 @@
 
     }
 
-    function renderDate(d, y,c) {
+    function renderDate(d, params) {
 
-      var year = typeof y === undefined ? true : y;
+      var year = typeof params.y === undefined ? true : params.y;
 
       function leadingZero(t) {
         var o = (t < 10 ? '0' : '') + t;
@@ -58,7 +58,7 @@
       var date = new Date(d);
       var out = '';
       var day = date.getDay();
-      if (c== 0 || day == 1) out = leadingZero(date.getDate()) + "." + leadingZero((date.getMonth() + 1)) + "." + (year ? date.getFullYear() : '');
+      if (params.c== 1 || day == 1 || params.c == params.t) out = leadingZero(date.getDate()) + "." + leadingZero((date.getMonth() + 1)) + "." + (year ? date.getFullYear() : '');
       return out;
     }
 
@@ -70,10 +70,11 @@
       var ncumul_deceased = [];
 
       if (data.length) {
-        var count = 0;
+        var count = 1;
+        var total = data.length;
         $.each(data, function(k, v) {
 
-          dates.push(renderDate(v.date, false, count));
+          dates.push(renderDate(v.date, {y: false, c: count, t: total }));
           ncumul_conf.push(v.ncumul_conf);
           ncumul_hosp.push(v.ncumul_hosp);
           ncumul_deceased.push(v.ncumul_deceased);
