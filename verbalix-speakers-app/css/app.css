@@ -1,0 +1,33 @@
+.app ul li {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #c4c4c4;
+  list-style: none;
+}
+.no-results,
+.counts-and-period,
+.mark-speaker-listing {
+  opacity: 1;
+  transition: opacity 300ms ease;
+}
+.app[v-cloak] .mark-speaker-listing {
+  opacity: 0;
+}
+
+.app[v-cloak] .counts-and-period,
+.app[v-cloak] .no-results {
+  opacity: 0;
+}
+
+.spinner {
+  display: none;
+  text-align: center;
+  padding: 10px;
+}
+.spinner img {
+  display: block;
+  margin: 10px auto;
+}
+.app[v-cloak] .spinner {
+  display: block;
+}

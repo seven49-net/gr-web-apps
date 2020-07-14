@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html class="no-js" lang="de">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>verbalix speakers app</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./vendor/uikit-3/css/uikit.min.css">
+  <link rel="stylesheet" href="./css/app.css">
+</head>
+
+<body>
+  <div class="uk-container uk-margin-top">
+    <h1 class="uk-margin-small-bottom">Speakers/Markers App</h1>
+    <div class="app" id="speakers-app" v-cloak>
+
+      <div class="marks-query">
+        <form class="query uk-form-horizontal">
+          <div class="uk-margin">
+            <label for="marks-from" class="uk-form-label">von ( 2020.06.15 00.00.00 )</label>
+            <div class="uk-form-controls">
+              <input type="text" name="marks-from" id="marks-from" class="uk-input" v-model="marksfrom" placeholder="2020.06.15 00.00.00">
+            </div>
+          </div>
+          <div class="uk-margin">
+
+            <label for="marks-to" class="uk-form-label">bis ( 2020.06.15 18.00.00 )</label>
+            <div class="uk-form-controls">
+              <input type="text" name="marks-to" id="marks-to" class="uk-input" v-model="marksto" placeholder="2020.06.15 18.00.00">
+            </div>
+          </div>
+          <div class="uk-margin">
+            <button type="button" class="uk-button uk-button-primary" v-on:click="getdata">Marks anzeigen</button>
+          </div>
+        </form>
+      </div>
+      <div class="no-results uk-alert-warning uk-padding-small" v-if="!noresults">
+        Im Zeitraum von <em>{{ marksfrom }}</em> bis <em>{{ marksto }}</em> sind keine Datensätze vorhanden.
+      </div>
+      <div class="counts-and-period" v-if="marks.length">
+        <span class="label">Anzahl Datensätze im Zeitraum von <em>{{ marksfrom }}</em> bis <em>{{ marksto }}</em>:</span> <span class="value"><strong>{{ marks.length }}</strong></span>
+      </div>
+      <ul class="mark-speaker-listing uk-margin-large-top uk-list" v-if="marks.length">
+        <li v-for="mark in marks" :key="mark.id">
+          <div>
+            <span class="label">timestamp: </span> <span class="value">{{ mark.timestamp }}</span>
+            <span class="label">id: </span><span class="value">{{ mark.id }}</span>
+          </div>
+          <div v-if="mark.speaker_data.length">
+            <span class="forename" v-html="mark.speaker_data[0].forename"></span> <span class="name" v-html="mark.speaker_data[0].name"></span>
+            <div v-html="mark.speaker_data[0].user_format"></span>
+            </div>
+
+        </li>
+      </ul>
+    </div>
+  </div>
+  <script srce="./vendor/uikit-3/js/uikit.min.js"></script>
+  <script src="./vendor/axios.min.js"></script>
+  <script src="vendor/vue.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+
+</html>
