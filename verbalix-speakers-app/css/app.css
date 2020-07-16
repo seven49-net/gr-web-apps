@@ -1,8 +1,14 @@
+@import url(../vendor/uikit-3/css/uikit.min.css);
+
 .app ul li {
   margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid #c4c4c4;
   list-style: none;
+}
+.app ul.mark-speaker-listing {
+  border-top: 1px solid #c4c4c4;
+  padding-top: 20px;
 }
 .no-results,
 .counts-and-period,
@@ -30,4 +36,38 @@
 }
 .app[v-cloak] .spinner {
   display: block;
+}
+h1.app-title {
+  font-size: 1.8rem;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.body {
+  margin-top: 3rem;
+}
+/* .user-format:before {
+  content: ", ";
+} */
+
+/* .speaker-data {
+
+} */
+.forename,
+.name {
+  display: bold;
+  font-size: 1.5rem;
+}
+.user-format {
+  display: block;
+  font-size: 1rem;
+}
+
+.mark-content {
+  margin-top: 10px;
+}
+.mark-content p:last-child {
+  margin-bottom: 0;
+}
+.form-control.buttons {
+  align-self: flex-end;
 }

@@ -22,7 +22,9 @@
     function buildData(marks, speakers) {
       var out = [];
       if (marks.length && speakers.length) {
+
         marks.forEach(function(mark) {
+
           var m = mark;
           var sid = mark.markobject_id;
           var speaker = speakers.find(function(s) {
@@ -32,7 +34,20 @@
           if(typeof speaker !== "undefined") m.speaker_data.push(speaker);
           out.push(m);
         });
+
+        out.sort(function(a,b) {
+          var tsa = a.timestamp;
+          var tsb = b.timestamp;
+          var comparison = 0;
+          if (tsa > tsb) {
+            comparison = 1;
+          } else if (tsa < tsb) {
+            comparison = -1;
+          }
+          return comparison;
+        });
       }
+
       return out;
     }
     function init() {
@@ -42,8 +57,8 @@
       var vm = new Vue({
         el: "#speakers-app",
         data: {
-          marksto: "",
-          marksfrom: "",
+          marksto: "2020.06.15 24:00:00",
+          marksfrom: "2020.06.15 00:00:00",
           marks: "",
           count: "",
           noresults: 1
@@ -72,6 +87,27 @@
             }).catch(function(error) {
                 console.log(error);
             });
+          },
+          getxmltext(str) {
+            var pattern = /<p>.*?(?=<\/mark>)/sg;
+            var out = [""];
+            if (str.match(pattern)) {
+              out = str.match(pattern);
+            }
+            return out[0];
+          },
+          replaceName(title, name) {
+
+            if (typeof title !== "undefined") {
+              return title.replace(" " + name, "").replace(";", "");
+            }
+          }
+        },
+        filters: {
+          timestamp: function(value) {
+            var array = value.split(":");
+            array.pop();
+            return array.join(":");
           }
         }
       });
