@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>stellenportal</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.gr.ch/apps/int/stellenportal/css/app.css">
+</head>
+
+<body>
+  <div class="page-container">
+    <header>
+      <div class="branding"><span class="logo"><img src="https://cdn.gr.ch/dev-redesign2016/images/logo.svg" alt="Kanton Graubünden" /></span>Kanton Graubünden Stellenportal</div>
+    </header>
+    <div class="container">
+      <h1>Stellenportal App</h1>
+      <div class='app' id='sp-app'>
+        <form>
+          <div class="form-group">
+            <label for="departments">Amt</label>
+            <select id="departments" name="departments" @change="changeDepartment($event)">
+              <option value="">---</option>
+              <option v-for="option in options" :bind-value="option|lowercase" :selected="option.toLowerCase() === query">{{ option }}</option>
+            </select>
+          </div>
+        </form>
+        <ul class="job-list">
+          <li class="job" v-for="item in data">
+            <h3 v-html="item.Title"></h3>
+            <p v-html="item.Department"></p>
+            <p v-html="applicationLink(item.AdLink, 'Anmeldung')"></p>
+          </li>
+        </ul>
+
+
+      </div>
+    </div>
+
+    <footer>@2020 Kanton Graubünden</footer>
+  </div>
+
+  <script src="https://cdn.gr.ch/apps/int/stellenportal/vendor/axios.min.js" defer></script>
+  <script src="https://cdn.gr.ch/apps/int/stellenportal/vendor/vue.js" defer></script>
+  <script src="https://cdn.gr.ch/apps/int/stellenportal/js/app.js" defer></script>
+</body>
+
+</html>
