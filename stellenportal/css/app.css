@@ -64,13 +64,26 @@ footer {
 .job-list li p {
   margin: 0;
 }
-
+form {
+  margin-left: -5px;
+  margin-right: -5px;
+  display: flex;
+  flex-flow: row wrap;
+}
 .form-group {
   margin-bottom: 2rem;
+  flex: 0 1 100%;
+  padding: 10px;
 }
+@media (min-width: 580px) {
+  .form-group {
+    flex: 0 1 50%;
+  }
+}
+
 label {
-  display: inline-block;
-  margin-right: 2rem;
+  display: block;
+  /* margin-right: 2rem; */
 }
 select {
 	display: inline-block;

@@ -7,7 +7,7 @@
   <title>stellenportal</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdn.gr.ch/apps/int/stellenportal/css/app.css">
+  <link rel="stylesheet" href="https://cdn.gr.ch/apps/int/stellenportal/css/app.css?d=2020-07-22-0853">
 </head>
 
 <body>
@@ -22,11 +22,24 @@
           <div class="form-group">
             <label for="departments">Amt</label>
             <select id="departments" name="departments" @change="changeDepartment($event)">
-              <option value="">---</option>
-              <option v-for="option in options" :bind-value="option|lowercase" :selected="option.toLowerCase() === query">{{ option }}</option>
+              <option value="">Alle</option>
+              <option v-for="option in options" :bind-value="option.value" :selected="option.value === query">{{ option.title }} ({{ option.count }})</option>
             </select>
           </div>
+
+
+          <div class="form-group">
+            <label for="languages">Sprache</label>
+            <select id="languages" name="languages" @change="changeLanguage($event)">
+              <option value="">alle</option>
+              <option v-for="l in languages" :bind-value="l.value" :selected="l.value === lquery">{{ l.title }} ({{ l.count }})</option>
+            </select>
+          </div>
+
         </form>
+        <div class="item-count">
+          Offene Stellen: {{ count }}
+        </div>
         <ul class="job-list">
           <li class="job" v-for="item in data">
             <h3 v-html="item.Title"></h3>
@@ -42,9 +55,9 @@
     <footer>@2020 Kanton Graubünden</footer>
   </div>
 
-  <script src="https://cdn.gr.ch/apps/int/stellenportal/vendor/axios.min.js" defer></script>
-  <script src="https://cdn.gr.ch/apps/int/stellenportal/vendor/vue.js" defer></script>
-  <script src="https://cdn.gr.ch/apps/int/stellenportal/js/app.js" defer></script>
+  <script src="https://cdn.gr.ch/apps/int/stellenportal/vendor/axios.min.js"></script>
+  <script src="https://cdn.gr.ch/apps/int/stellenportal/vendor/vue.js"></script>
+  <script src="https://cdn.gr.ch/apps/int/stellenportal/js/app.js?d=2020-07-22-0853"></script>
 </body>
 
 </html>
