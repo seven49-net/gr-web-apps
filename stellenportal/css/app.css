@@ -38,6 +38,14 @@ footer {
   bottom: 0;
   left: 0;width: 100%;
 }
+
+
+.builder {
+  display: none;
+}
+.build .builder {
+  display:  block;
+}
 .container {
   width: 90%;
   max-width: 1024px;
@@ -45,25 +53,36 @@ footer {
   padding-bottom: 1.5rem;
 }
 
+.responsive-table {
+  overflow-x: auto;
+  max-width: 100%;
+}
 .job-list {
-  border-top: 1px solid #c4c4ce;
+  border-collapse: collapse;
+  width: 100%;
   margin: 10px 0;
   padding: 0;
   list-style: none;
 }
+.job-list tr {
+  border-bottom: 1px solid  #eceded;
+}
+.job-list th,
+.job-list td {
+  padding: 8px;
+}
+.job-list th {
+  font-size: .9rem;
+  line-height: 1.1;
+  text-align: left;
+  background: #0069B4;
+  color: #fff;
+}
+.job-list td {
+  font-size: .9rem;
+}
 
-.job-list li {
-  margin: 5px 0;
-  padding: 5px 0;
-  border-bottom: 1px solid #c4c4ce;
-}
-.job-list li h3 {
-  margin: 0;
-  font-size: 1rem;
-}
-.job-list li p {
-  margin: 0;
-}
+
 form {
   margin-left: -5px;
   margin-right: -5px;
@@ -76,8 +95,14 @@ form {
   padding: 10px;
 }
 @media (min-width: 580px) {
-  .form-group {
+  .form-group.language-selection {
+    flex: 0 1 25%;
+  }
+  .form-group.department-selection {
     flex: 0 1 50%;
+  }
+  .form-group.type-selection {
+    flex: 0 1 25%;
   }
 }
 
@@ -153,4 +178,88 @@ select:disabled:hover, select[aria-disabled=true] {
 .branding .logo {
   width: 60px;
   margin-right: 5px;
+}
+.copy-link {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-end;
+  align-content: space-between;
+  padding: 5px;
+  width: 100%;
+}
+input[type=text] {
+  padding: 0 10px;
+  flex: 0 1 calc(100% - 120px);
+  /* width: calc(100% - 150px); */
+  line-height: 40px;
+  margin-right: 10px;
+  font-size: 12px;
+  border: 0 none;
+  background: #cecece;
+  border-radius: 0;
+}
+input[type=text]:focus,
+input[type=text]:active {
+  outline: 0 none;
+  /* background: rgba(0.0%, 32.7%, 56.1%, .6); */
+  box-shadow: 0 0 5px rgba(9, 83, 164, 0.647);
+}
+.button {
+  flex: 0 1 120px;
+  padding: 0 10px;
+  line-height: 40px;
+  background: #0069B4;
+  color: #fff;
+  font-size: 12px;
+  border: 0 none;
+  cursor: pointer;
+  transition: background 500ms ease;
+  border-radius: 0;
+  outline: 0 none;
+}
+
+.button:focus,
+.button:hover {
+  background: #00538f;
+  outline: 0 none;
+}
+.tooltip {
+  font-size: 12px;
+  margin: -1rem 5px 2rem 5px;
+  position: relative;
+  background: rgba(255, 214, 84, 1.000);
+  z-index: 1;
+  color: #000;
+}
+.tooltip::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 214, 84, 1.000);
+  transform: rotate(-45deg) translate(-50%);
+  left: 50%;
+  top: -15px;
+  z-index: -1;
+}
+
+.tooltip em {
+  display: inline-block;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  vertical-align: middle;
+}
+.tooltip span {
+  display: inline-block;
+  vertical-align: middle;
+}
+.standalone-app {
+  padding-top: 20px;
+}
+.build .standalone-app {
+  padding-top: 0;
+}
+[v-cloak] .standalone-app {
+  display: none;
 }

@@ -11,50 +11,78 @@
 </head>
 
 <body>
-  <div class="page-container">
-    <header>
-      <div class="branding"><span class="logo"><img src="https://cdn.gr.ch/dev-redesign2016/images/logo.svg" alt="Kanton Graubünden" /></span>Kanton Graubünden Stellenportal</div>
-    </header>
-    <div class="container">
-      <h1>Stellenportal App</h1>
-      <div class='app' id='sp-app'>
-        <form>
-          <div class="form-group">
-            <label for="departments">Amt</label>
-            <select id="departments" name="departments" @change="changeDepartment($event)">
-              <option value="">Alle</option>
-              <option v-for="option in options" :bind-value="option.value" :selected="option.value === query">{{ option.title }} ({{ option.count }})</option>
-            </select>
+  <div id='sp-app' v-cloak>
+    <div class="page-container">
+      <header class="builder">
+        <div class="branding"><span class="logo"><img src="https://cdn.gr.ch/dev-redesign2016/images/logo.svg" alt="Kanton Graubünden" /></span>Kanton Graubünden Stellenportal</div>
+      </header>
+      <div class="container">
+        <h1 class="builder">Stellenportal App</h1>
+        <div class='app'>
+          <div class="builder">
+            <form>
+              <div class="form-group language-selection">
+                <label for="languages">Sprache</label>
+                <select id="languages" name="languages" @change="changeLanguage($event)">
+                  <option value="">alle</option>
+                  <option v-for="l in languages" :bind-value="l.value" :selected="l.value === lquery">{{ l.title }} ({{ l.count }})</option>
+                </select>
+              </div>
+
+              <div class="form-group department-selection" v-if="departments.length > 0">
+                <label for="departments">Amt</label>
+                <select id="departments" name="departments" @change="changeDepartment($event)">
+                  <option value="">Alle</option>
+                  <option v-for="department in departments" :bind-value="department.value" :selected="department.value === query">{{ department.title }} ({{ department.count }})</option>
+                </select>
+              </div>
+
+              <div class="form-group type-selection" v-if="departments.length && types.length">
+                <label for="types">Typ</label>
+                <select id="types" name="types" @change="changeType($event)">
+                  <option value="">Alle</option>
+                  <option v-for="type in types" :bind-value="type" :selected="type === typequery">{{ type }}</option>
+                </select>
+              </div>
+
+              <div class="form-group copy-link" v-if="copylink">
+                <input type="text" id="copy-link-input" name="copy-link-input" v-model="copylink" />
+                <button type="button" @click="copyLinkToClipord()" id="copy-link" class="button">Link kopieren</button>
+              </div>
+              <div class="form-group tooltip" v-if="tooltip">
+                <em>{{ tooltip }}</em> <span>in die Zwischenablage kopiert!</span>
+              </div>
+            </form>
           </div>
-
-
-          <div class="form-group">
-            <label for="languages">Sprache</label>
-            <select id="languages" name="languages" @change="changeLanguage($event)">
-              <option value="">alle</option>
-              <option v-for="l in languages" :bind-value="l.value" :selected="l.value === lquery">{{ l.title }} ({{ l.count }})</option>
-            </select>
+          <div class="standalone-app">
+            <div class="item-count" v-if="count">
+              <span v-html="getTranslation('open_jobs', selectedlanguage)"></span> {{ count }}
+            </div>
+            <div class="responsive-table">
+              <table class="job-list" v-if="data.length">
+                <thead>
+                  <tr>
+                    <th v-html="getTranslation('jobtitle', selectedlanguage)"></th>
+                    <th v-html="getTranslation('department', selectedlanguage)">Amt</th>
+                    <th v-html="getTranslation('application_due', selectedlanguage)">Anmeldefrist</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="job" v-for="item in data">
+                    <td v-html="applicationLink(item.AdLink, item.Title)"></td>
+                    <td v-html="item.Department"></td>
+                    <td>{{ item.pubEndDate|date }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-
-        </form>
-        <div class="item-count">
-          Offene Stellen: {{ count }}
         </div>
-        <ul class="job-list">
-          <li class="job" v-for="item in data">
-            <h3 v-html="item.Title"></h3>
-            <p v-html="item.Department"></p>
-            <p v-html="applicationLink(item.AdLink, 'Anmeldung')"></p>
-          </li>
-        </ul>
-
-
       </div>
+
+      <footer class="builder">@2020 Kanton Graubünden</footer>
     </div>
-
-    <footer>@2020 Kanton Graubünden</footer>
   </div>
-
   <script src="./vendor/axios.min.js" defer></script>
   <script src="./vendor/vue.js" defer></script>
   <script src="./js/app.js" defer></script>
