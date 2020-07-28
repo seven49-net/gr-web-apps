@@ -72,20 +72,33 @@
       return out;
     }
 
-    function departmentList(objects) {
+    function departmentList(objects, bi) {
       // console.log(objects);
+      var bid = typeof bi === "undefined" ? null : bi;
       var departments = [];
       objects.forEach(function (o) {
         var d = o.Department;
-        if (departments.indexOf(d) === -1) {
-          departments.push(d);
+        if (bid) {
+          if (departments.indexOf(d) === -1 && o.businessUnitId === bid) {
+            departments.push(d);
+          }
+        } else {
+          if (departments.indexOf(d) === -1) {
+            departments.push(d);
+          }
         }
+
       });
       var out = [];
       departments.forEach(function (o) {
         var obj = objects.filter(function (e) {
           return e.Department == o;
         });
+        if (bid) {
+          obj = objects.filter(function (e) {
+            return e.Department == o && e.businessUnitId === bid;
+          });
+        }
         out.push({
           title: o,
           value: o.toLowerCase(),
@@ -96,6 +109,12 @@
 
       return out;
     }
+     function makeCopyLink(href) {
+       var regex = /[a-z]{1,}=&/gmi;
+       var regex2 = /[a-z]{1,}=$/gmi;
+       var link = updateQueryStringParameter(href, "standalone", "1");
+       return link.replace(regex, "").replace(regex2, "");
+     }
 
     function typeList(objects) {
       var types = [];
@@ -208,22 +227,36 @@
           filteredData = filterObjects(all, "language", langQuery);
           //console.log(filteredData);
           departments = departmentList(filteredData);
-          console.log(typeList(all));
+
+          types = typeList(filteredData);
+          if (types.length > 1) {
+            vm.types = types;
+          }
           vm.departments = departments;
-          vm.copylink = updateQueryStringParameter(location.href, "standalone", "1")
-          if (query) {
+          vm.copylink = makeCopyLink(location.href);//updateQueryStringParameter(location.href, "standalone", "1");
+
+          if (query && !typeQuery) {
             vm.query = query;
             filteredData = filterObjects(filteredData, "Department", query);
             types = typeList(filteredData);
             if (types.length > 1) vm.types = types;
             vm.typequery = '';
-            vm.copylink = updateQueryStringParameter(location.href, "standalone", "1");
-            if (typeQuery) {
+            vm.copylink = makeCopyLink(location.href); //updateQueryStringParameter(location.href, "standalone", "1");
+
+            } else if (typeQuery && !query) {
+              vm.typequery = typeQuery;
+              vm.query = '';
+              filteredData = filterObjects(filteredData, "businessUnitId", typeQuery);
+              vm.departments = departmentList(filteredData, typeQuery);
+              vm.copylink = makeCopyLink(location.href); // updateQueryStringParameter(location.href, "standalone", "1");
+            } else if (query && typeQuery) {
+              vm.query = query;
+              filteredData = filterObjects(filteredData, "Department", query);
               vm.typequery = typeQuery;
               filteredData = filterObjects(filteredData, "businessUnitId", typeQuery);
-              vm.copylink = updateQueryStringParameter(location.href, "standalone", "1");
+              vm.departments = departmentList(filteredData, typeQuery);
+              vm.copylink = makeCopyLink(location.href); // updateQueryStringParameter(location.href, "standalone", "1");
             }
-          }
         }
 
 

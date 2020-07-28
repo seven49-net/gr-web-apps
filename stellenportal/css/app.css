@@ -23,8 +23,11 @@ a:hover {
 }
 .page-container {
   min-height: 100vh;
-  padding-bottom: 60px;
+
   position: relative;
+}
+.build .page-container {
+  padding-bottom: 60px;
 }
 footer,
 header {
@@ -67,6 +70,9 @@ footer {
 .job-list tr {
   border-bottom: 1px solid  #eceded;
 }
+.job-list tbody tr:hover {
+  background: #E6F0F8;
+}
 .job-list th,
 .job-list td {
   padding: 8px;
@@ -81,7 +87,11 @@ footer {
 .job-list td {
   font-size: .9rem;
 }
-
+.icon-apprentice::after {
+  content: "*";
+  color: red;
+  margin-left: 5px;
+}
 
 form {
   margin-left: -5px;

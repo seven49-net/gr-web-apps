@@ -7,7 +7,7 @@
   <title>stellenportal</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdn.gr.ch/apps/int/stellenportal/css/app.css?2020-07-28-1030">
+  <link rel="stylesheet" href="https://cdn.gr.ch/apps/int/stellenportal/css/app.css?2020-07-28-14:08">
 </head>
 
 <body>
@@ -28,20 +28,18 @@
                   <option v-for="l in languages" :bind-value="l.value" :selected="l.value === lquery">{{ l.title }} ({{ l.count }})</option>
                 </select>
               </div>
-
-              <div class="form-group department-selection" v-if="departments.length > 0">
-                <label for="departments">Amt</label>
-                <select id="departments" name="departments" @change="changeDepartment($event)">
-                  <option value="">Alle</option>
-                  <option v-for="department in departments" :bind-value="department.value" :selected="department.value === query">{{ department.title }} ({{ department.count }})</option>
-                </select>
-              </div>
-
-              <div class="form-group type-selection" v-if="departments.length && types.length">
+              <div class="form-group type-selection" v-if="types.length">
                 <label for="types">Typ</label>
                 <select id="types" name="types" @change="changeType($event)">
                   <option value="">Alle</option>
                   <option v-for="type in types" :bind-value="type" :selected="type === typequery">{{ type }}</option>
+                </select>
+              </div>
+              <div class="form-group department-selection" v-if="departments.length > 0">
+                <label for="departments">Amt</label>
+                <select id="departments" name="departments" @change="changeDepartment($event)">
+                  <option value="">Alle</option>
+                  <option v-for="department in departments" :bind-value="department.value" :selected="department.value === query">{{ department.title }}</option>
                 </select>
               </div>
 
@@ -69,7 +67,7 @@
                 </thead>
                 <tbody>
                   <tr class="job" v-for="item in data">
-                    <td v-html="applicationLink(item.AdLink, item.Title)"></td>
+                    <td><span v-html="applicationLink(item.AdLink, item.Title)"></span> <span v-if="item.businessUnitId =='lehrstelle'" class="icon icon-apprentice"></span></td>
                     <td v-html="item.Department"></td>
                     <td>{{ item.pubEndDate|date }}</td>
                   </tr>
@@ -86,7 +84,7 @@
 
   <script src="https://cdn.gr.ch/apps/int/stellenportal/vendor/axios.min.js"></script>
   <script src="https://cdn.gr.ch/apps/int/stellenportal/vendor/vue.js"></script>
-  <script src="https://cdn.gr.ch/apps/int/stellenportal/js/app.js?d=2020-07-28-10:36"></script>
+  <script src="https://cdn.gr.ch/apps/int/stellenportal/js/app.js?d=2020-07-28-14:18"></script>
 </body>
 
 </html>
