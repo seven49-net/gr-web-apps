@@ -46,6 +46,7 @@
               <div class="form-group copy-link" v-if="copylink">
                 <input type="text" id="copy-link-input" name="copy-link-input" v-model="copylink" />
                 <button type="button" @click="copyLinkToClipord()" id="copy-link" class="button">Link kopieren</button>
+                <span class="button link-button"><a :href="copylink" target="_blank">Vorschau</a></span>
               </div>
               <div class="form-group tooltip" v-if="tooltip">
                 <em>{{ tooltip }}</em> <span>in die Zwischenablage kopiert!</span>

@@ -7,7 +7,7 @@
   <title>stellenportal</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdn.gr.ch/apps/int/stellenportal/css/app.css?2020-07-28-14:08">
+  <link rel="stylesheet" href="https://cdn.gr.ch/apps/int/stellenportal/css/app.css?2020-07-29-16:32">
 </head>
 
 <body>
@@ -46,6 +46,7 @@
               <div class="form-group copy-link" v-if="copylink">
                 <input type="text" id="copy-link-input" name="copy-link-input" v-model="copylink" />
                 <button type="button" @click="copyLinkToClipord()" id="copy-link" class="button">Link kopieren</button>
+                <span class="button link-button"><a :href="copylink" target="_blank">Vorschau</a></span>
               </div>
               <div class="form-group tooltip" v-if="tooltip">
                 <em>{{ tooltip }}</em> <span>in die Zwischenablage kopiert!</span>
