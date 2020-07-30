@@ -1,0 +1,15 @@
+{
+  "name": "verbalix-xml-s3-to-dynamodb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "seven49.net/webbear.ch",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.698.0",
+    "lambda-local": "^1.7.3"
+  }
+}
