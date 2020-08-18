@@ -65,7 +65,8 @@ module.exports.stellenportal_xml_to_dynamodb = async (event, context, callback) 
       if (query.statusCode == 200) {
         var itemsToDelete = query.body.Items;
         console.log("outdated items in dynamo db: " + query.body.Count);
-        if (query.Count) {
+
+        if (query.body.Count) {
           var actions2 = itemsToDelete.map(deleteItem);
           var results2 = Promise.all(actions2);
           var deleted = await results2.then(data => {
@@ -100,7 +101,9 @@ function deleteItem(obj) {
       } else {
         statusCode = 200;
         responseText = data;
+
         resolve({
+
           statusCode: statusCode,
           body: responseText
         });
