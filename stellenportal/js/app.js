@@ -163,7 +163,7 @@
         },
         methods: {
           applicationLink(link, title) {
-            return "<a href='" + link + "' target='_blank'>" + title + "</a>";
+            return "<a data-fancybox data-type='iframe' data-src='" + link + "' href='javascript:;'>" + title + "</a>";
           },
           changeDepartment: function (event) {
             var query = event.target.value;
