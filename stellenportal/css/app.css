@@ -298,3 +298,7 @@ input[type=text]:active {
 [v-cloak] .standalone-app {
   display: none;
 }
+
+.fancybox-slide--iframe .fancybox-content {
+  max-width: 960px;
+}

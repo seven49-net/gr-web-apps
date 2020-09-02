@@ -260,7 +260,7 @@
         }
 
 
-        console.log(filteredData);
+        //console.log(filteredData);
         vm.count = filteredData.length;
         vm.data = filteredData;
       });
