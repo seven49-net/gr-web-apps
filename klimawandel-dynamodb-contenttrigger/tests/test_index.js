@@ -18,7 +18,7 @@ module.exports = {
       },
       "NewImage":{
         "Keywords":{
-          "S":"#Tag2; #Tag4; Test3"
+          "S":"#Tag2; #Tag4; Test3; #Tag10"
         },
         "Modified":{
           "S":"2020-12-23T10:23:05.410Z"
@@ -45,7 +45,7 @@ module.exports = {
           "N":"0"
         },
         "Url":{
-          "S":"https://intwww.gr.ch/de/medien/mitteilungen/mmstaka/2020/seiten/test-keywords3.aspx"
+          "S":"https://intwww.gr.ch/de/medien/mitteilungen/mmstaka/2020/seiten/test-keywords4.aspx"
         },
         "Created":{
           "S":"2020-12-23T10:01:07.000Z"
