@@ -80,7 +80,7 @@ fetch(url).then(response => {
 	<div class="hovered-tag">{ clickedtag }</div>
 	<ul class="page-list">
 		{#each pages as page}
-			<li><a href={pages.url}>{page.title}</a></li>
+			<li><a href={page.url}>{page.title}</a></li>
 		{/each}
 	</ul>
 		
