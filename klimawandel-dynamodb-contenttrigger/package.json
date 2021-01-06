@@ -1,0 +1,14 @@
+{
+  "name": "klimawandel-dynamodb-contenttrigger",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "lambda-local -l index.js -h handler -e ./tests/test_index.js"
+  },
+  "author": "webbear/seven49.net",
+  "license": "ISC",
+  "dependencies": {
+    "lambda-local": "^1.7.4"
+  }
+}
