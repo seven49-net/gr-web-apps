@@ -87,9 +87,7 @@ function initCarousel() {
 <style>
 	
 .clima-change-carousel {
-	width: 80%;
-	max-width: 1200px;
-	margin: 30px  auto;
+	font-family: Aria, sans-serif;
 }
 	
 </style>
