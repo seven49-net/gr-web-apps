@@ -38,7 +38,7 @@ fetch(url).then(response => {
 	WordCloud(document.querySelector("#tag-cloud"), {
 		list: list, 
 		fontWeight: "bold",
-		fontFamily: "Comfortaa, cursive",
+		fontFamily: "Arial, sans-serif",
 		backgroundColor: "rgba(137, 193, 122, .55)",
 		minSize: 18,
 		color: function(word,weight, fontSize) {
@@ -90,9 +90,8 @@ fetch(url).then(response => {
 
 <style>
 	.tag-app {
-		width: 80%;
-		max-width: 100%;
-		margin: 2rem auto;
+		
+		font-family: Arial, sans-serif;
 	}
 	.tag-cloud {
 		list-style: none;

@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset='utf-8'>
-	<meta name='viewport' content='width=device-width,initial-scale=1'>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
 
 	<title>Klimawandel Tag App</title>
 
-	<link rel='icon' type='image/png' href='//www.gr.ch/_layouts/15/GR/images/favicon.ico'>
-	<link rel='stylesheet' href='https://cdn.gr.ch/redesign2016/css/main.v2.css'>
-	<link rel='stylesheet' href='./build/bundle.css'>
-	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet">
-	<script src="./wordcloud.js"></script>
-	<script defer src='./build/bundle.js'></script>
+	<link rel="icon" type="image/png" href="//www.gr.ch/_layouts/15/GR/images/favicon.ico">
+	<link rel="stylesheet" href="https://cdn.gr.ch/redesign2016/css/main.v2.css">
+	<link rel="stylesheet" href="./build/app.css">
+	<style>
+		.climate-change-tag-cloud {
+			width: 80%;
+			max-width: 100%;
+			margin: 2rem auto;
+		}
+
+	</style>
+	
 </head>
 
 <body>
+	<script src="./wordcloud.js"></script>
+	<script defer src="./build/bundle.js"></script>
+	<div class="climate-change-tag-cloud"></div>
 </body>
 </html>
