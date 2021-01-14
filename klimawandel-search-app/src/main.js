@@ -6,7 +6,8 @@ const app = new App({
 		appName: "Klimawandel Suche",
 		searchterm: '',
 		results: [],
-		message: ''
+		message: '',
+		tags: []
 	}
 });
 
