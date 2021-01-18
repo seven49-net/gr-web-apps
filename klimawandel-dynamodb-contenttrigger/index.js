@@ -27,7 +27,8 @@ exports.handler = async (event) => {
     // ob tag vorhanden ist. wenn nein, dann item mit neuem einfügen. 
     // später: delete handeln 
     */
-    const tagTable = "gr_tags_www_gr_ch";
+    const source = record.eventSourceARN;
+    const tagTable = setTableName(source);
     const url = record.dynamodb.NewImage.Url.S;
     const language = getLanguage(url);
     const pagetitle = record.dynamodb.NewImage.Title.S
@@ -43,10 +44,11 @@ exports.handler = async (event) => {
       modifiedOn: modifiedOn,
       name: ''
     };
-    const tags = getTags(event.Records[0].dynamodb.NewImage.Keywords.S);
+    const keywords = record.dynamodb.NewImage.hasOwnProperty("Keywords") ? record.dynamodb.NewImage.Keywords.S : null;
+    const tags = keywords ? getTags(keywords) : [];
     //console.log(tags);
 
-    if (tags.length) {
+    if (tagTable && tags.length) {
       for (var tag of tags) {
         console.log(`handle ${tag}`);
         try {
@@ -146,7 +148,8 @@ exports.handler = async (event) => {
 };
 
 function getTags(tags) {
-  const keywordsArray = tags.split(";");
+  let tempTags = tags.replace(/,/gmi, ";")
+  const keywordsArray = tempTags.indexOf(";") > -1 ?  tempTags.split(";") : [tempTags];
   const tagsArray = [];
   keywordsArray.forEach((tag) => {
     tag = tag.trim();
@@ -156,6 +159,18 @@ function getTags(tags) {
     }
   });
   return tagsArray;
+}
+
+function setTableName(src) {
+    
+    const tagTableWWW = "gr_tags_www_gr_ch";
+    const tagTableInt = "gr_tags_intwww_gr_ch";
+    const tagTableClimate = "gr_tags_klimawandel_gr_ch";
+    let out = null;
+    if (src.indexOf("gr_content_www_gr_ch") > -1) out = tagTableWWW;
+    else if (src.indexOf("gr_content_intwww_gr_ch") > -1) out = tagTableInt;
+    else if (src.indexOf("gr_content_klimawandel_gr_ch") > -1) out = tagTableClimate;
+    return out;
 }
 
 function putItem(obj) {
