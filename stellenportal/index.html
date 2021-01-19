@@ -9,6 +9,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="./css/app.css">
   <link rel="stylesheet" href="./vendor/fancybox/jquery.fancybox.min.css">
+  <script src="./vendor/jquery-latest.js"></script>
+  <script>
+    (function() {
+      function urlParams(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+      }
+      var _qs = {
+        language: urlParams("language"),
+        type: urlParams("type"),
+        department: urlParams("department")
+      };
+      
+
+      $(function() {
+        $.each(_qs, function(p,v) {
+        console.log(p,v);
+        $("body").attr("data-" + p, v); 
+      });
+      });
+      
+    })();
+
+  </script>
 </head>
 
 <body>
@@ -83,7 +109,7 @@
       <footer class="builder">@2020 Kanton Graubünden</footer>
     </div>
   </div>
-  <script src="./vendor/jquery-latest.js" defer></script>
+  
   <script src="./vendor/fancybox/jquery.fancybox.min.js" defer></script>
   <script src="./vendor/axios.min.js" defer></script>
   <script src="./vendor/vue.js" defer></script>
