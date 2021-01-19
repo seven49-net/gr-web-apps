@@ -1,6 +1,9 @@
 <script>
 	import { onMount } from 'svelte';
-	let url = "https://oeqtc4dy55.execute-api.eu-west-1.amazonaws.com/prod?tablename=gr_content_www_gr_ch";
+	import utils  from "../../defaults/js/utils.js";
+	import configs from "../../defaults/js/configs.js";
+	const env = "www_gr_ch";
+	let url = utils.updateQueryStringParameter(configs.url, "tablename", configs[env].contentTable);
 	let items = [];
 	function makeCarousel(data) {
 		//console.log(data);
