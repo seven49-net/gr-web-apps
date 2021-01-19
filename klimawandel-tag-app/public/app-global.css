@@ -1,0 +1,51 @@
+.main-content .EmbedExternalContent {
+  overflow-x: visible !important;
+}
+
+.climate-change-tag-cloud * {
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+  flex-flow: row wrap;
+  margin-left: -25px;
+  margin-right: -25px;
+}
+
+.column {
+  padding: 25px;
+  flex: 0 1 100%;
+}
+
+.column.column-1-1 {
+  flex: 0 1 100%;
+}
+
+@media screen and (min-width: 576px) {
+  .column {
+    flex: 0 1 50%;
+  }
+
+}
+
+@media screen and (min-width: 992px) {
+  .column {
+    flex: 0 1 33.333333%;
+  }
+
+}
+
+@media screen and (min-width: 1200px) {
+  .column {
+    flex: 0 1 25%;
+  }
+
+  .column.full {
+    flex: 0 1 100%;
+  }
+}

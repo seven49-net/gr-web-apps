@@ -3,12 +3,14 @@
 	export let tags;
 	export let clickedtag;
 	export let pages;
-	let url = "https://oeqtc4dy55.execute-api.eu-west-1.amazonaws.com/prod?tablename=gr_tags_www_gr_ch";
+	import utils  from "../../defaults/js/utils.js";
+	import configs from "../../defaults/js/configs.js";
+	
+	const env = "www_gr_ch";
+	const urlTags = utils.updateQueryStringParameter(configs.url, "tablename", configs[env].tagTable);
+	const urlPages = utils.updateQueryStringParameter(configs.url, "tablename", configs[env].contentTable);
 	export let list = [];
-	// $: list = tags.forEach(function(t) {
-	// 		console.log(t);
-	// 		list.push([t.name, randomFs(20,72), t.pages])
-	// 	});
+	
 	function randomFs(min, max) {
 		min = Math.ceil(min);
 		max = Math.floor(max);
@@ -26,9 +28,10 @@
 		});
 		return updatedTags;
 	}
-	fetch(url).then(response => {
+	fetch(urlTags).then(response => {
 		return response.json();
 	}).then(data => {
+		//console.log("tablename: "+ utils.getUrlParameter("tablename"))
 		console.log(data);
 		if (data.Items.length) {
 			tags = makeObject(data.Items);
@@ -42,6 +45,14 @@
 		console.log(list);
 		wordcloud(list);
 	});
+	function getPages(tag, url) {
+		fetch(utils.updateQueryStringParameter(url, "tag", tag))
+		.then(response => response.json())
+		.then(data => {
+			console.log(data);
+			pages =  data.Items;
+		})
+	}
 
 	function wordcloud(list) {
 		WordCloud(document.querySelector("#tag-cloud"), {
@@ -60,7 +71,7 @@
 				return "wc wc-" + word.toLowerCase().replace(/ /gmi, "-") + " wc-weight-" + weight + " wc-fs-" + fontSize;
 			},
 			click: function (item) {
-				pages = item[2];
+				getPages(item[0], urlPages); //item[2];
 				clickedtag = item[0];
 			},
 			gridSize: 10,
@@ -73,24 +84,29 @@
 </script>
 
 <div class="tag-app">
-	{#if tags.length}
+	<!-- {#if tags.length}
 	<ul class="tag-cloud">
 		{#each tags as tag}
 			<li>{tag.name}</li>
 		{/each}
 	</ul>
 		
-		{/if}
+		{/if} -->
 
-		<div id="tag-cloud"></div>
+		<div id="tag-cloud" class="tag-cloud"></div>
 		
 	{#if pages.length}
-	<div class="hovered-tag">{ clickedtag }</div>
-	<ul class="page-list">
+	<div class="clicked-tag">{ clickedtag }</div>
+	<div class="page-list row">
 		{#each pages as page}
-			<li><a href={page.url}>{page.title}</a></li>
+			<div class="page column">
+				<a href={page.Url}>
+				<span class="title">{page.Title}</span>
+					{#if page.Summary}<div class="summary">{page.Summary}</div>{/if}
+				</a>
+			</div>
 		{/each}
-	</ul>
+	</div>
 		
 		{/if}
 		
@@ -105,39 +121,27 @@
 		
 		font-family: Arial, sans-serif;
 	}
+	
 	.tag-cloud {
-		list-style: none;
-		margin: 10px 0;
-		padding: 0;
-		display: block;
-		width: 100%;
-		max-width: 100%;
-		
-	}
-	.tag-cloud li {
-			display: inline-block;
-			margin: 0 5px 0 0;
-		}
-
-	#tag-cloud {
 		width: 500px;
-		height:500px;
 		max-width: 100%;
 		position: relative;
 		display: block;
+		margin-bottom: .75rem;
 	}
-	@media all and (min-width: 440px) {
-		#tag-cloud {
-			
-			
-		}
-	}
-		
 
-	#tag-cloud:before {
+	.tag-cloud:before {
 		content: "";
 		display: block;
-		padding: 0 0 100% 0;
+		padding-bottom: 100%;
+	}
+	.clicked-tag {
+		font-weight: bold;
+	}
+	.page-list {
+		/* padding: 0;
+		margin: .25rem 0;
+		list-style: none; */
 	}
 	
 </style>
