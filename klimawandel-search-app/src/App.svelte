@@ -1,17 +1,23 @@
 <script>
 	import Items from "./Items.svelte";
 	import Message from "./Message.svelte";
+	import utils from "../../defaults/js/utils.js";
+	import configs from "../../defaults/js/configs.js";
 	export let appName;
-	let searchUrl = "https://oeqtc4dy55.execute-api.eu-west-1.amazonaws.com/prod?tablename=gr_content_www_gr_ch";
+	
 	export let searchterm;
 	export let results;
 	export let message;
 	export let tags;
 	let hits;
 	let value = "";
+	const env = "www_gr_ch";
+	let searchUrl = utils.updateQueryStringParameter(configs.url, "tablename", configs[env].contentTable);
 
 	$: filteredResults = value == '' ? results : results.filter(result => {
-		let tagsArr = trimStringInArray(result.Keywords.split(";"));
+		console.log("keywords: " + result.Keywords);
+		let tagStr = result.hasOwnProperty("Keywords") ? result.Keywords.replace(/,/gmi, ";") : "";
+		let tagsArr = tagStr.indexOf(";") > -1 ? utils.trimStringInArray(tagStr.split(";")) : [tagStr];
 		return tagsArr.indexOf(value) > -1;
 	});
 	
@@ -23,11 +29,7 @@
 			console.log(tags);
 		}
 	});
-	function trimStringInArray(array) {
-		return array = array.map(function (el) {
-  			return el.trim();
-		});	
-	}
+	
 	function sortByTitle(arr) {
 		let out = arr;
 		if (arr.length) {
@@ -49,9 +51,10 @@
 	function getTags(items) {
 		let tagArray = [];
 		items.forEach(i => {
-			let kw = i.Keywords;
+			let kw = i.hasOwnProperty("Keywords") ? i.Keywords : [];
 			console.log(kw);
 			if (kw.length) {
+				kw.replace(/,/gmi, ";");
 				kw.split(";").forEach(k => {
 					let keyword = k.trim();
 					if (keyword.indexOf("#") > -1 && tagArray.indexOf(keyword) == -1) tagArray.push(keyword); 
@@ -61,7 +64,7 @@
 		return tagArray.sort();
 	}
 	function getSearchresults() {
-		let url = searchterm == "" ? searchUrl : searchUrl + "&searchterm=" + searchterm;
+		let url = searchterm == "" ? searchUrl : utils.updateQueryStringParameter(searchUrl,"searchterm" + searchterm);
 		fetch(url).then((response) => {
 			return response.json();
 		}).then(data => {

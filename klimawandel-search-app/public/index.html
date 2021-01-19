@@ -7,11 +7,14 @@
 	<title>Svelte app</title>
 
 	<link rel="icon" type="image/png" href="//www.gr.ch/_layouts/15/GR/images/favicon.ico">
-	<link rel="stylesheet" href="https://cdn.gr.ch/redesign2016/css/main.v2.css">
-	<link rel='stylesheet' href='./grid.css'>
-	<link rel='stylesheet' href='./build/bundle.css'>
+	<!-- 'will not imported - use for standalone gr styles' -->
+	<link rel="stylesheet" href='https://cdn.gr.ch/redesign2016/css/main.v2.css'>
+	<!-- overwwrite overflow-x behavior -->
+	<link rel="stylesheet" href="https://cdn.gr.ch/apps/int/klimawandel-tag-cloud/app-global.css">
+	<link rel='stylesheet' href="./grid.css">
+	<link rel='stylesheet' href="./build/bundle.css">
 
-	<script defer src='./build/bundle.js'></script>
+	<script defer src="./build/bundle.js"></script>
 	<style>
 		.climate-change-search-app {
 			width: 80%;
