@@ -134,16 +134,17 @@
     }
 
     function init() {
-      //console.log("init app");
-      // .EmbedExternalContent
+      /*
+        if used as embed the data attributes will be rendered on div.EmbedExternalContent => base
+        $("body") as base will be only needed for direct use
+      */
       var base = $("#sp-app").parents(".EmbedExternalContent").length ? $("#sp-app").parents(".EmbedExternalContent").first() : $("body");
-      console.log(base);
       var json = axios.get(url);
       var query = base.attr("data-department"); //getUrlParameter("department");
       var langQuery = base.attr("data-language"); //getUrlParameter("language");
       var typeQuery = base.attr("data-type"); // getUrlParameter("type");
       if (query) query = query.toLowerCase();
-      var standalone = getUrlParameter("standalone");
+      var standalone = base.attr("data-standalone"); //getUrlParameter("standalone");
       if (!standalone) document.querySelector("body").classList.add("build");
       if (langQuery) langQuery = langQuery.toLowerCase();
 
@@ -274,8 +275,8 @@
     };
   })();
 
-  $(function() {
-    window.sp.init();
+  document.addEventListener("DOMContentLoaded", function(event) {
+        window.sp.init();
   });
   
 })();

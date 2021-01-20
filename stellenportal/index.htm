@@ -8,10 +8,38 @@
   <title>stellenportal</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdn.gr.ch/apps/prod/stellenportal/css/app.css?d=2020-09-02-1120">
+  <link rel="stylesheet" href="https://cdn.gr.ch/apps/prod/stellenportal/css/app.css?v=2021-01-20-1349">
   <link rel="stylesheet" href="https://cdn.gr.ch/apps/prod/stellenportal/vendor/fancybox/jquery.fancybox.min.css">
   <link rel="icon" type="image/x-icon" href="./favicon.ico" />
-
+  <!-- only standalone -->
+  <script src="https://cdn.gr.ch/apps/prod/stellenportal/vendor/jquery-latest.js"></script>
+   <script>
+     // if used as embed the data attributes will be rendered on div.EmbedExternalContent
+     // this will be only needed for direct use
+    (function() {
+      function urlParams(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+      }
+      var _qs = {
+        language: urlParams("language"),
+        type: urlParams("type"),
+        department: urlParams("department"),
+        standalone: urlParams("standalone")
+      };
+      
+      document.addEventListener("DOMContentLoaded", function(event) {
+        var body = document.getElementsByTagName("body")[0];
+        for (var key in _qs) {
+            if (_qs.hasOwnProperty(key)) {
+              body.setAttribute("data-" + key, encodeURIComponent(_qs[key]));
+          }
+        }
+      });
+    })();
+  </script>
 </head>
 
 <body>
@@ -87,7 +115,7 @@
     </div>
   </div>
 
-  <script src="https://cdn.gr.ch/apps/prod/stellenportal/vendor/jquery-latest.js" defer></script>
+  
   <script src="https://cdn.gr.ch/apps/prod/stellenportal/vendor/fancybox/jquery.fancybox.min.js" defer></script>
   <script src="https://cdn.gr.ch/apps/prod/stellenportal/vendor/axios.min.js"></script>
   <script src="https://cdn.gr.ch/apps/prod/stellenportal/vendor/vue.js"></script>

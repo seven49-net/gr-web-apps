@@ -21,19 +21,19 @@
       var _qs = {
         language: urlParams("language"),
         type: urlParams("type"),
-        department: urlParams("department")
+        department: urlParams("department"),
+        standalone: urlParams("standalone")
       };
       
-
-      $(function() {
-        $.each(_qs, function(p,v) {
-        console.log(p,v);
-        $("body").attr("data-" + p, v); 
+      document.addEventListener("DOMContentLoaded", function(event) {
+        var body = document.getElementsByTagName("body")[0];
+        for (var key in _qs) {
+            if (_qs.hasOwnProperty(key)) {
+              body.setAttribute("data-" + key, encodeURIComponent(_qs[key]));
+          }
+        }
       });
-      });
-      
     })();
-
   </script>
 </head>
 
