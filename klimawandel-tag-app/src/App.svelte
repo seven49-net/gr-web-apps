@@ -112,8 +112,11 @@
 		
 </div>
 
-<style>
-	:root {
+<style type="text/scss">
+	$primar-color: #0069b4;
+	$secondary-color: #e6f0f8;
+	$tag-cloud-width: 500px;
+:root {
 		--primary-color: #0069b4;
 		--secondary-color: #e6f0f8;
 	}
@@ -123,7 +126,7 @@
 	}
 	
 	.tag-cloud {
-		width: 500px;
+		width: $tag-cloud-width;
 		max-width: 100%;
 		position: relative;
 		display: block;
@@ -138,10 +141,6 @@
 	.clicked-tag {
 		font-weight: bold;
 	}
-	.page-list {
-		/* padding: 0;
-		margin: .25rem 0;
-		list-style: none; */
-	}
+
 	
 </style>
