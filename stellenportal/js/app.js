@@ -138,18 +138,25 @@
         if used as embed the data attributes will be rendered on div.EmbedExternalContent => base
         $("body") as base will be only needed for direct use
       */
-      var base = $("#sp-app").parents(".EmbedExternalContent").length ? $("#sp-app").parents(".EmbedExternalContent").first() : $("body");
+      var embed = $(".sp-app").parents(".EmbedExternalContent").length ? true : false;
+      var base = embed ? $(".sp-app").parent("div") : $("body");
       var json = axios.get(url);
-      var query = base.attr("data-department"); //getUrlParameter("department");
-      var langQuery = base.attr("data-language"); //getUrlParameter("language");
-      var typeQuery = base.attr("data-type"); // getUrlParameter("type");
+      var query = base.attr("data-department") != undefined ? decodeURIComponent(base.attr("data-department")) : ''; //getUrlParameter("department");
+      console.log(query);
+      var langQuery = base.attr("data-language") != undefined ? decodeURIComponent(base.attr("data-language")) : ''; //getUrlParameter("language");
+      console.log(langQuery);
+      var typeQuery = base.attr("data-type") != undefined ? decodeURIComponent(base.attr("data-type")) : ''; // getUrlParameter("type");
+      console.log(typeQuery);
       if (query) query = query.toLowerCase();
       var standalone = base.attr("data-standalone"); //getUrlParameter("standalone");
       if (!standalone) document.querySelector("body").classList.add("build");
+      if (embed) {
+        $(".sp-app").addClass("embed");
+      }
       if (langQuery) langQuery = langQuery.toLowerCase();
 
       var vm = new Vue({
-        el: "#sp-app",
+        el: ".sp-app",
         data: {
           data: [],
           departments: [],
