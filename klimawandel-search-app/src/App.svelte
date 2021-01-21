@@ -116,14 +116,17 @@
 	
 </div>
 
-<style>
+<style type="text/scss">
+	$primary-color: #0069b4;
+	$secondary-color: #e6f0f8;
+	$white: #fff;
 	:root {
-		--primary-color: #0069b4;
-		--secondary-color: #e6f0f8;;
+		--primary-color: $primary-color;
+		--secondary-color: $secondary-color;
 	}
 	
 	.form-control {
-		background: var(--secondary-color);
+		background: $secondary-color;
 		padding: .75rem;
 		margin-right: 25px;
 		margin-left: 25px;
@@ -133,14 +136,14 @@
 		width: 100%;
 		padding: .25rem;
 		font-size: 1rem;
-		border: 1px solid #fff;
-		background-color: #fff;
+		border: 1px solid $white;
+		background-color: $white;
 	}
 	input::-internal-autofill-selected,
 	input:active,
 	input:focus,
 	input:focus-within {
-		background-color: #fff !important;
+		background-color: $white !important;
 	}
 	label {
 		display: block;
@@ -151,12 +154,12 @@
   max-width: 100%;
   padding: 0.75rem;
   margin: 0 0 0.75rem 0;
-  border: 1px solid #fff;
+  border: 1px solid $white;
   font-size: 1rem;
   font-family: inherit;
   line-height: normal;
   color: #000;
-  background-color: #fff;
+  background-color: $white;
   border-radius: 0;
   -webkit-appearance: none;
      -moz-appearance: none;
