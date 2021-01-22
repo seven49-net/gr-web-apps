@@ -11,7 +11,7 @@
 	export let tags;
 	let hits;
 	let value = "";
-	const env = "www_gr_ch";
+	const env = "intwww_gr_ch";
 	let searchUrl = utils.updateQueryStringParameter(configs.url, "tablename", configs[env].contentTable);
 
 	$: filteredResults = value == '' ? results : results.filter(result => {
@@ -54,9 +54,11 @@
 			let kw = i.hasOwnProperty("Keywords") ? i.Keywords : [];
 			console.log(kw);
 			if (kw.length) {
-				kw.replace(/,/gmi, ";");
+				kw = kw.replace(/,/gmi, ";");
+				console.log("new: " + kw)
 				kw.split(";").forEach(k => {
 					let keyword = k.trim();
+					console.log(keyword)
 					if (keyword.indexOf("#") > -1 && tagArray.indexOf(keyword) == -1) tagArray.push(keyword); 
 				});
 			}
@@ -64,7 +66,7 @@
 		return tagArray.sort();
 	}
 	function getSearchresults() {
-		let url = searchterm == "" ? searchUrl : utils.updateQueryStringParameter(searchUrl,"searchterm" + searchterm);
+		let url = searchterm == "" ? searchUrl : utils.updateQueryStringParameter(searchUrl,"searchterm" , searchterm.toLowerCase());
 		fetch(url).then((response) => {
 			return response.json();
 		}).then(data => {
