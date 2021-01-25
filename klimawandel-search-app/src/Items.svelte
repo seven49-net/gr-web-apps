@@ -1,4 +1,5 @@
 <script>
+  import utils from "../../defaults/js/utils.js";
   export let items = [];
   function renderTags(item) {
     let tags = item.Keywords == undefined ? [] : item.Keywords;
@@ -13,17 +14,17 @@
     return out.join(" ");
   }
   let r;
-  function getText(str, length) {
-    let count = length === "undefined" ? 0 : length;
-    let cleaned = str.replace(/(<([^>]+)>)/gi, "");
-    let out = cleaned; 
-    if(count) {
-      if (cleaned.length > count-1) {
-        out = cleaned.substring(0, length) + "...";
-      }
-    }
-    return out;
-    }
+  // function getText(str, length) {
+  //   let count = length === "undefined" ? 0 : length;
+  //   let cleaned = str.replace(/(<([^>]+)>)/gi, "");
+  //   let out = cleaned; 
+  //   if(count) {
+  //     if (cleaned.length > count-1) {
+  //       out = cleaned.substring(0, length) + "...";
+  //     }
+  //   }
+  //   return out;
+  //   }
 </script>
 
 {#if items.length} 
@@ -34,8 +35,9 @@
             {#if r.Keywords != undefined}
               <div class="tags">{renderTags(r)}</div>
             {/if}
+            {#if r.PreviewImage }<img src={r.PreviewImage} alt='' />{/if}
 					<span class="title">{#if r.LongTitle}{r.LongTitle}{:else}{r.Title}{/if}</span>
-					{#if r.Content}<div class="summary">{getText(r.Content, 200)}</div>{/if}
+					{#if r.Content}<div class="summary">{@html utils.getText(r.Content, 200)}</div>{/if}
 					</a>
 				</div>
 			{/each}

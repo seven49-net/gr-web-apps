@@ -6,7 +6,7 @@
 	import utils  from "../../defaults/js/utils.js";
 	import configs from "../../defaults/js/configs.js";
 	
-	const env = "www_gr_ch";
+	const env = "intwww_gr_ch";
 	const urlTags = utils.updateQueryStringParameter(configs.url, "tablename", configs[env].tagTable);
 	const urlPages = utils.updateQueryStringParameter(configs.url, "tablename", configs[env].contentTable);
 	export let list = [];
@@ -101,8 +101,9 @@
 		{#each pages as page}
 			<div class="page column">
 				<a href={page.Url}>
+					{#if page.PreviewImage}<div class='image'><img src={page.PreviewImage} alt='' /></div>{/if}
 				<span class="title">{page.Title}</span>
-					{#if page.Summary}<div class="summary">{page.Summary}</div>{/if}
+				{#if page.Content}<div class="summary">{@html utils.getText(page.Content, 200)}</div>{/if}
 				</a>
 			</div>
 		{/each}

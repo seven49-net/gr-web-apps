@@ -32,13 +32,25 @@ const utils = (() => {
 		return array = array.map(function (el) {
   			return el.trim();
 		});	
-	}
+  }
+  function getText(str, length) {
+    let count = length === "undefined" ? 0 : length;
+    let cleaned = str.replace(/(<([^>]+)>)/gi, "");
+    let out = cleaned; 
+    if(count) {
+      if (cleaned.length > count-1) {
+        out = cleaned.substring(0, length) + "...";
+      }
+    }
+    return out;
+    }
 
   return {
     getUrlParameter: getUrlParameter,
     updateQueryStringParameter: updateQueryStringParameter,
     getTags: getTags,
-    trimStringInArray: trimStringInArray
+    trimStringInArray: trimStringInArray,
+    getText: getText
   }
 
   
