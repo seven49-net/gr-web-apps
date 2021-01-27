@@ -8,21 +8,24 @@
         "department": "Amt",
         "application_due": "Anmeldefrist",
         "overview": "Übersicht",
-        "open_jobs": "Offene Stellen:"
+        "open_jobs": "Offene Stellen:",
+        "noresulttext": "Derzeit sind keine offenen Stellen ausgeschrieben, weitere Stellen finden Sie unter <a href='https://www.gr.ch/stellen'>www.gr.ch/stellen</a>."
       },
       "it": {
         "jobtitle": "Posizione",
         "department": "Ufficio",
         "application_due": "Termine di annuncio",
         "overview": "Panoramica impieghi",
-        "open_jobs": "Posizioni abierti:"
+        "open_jobs": "Posizioni abierti:",
+        "noresulttext": "Italienische Version fehlt - Derzeit sind keine offenen Stellen ausgeschrieben, weitere Stellen finden Sie unter <a href='https://www.gr.ch/stellen'>www.gr.ch/stellen</a>."
       },
       "rm": {
         "jobtitle": "Plazza",
         "department": "Uffizi",
         "application_due": "Termin d'annunzia",
         "overview": "Survista da las plazzas",
-        "open_jobs": "Offene Stellen:"
+        "open_jobs": "Offene Stellen:",
+        "noresulttext": "Romanische Version fehlt - Derzeit sind keine offenen Stellen ausgeschrieben, weitere Stellen finden Sie unter <a href='https://www.gr.ch/stellen'>www.gr.ch/stellen</a>."
       }
     };
 
@@ -147,6 +150,8 @@
       console.log(langQuery);
       var typeQuery = base.attr("data-type") != undefined ? decodeURIComponent(base.attr("data-type")) : ''; // getUrlParameter("type");
       console.log(typeQuery);
+      var noResultText = base.attr("data-noresulttext") != undefined ? decodeURIComponent(base.attr("data-noresulttext")) : '';
+      console.log(noResultText)
       if (query) query = query.toLowerCase();
       var standalone = base.attr("data-standalone"); //getUrlParameter("standalone");
       if (!standalone) document.querySelector("body").classList.add("build");
@@ -154,7 +159,8 @@
         $(".sp-app").addClass("embed");
       }
       if (langQuery) langQuery = langQuery.toLowerCase();
-
+      // vm.noresulttext = noResultText;
+      //   console.log(noResultText)
       var vm = new Vue({
         el: ".sp-app",
         data: {
@@ -164,12 +170,13 @@
           types: [],
           standalone: false,
           count: '',
-          query: '',
+          query: query ? query:'',
           lquery: '',
           typequery: '',
           copylink: '',
           tooltip: '',
           selectedlanguage: "de",
+          noresulttext: '',
           translations: translations
         },
         methods: {
@@ -207,6 +214,18 @@
             var out = trans["de"].hasOwnProperty(prop) ? trans["de"][prop] : "missing translation for " + prop;
             if (trans.hasOwnProperty(lang) && trans[lang].hasOwnProperty(prop)) out = trans[lang][prop];
             return out;
+          },
+          getNoresultText(prop, lang) {
+            console.log(lang);
+            return this.getTranslation(prop, lang)
+          },
+          updateCopyLink() {
+            var noResultText = this.noresulttext;
+            return this.copylink = updateQueryStringParameter(this.copylink, "noresulttext", encodeURIComponent(noResultText));
+          },
+          updateonkeyup() {
+            var link = this.copylink;
+            this.copylink = updateQueryStringParameter(link, "noresulttext", encodeURIComponent(this.noresulttext));
           }
         },
         filters: {
@@ -218,10 +237,9 @@
             return arr[2] + "." + arr[1] + "." + arr[0];
           }
         }
-
       });
 
-
+        
       json.then(function (response) {
         var data = response.data;
         var all = data.Items;
@@ -231,21 +249,23 @@
         var types = [];
         vm.standalone = standalone ? true : false;
         vm.languages = languages;
-
+        
+        
         if (langQuery) {
           vm.lquery = langQuery;
           vm.selectedlanguage = langQuery;
           filteredData = filterObjects(all, "language", langQuery);
           //console.log(filteredData);
           departments = departmentList(filteredData);
-
+          console.log(noResultText);
+          vm.noresulttext = noResultText == '' ? vm.getTranslation("noresulttext", langQuery): decodeURIComponent(noResultText);
           types = typeList(filteredData);
           if (types.length > 1) {
             vm.types = types;
           }
           vm.departments = departments;
           vm.copylink = makeCopyLink(location.href);//updateQueryStringParameter(location.href, "standalone", "1");
-
+          vm.copylink = vm.updateCopyLink();
           if (query && !typeQuery) {
             vm.query = query;
             filteredData = filterObjects(filteredData, "Department", query);
@@ -253,6 +273,8 @@
             if (types.length > 1) vm.types = types;
             vm.typequery = '';
             vm.copylink = makeCopyLink(location.href); //updateQueryStringParameter(location.href, "standalone", "1");
+            vm.copylink = vm.updateCopyLink();
+            
 
             } else if (typeQuery && !query) {
               vm.typequery = typeQuery;
@@ -260,6 +282,8 @@
               filteredData = filterObjects(filteredData, "businessUnitId", typeQuery);
               vm.departments = departmentList(filteredData, typeQuery);
               vm.copylink = makeCopyLink(location.href); // updateQueryStringParameter(location.href, "standalone", "1");
+              vm.copylink = vm.updateCopyLink();
+               
             } else if (query && typeQuery) {
               vm.query = query;
               filteredData = filterObjects(filteredData, "Department", query);
@@ -267,14 +291,18 @@
               filteredData = filterObjects(filteredData, "businessUnitId", typeQuery);
               vm.departments = departmentList(filteredData, typeQuery);
               vm.copylink = makeCopyLink(location.href); // updateQueryStringParameter(location.href, "standalone", "1");
+              vm.copylink = vm.updateCopyLink();
+              
             }
-        }
 
+            
+        }
 
         //console.log(filteredData);
         vm.count = filteredData.length;
         vm.data = filteredData;
       });
+      
     }
 
     return {
@@ -284,6 +312,12 @@
 
   document.addEventListener("DOMContentLoaded", function(event) {
         window.sp.init();
+
+    // $('#editor').trumbowyg({
+    //               btns: [['strong', 'em',], ['link'],['viewHTML']],
+    //               autogrow: true
+    //           });
+         
   });
   
 })();

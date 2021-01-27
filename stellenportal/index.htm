@@ -16,19 +16,18 @@
    <script>
      // if used as embed the data attributes will be rendered on div.EmbedExternalContent
      // this will be only needed for direct use
-    (function() {
-      function urlParams(name) {
-        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-        var results = regex.exec(location.search);
-        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+     (function() {
+      var _query = location.search;
+      var _qs = {};
+
+      if (_query.length) {
+        var _qsarr = _query.replace(/\?/gmi, "").split("&");
+
+        _qsarr.forEach(function(val) {
+          var i = val.split("=");
+          _qs[i[0]] = i[1];
+        });
       }
-      var _qs = {
-        language: urlParams("language"),
-        type: urlParams("type"),
-        department: urlParams("department"),
-        standalone: urlParams("standalone")
-      };
       
       document.addEventListener("DOMContentLoaded", function(event) {
         var body = document.getElementsByTagName("body")[0];
@@ -53,6 +52,7 @@
         <div class='app'>
           <div class="builder">
             <form>
+              
               <div class="form-group language-selection">
                 <label for="languages">Sprache</label>
                 <select id="languages" name="languages" @change="changeLanguage($event)">
@@ -74,20 +74,28 @@
                   <option v-for="department in departments" :bind-value="department.value" :selected="department.value === query">{{ department.title }}</option>
                 </select>
               </div>
-
               <div class="form-group copy-link" v-if="copylink">
-                <input type="text" id="copy-link-input" name="copy-link-input" v-model="copylink" />
+                <input type="text" id="copy-link-input"  name="copy-link-input" v-model="copylink" />
                 <button type="button" @click="copyLinkToClipord()" id="copy-link" class="button">Link kopieren</button>
                 <span class="button link-button"><a :href="copylink" target="_blank">Vorschau</a></span>
               </div>
               <div class="form-group tooltip" v-if="tooltip">
                 <em>{{ tooltip }}</em> <span>in die Zwischenablage kopiert!</span>
               </div>
+
+              <div  class="form-group no-result-text" v-if="copylink">
+                <label for="no-result-text-label" class="no-result-text-label">Kein Resultat-Text</span>
+                  <textarea id="no-result-text-label" v-model="noresulttext" v-on:keyup="updateonkeyup"></textarea>
+                  <div class="text-output" v-html="noresulttext"></div>
+              </div>
             </form>
           </div>
           <div class="standalone-app">
             <div class="item-count" v-if="count">
               <span v-html="getTranslation('open_jobs', selectedlanguage)"></span> {{ count }}
+            </div>
+            <div class="no-result" v-if="count == 0">
+              <div v-html="noresulttext"></div>
             </div>
             <div class="responsive-table">
               <table class="job-list" v-if="data.length">
