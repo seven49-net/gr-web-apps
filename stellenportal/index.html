@@ -10,9 +10,6 @@
   <link rel="stylesheet" href="./css/app.css">
   <link rel="stylesheet" href="./vendor/fancybox/jquery.fancybox.min.css">
   <script src="./vendor/jquery-latest.js"></script>
-
-  <link rel="stylesheet" href="/vendor/trumbowyg/ui/trumbowyg.min.css">
-  <script src="/vendor/trumbowyg/trumbowyg.min.js"></script>
   <script>
     (function() {
       var _query = location.search;
@@ -82,9 +79,12 @@
               </div>
 
               <div  class="form-group no-result-text" v-if="copylink">
-                <label for="no-result-text-label" class="no-result-text-label">Kein Resultat-Text</span>
-                  <textarea id="no-result-text-label" v-model="noresulttext" v-on:keyup="updateonkeyup"></textarea>
+                  <label for="no-result-text" class="no-result-text-label">Kein Resultat-Text</label>
                   <div class="text-output" v-html="noresulttext"></div>
+                  <div class="instructions"><span class="alert">Bitte den "Kein Resultat-Text" erst am Schluss vor dem Kopieren des Links anpassen!</span> <span class='toggle-button'><button class="button" @click="showEditor">Text bearbeiten</button></span></div>
+                  
+                  <textarea class="no-result-text-editor hidden" id="no-result-text" v-model="noresulttext" v-on:keyup="updateonkeyup"></textarea>
+                  
               </div>
             </form>
           </div>
@@ -125,12 +125,7 @@
   <script src="./vendor/axios.min.js"></script>
   <script src="./vendor/vue.js"></script>
   <script src="./js/app.js"></script>
-  <script>
-    // $('#editor').trumbowyg({
-    //               btns: [['strong', 'em',], ['link'],['viewHTML']],
-    //               autogrow: true
-    //           });
-  </script>
+
 </body>
 
 </html>

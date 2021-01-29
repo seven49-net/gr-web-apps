@@ -8,7 +8,7 @@
   <title>stellenportal</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdn.gr.ch/apps/prod/stellenportal/css/app.css?v=2021-01-20-1349">
+  <link rel="stylesheet" href="https://cdn.gr.ch/apps/prod/stellenportal/css/app.css?v=2021-01-29-1323">
   <link rel="stylesheet" href="https://cdn.gr.ch/apps/prod/stellenportal/vendor/fancybox/jquery.fancybox.min.css">
   <link rel="icon" type="image/x-icon" href="./favicon.ico" />
   <!-- only standalone -->
@@ -84,9 +84,12 @@
               </div>
 
               <div  class="form-group no-result-text" v-if="copylink">
-                <label for="no-result-text-label" class="no-result-text-label">Kein Resultat-Text</span>
-                  <textarea id="no-result-text-label" v-model="noresulttext" v-on:keyup="updateonkeyup"></textarea>
+                  <label for="no-result-text" class="no-result-text-label">Kein Resultat-Text</label>
                   <div class="text-output" v-html="noresulttext"></div>
+                  <div class="instructions"><span class="alert">Bitte den "Kein Resultat-Text" erst am Schluss vor dem Kopieren des Links anpassen!</span> <span class='toggle-button'><button class="button" @click="showEditor">Text bearbeiten</button></span></div>
+                  
+                  <textarea class="no-result-text-editor hidden" id="no-result-text" v-model="noresulttext" v-on:keyup="updateonkeyup"></textarea>
+                  
               </div>
             </form>
           </div>
@@ -127,7 +130,7 @@
   <script src="https://cdn.gr.ch/apps/prod/stellenportal/vendor/fancybox/jquery.fancybox.min.js" defer></script>
   <script src="https://cdn.gr.ch/apps/prod/stellenportal/vendor/axios.min.js"></script>
   <script src="https://cdn.gr.ch/apps/prod/stellenportal/vendor/vue.js"></script>
-  <script src="https://cdn.gr.ch/apps/prod/stellenportal/js/app.js?d=2020-09-02-1120"></script>
+  <script src="https://cdn.gr.ch/apps/prod/stellenportal/js/app.js?d=2021-01-29-1324"></script>
 </body>
 
 </html>

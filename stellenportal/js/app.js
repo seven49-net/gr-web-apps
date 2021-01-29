@@ -145,13 +145,13 @@
       var base = embed ? $(".sp-app").parent("div") : $("body");
       var json = axios.get(url);
       var query = base.attr("data-department") != undefined ? decodeURIComponent(base.attr("data-department")) : ''; //getUrlParameter("department");
-      console.log(query);
+      //console.log(query);
       var langQuery = base.attr("data-language") != undefined ? decodeURIComponent(base.attr("data-language")) : ''; //getUrlParameter("language");
       console.log(langQuery);
       var typeQuery = base.attr("data-type") != undefined ? decodeURIComponent(base.attr("data-type")) : ''; // getUrlParameter("type");
-      console.log(typeQuery);
+      //console.log(typeQuery);
       var noResultText = base.attr("data-noresulttext") != undefined ? decodeURIComponent(base.attr("data-noresulttext")) : '';
-      console.log(noResultText)
+      //console.log(noResultText)
       if (query) query = query.toLowerCase();
       var standalone = base.attr("data-standalone"); //getUrlParameter("standalone");
       if (!standalone) document.querySelector("body").classList.add("build");
@@ -193,6 +193,8 @@
             var query = event.target.value;
             query = (query) ? query.replace(/\(\d{1,}\)/gm, "").trim().toLowerCase() : '';
             var href = location.href.replace(/\?.{1,}$/gi, "");
+            // var hrefPlus = updateQueryStringParameter(href, "noresulttext", encodeURIComponent(this.getTranslation("noresulttext",query)));
+            // console.log(hrefPlus);
             location.href = updateQueryStringParameter(href, "language", encodeURIComponent(query));
             this.selectedlanguage = query;
           },
@@ -226,6 +228,11 @@
           updateonkeyup() {
             var link = this.copylink;
             this.copylink = updateQueryStringParameter(link, "noresulttext", encodeURIComponent(this.noresulttext));
+          },
+          showEditor(e) {
+            e.preventDefault();
+            document.querySelector(".no-result-text-editor").classList.toggle("hidden");
+            
           }
         },
         filters: {
