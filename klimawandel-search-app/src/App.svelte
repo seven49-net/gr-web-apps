@@ -41,13 +41,20 @@
 		} 
 		return out;
 	}
-	function onKeyPress(e) {
-		if (e.charCode == 13 ) {
-			getSearchresults();
-			value = "";
+
+	function onkeyup(e) {
+		filteredResults = results.filter(function(s) {
+			return s.SearchContent.indexOf(searchterm.toLowerCase()) > -1;
+		});
+		
+	}
+
+	function onkeydown(e) {
+		if (e.key === "Enter" || e.keyCode === 13) {
 			e.preventDefault();
 		}
 	}
+
 	function getTags(items) {
 		let tagArray = [];
 		items.forEach(i => {
@@ -65,6 +72,7 @@
 		});
 		return tagArray.sort();
 	}
+
 	function getSearchresults() {
 		let url = searchterm == "" ? searchUrl : utils.updateQueryStringParameter(searchUrl,"searchterm" , searchterm.toLowerCase());
 		fetch(url).then((response) => {
@@ -82,10 +90,6 @@
 			} 
 		});
 	}
-
-	// function onChangeSelect(e) {
-	// 	console.log(value);
-	// }
 </script>
 <svelte:head>
 <title>{appName}</title>
@@ -96,7 +100,7 @@
 	<form class="row">
 		<div class="form-control column column-1-1">
 		<label for="searchterm">Suchen</label>
-		<input type="text" name="searchterm" bind:value={searchterm} id="searchterm" on:keypress={onKeyPress} placeholder="bitte geben Sie einen Suchbegriff ein"/>
+		<input type="text" name="searchterm" bind:value={searchterm} id="searchterm" on:keyup={onkeyup} placeholder="bitte geben Sie einen Suchbegriff ein" on:keydown={onkeydown} />
 	</div>
 
 	{#if tags.length}
