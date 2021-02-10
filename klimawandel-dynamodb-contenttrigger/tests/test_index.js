@@ -12,13 +12,13 @@ module.exports = {
         "Inhaltstyp":{
           "S":"WCAG Article Page"
         },
-        "Url":{
-          "S":"https://intwww.gr.ch/de/medien/mitteilungen/mmstaka/2020/seiten/test-keywords3.aspx"
+        "Url": {
+          "S": "https://intwww.gr.ch/de/test-keywords-webbear.aspx"
         }
       },
       "NewImage":{
         "Keywords":{
-          "S":"#Tag2; #Tag4, Test3; #Tag10"
+          "S": "#Tag2; #Tag4, Test3; #Tag10, #Tag12"
         },
         "Modified":{
           "S":"2020-12-23T10:23:05.410Z"
@@ -30,7 +30,7 @@ module.exports = {
           "S":"193.247.20.51"
         },
         "Title":{
-          "S":"Dummy Title 1"
+          "S": "Webbears MODIFY"
         },
         "Host":{
           "S":"https://intwww.gr.ch"
@@ -45,13 +45,13 @@ module.exports = {
           "N":"0"
         },
         "Url":{
-          "S":"https://intwww.gr.ch/de/medien/mitteilungen/mmstaka/2020/seiten/test-keywords4.aspx"
+          "S": "https://intwww.gr.ch/de/test-keywords-webbear.aspx"
         },
         "Created":{
           "S":"2020-12-23T10:01:07.000Z"
         },
         "Referrer":{
-          "S":"https://intwww.gr.ch/de/medien/mitteilungen/mmstaka/2020/seiten/test-keywords.aspx"
+          "S": "https://intwww.gr.ch/de/test-keywords-webbear.aspx"
         },
         "UserAgent":{
           "S":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0"
@@ -92,7 +92,7 @@ module.exports = {
           "N":"0"
         },
         "Url":{
-          "S":"https://intwww.gr.ch/de/medien/mitteilungen/mmstaka/2020/seiten/test-keywords3.aspx"
+          "S": "https://intwww.gr.ch/de/medien/mitteilungen/mmstaka/2020/seiten/test-keywords-webbear.aspx"
         },
         "Created":{
           "S":"2020-12-23T10:01:07.000Z"

@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "lambda-local -l index.js -h handler -e ./tests/test_index.js"
+    "modify": "lambda-local -l index.js -h handler -e ./tests/test_index.js",
+    "delete": "lambda-local -l index.js -h handler -e ./tests/test_delete.js",
+    "new": "lambda-local -l index.js -h handler -e ./tests/test_new.js"
   },
   "author": "webbear/seven49.net",
   "license": "ISC",
