@@ -247,18 +247,18 @@ exports.handler = async (event) => {
   }
   return `Successfully processed ${event.Records.length} records.`;
 };
-
 function getTags(tags) {
-  let tempTags = tags.replace(/,/gmi, ";")
-  const keywordsArray = tempTags.indexOf(";") > -1 ? tempTags.split(";") : [tempTags];
+  let patt = /#[0-9a-z-@]+/gmi;
+  let tempTags = tags.match(patt);
   const tagsArray = [];
-  keywordsArray.forEach((tag) => {
-    tag = tag.trim();
-    if (tag.indexOf("#") > -1) {
+  if (tempTags && tempTags.length) {
+    tempTags.forEach((tag) => {
+      tag = tag.trim();
       tagsArray.push(tag.replace('#', ''));
-      //console.log(tagsArray);
-    }
-  });
+    });
+  }
+  //const keywordsArray = tempTags.indexOf(";") > -1 ? tempTags.split(";") : [tempTags];
+
   return tagsArray;
 }
 
