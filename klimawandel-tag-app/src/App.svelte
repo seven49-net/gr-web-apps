@@ -5,12 +5,12 @@
 	export let pages;
 	import utils  from "../../defaults/js/utils.js";
 	import configs from "../../defaults/js/configs.js";
-	
-	const env = "intwww_gr_ch";
+
+	const env = "intklimawandel_gr_ch";
 	const urlTags = utils.updateQueryStringParameter(configs.url, "tablename", configs[env].tagTable);
 	const urlPages = utils.updateQueryStringParameter(configs.url, "tablename", configs[env].contentTable);
 	export let list = [];
-	
+
 	function randomFs(min, max) {
 		min = Math.ceil(min);
 		max = Math.floor(max);
@@ -90,11 +90,11 @@
 			<li>{tag.name}</li>
 		{/each}
 	</ul>
-		
+
 		{/if} -->
 
 		<div id="tag-cloud" class="tag-cloud"></div>
-		
+
 	{#if pages.length}
 	<div class="clicked-tag">{ clickedtag }</div>
 	<div class="page-list row">
@@ -108,9 +108,9 @@
 			</div>
 		{/each}
 	</div>
-		
+
 		{/if}
-		
+
 </div>
 
 <style type="text/scss">
@@ -122,10 +122,10 @@
 		--secondary-color: #e6f0f8;
 	}
 	.tag-app {
-		
+
 		font-family: Arial, sans-serif;
 	}
-	
+
 	.tag-cloud {
 		width: $tag-cloud-width;
 		max-width: 100%;
@@ -143,5 +143,5 @@
 		font-weight: bold;
 	}
 
-	
+
 </style>

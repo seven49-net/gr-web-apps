@@ -4,14 +4,14 @@
 	import utils from "../../defaults/js/utils.js";
 	import configs from "../../defaults/js/configs.js";
 	export let appName;
-	
+
 	export let searchterm;
 	export let results;
 	export let message;
 	export let tags;
 	let hits;
 	let value = "";
-	const env = "intwww_gr_ch";
+	const env = "intklimawandel_gr_ch";
 	let searchUrl = utils.updateQueryStringParameter(configs.url, "tablename", configs[env].contentTable);
 
 	$: filteredResults = value == '' ? results : results.filter(result => {
@@ -20,7 +20,7 @@
 		let tagsArr = tagStr.indexOf(";") > -1 ? utils.trimStringInArray(tagStr.split(";")) : [tagStr];
 		return tagsArr.indexOf(value) > -1;
 	});
-	
+
 	fetch(searchUrl).then(response => response.json()).then(data => {
 		console.log(data.Items);
 		results = sortByTitle(data.Items);
@@ -29,7 +29,7 @@
 			console.log(tags);
 		}
 	});
-	
+
 	function sortByTitle(arr) {
 		let out = arr;
 		if (arr.length) {
@@ -38,7 +38,7 @@
 				let titleB = b.Title.toUpperCase();
 				return titleA.localeCompare(titleB);
 			});
-		} 
+		}
 		return out;
 	}
 
@@ -46,7 +46,7 @@
 		filteredResults = results.filter(function(s) {
 			return s.SearchContent.indexOf(searchterm.toLowerCase()) > -1;
 		});
-		
+
 	}
 
 	function onkeydown(e) {
@@ -66,7 +66,7 @@
 				kw.split(";").forEach(k => {
 					let keyword = k.trim();
 					console.log(keyword)
-					if (keyword.indexOf("#") > -1 && tagArray.indexOf(keyword) == -1) tagArray.push(keyword); 
+					if (keyword.indexOf("#") > -1 && tagArray.indexOf(keyword) == -1) tagArray.push(keyword);
 				});
 			}
 		});
@@ -87,7 +87,7 @@
 			} else {
 				message = `Die Suche nach <b>"${searchterm}"</b> ergab keine Treffer. Bitte geben Sie einen neuen Suchbegriff ein und drücken Sie "Enter". Beachten Sie bitte Gross-/Kleinschreibung!`;
 				tags = [];
-			} 
+			}
 		});
 	}
 </script>
@@ -115,11 +115,11 @@
 	</div>
 	{/if}
 	</form>
-	
+
 	<Message message={message} />
 	<Items items={filteredResults} />
 
-	
+
 </div>
 
 <style type="text/scss">
@@ -130,7 +130,7 @@
 		--primary-color: $primary-color;
 		--secondary-color: $secondary-color;
 	}
-	
+
 	.form-control {
 		background: $secondary-color;
 		padding: .75rem;

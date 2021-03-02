@@ -4,7 +4,7 @@
 	} from 'svelte';
 	import utils from "../../defaults/js/utils.js";
 	import configs from "../../defaults/js/configs.js";
-	const env = "intwww_gr_ch";
+	const env = "intklimawandel_gr_ch";
 	let url = utils.updateQueryStringParameter(configs.url, "tablename", configs[env].contentTable);
 	let items = [];
 
@@ -82,7 +82,7 @@
 					<p class="summary">
 						{@html utils.getText(item.Content,200)}
 					</p>
-					
+
 					{/if}
 					<span class="more"></span>
 					</a>
@@ -92,9 +92,9 @@
 	{/if}
 	</div>
 <style>
-	
+
 .clima-change-carousel {
 	font-family: Aria, sans-serif;
 }
-	
+
 </style>

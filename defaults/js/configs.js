@@ -11,6 +11,10 @@ const configs = {
   klimawandel_gr_ch: {
     tagTable: "gr_tags_klimawandel_gr_ch",
     contentTable: "gr_content_klimawandel_gr_ch"
+  },
+  intklimawandel_gr_ch: {
+    tagTable: "gr_tags_intklimawandel_gr_ch",
+    contentTable: "gr_content_intklimawandel_gr_ch"
   }
 };
 export default configs;
