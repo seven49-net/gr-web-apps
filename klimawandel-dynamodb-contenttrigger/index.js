@@ -267,10 +267,12 @@ function setTableName(src) {
   const tagTableWWW = "gr_tags_www_gr_ch";
   const tagTableInt = "gr_tags_intwww_gr_ch";
   const tagTableClimate = "gr_tags_klimawandel_gr_ch";
+  const tagTableIntClimate = "gr_tags_intklimawandel_gr_ch";
   let out = null;
   if (src.indexOf("gr_content_www_gr_ch") > -1) out = tagTableWWW;
   else if (src.indexOf("gr_content_intwww_gr_ch") > -1) out = tagTableInt;
   else if (src.indexOf("gr_content_klimawandel_gr_ch") > -1) out = tagTableClimate;
+  else if (src.indexOf("gr_content_intklimawandel_gr_ch") > -1) out = tagTableIntClimate;
   return out;
 }
 
