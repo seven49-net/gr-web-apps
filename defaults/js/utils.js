@@ -15,28 +15,29 @@ const utils = (() => {
   }
 
   function getTags(tags) {
-    let tempTags = tags.replace(/,/gmi, ";")
-    const keywordsArray = tempTags.indexOf(";") > -1 ? tempTags.split(";") : [tempTags];
+    let patt = /#[0-9a-z-@]+/gmi;
+    let tempTags = tags.match(patt);
     const tagsArray = [];
-    keywordsArray.forEach((tag) => {
-      tag = tag.trim();
-      if (tag.indexOf("#") > -1) {
+    if (tempTags && tempTags.length) {
+      tempTags.forEach((tag) => {
+        tag = tag.trim();
         tagsArray.push(tag.replace('#', ''));
-        //console.log(tagsArray);
-      }
-    });
+      });
+    }
+    //const keywordsArray = tempTags.indexOf(";") > -1 ? tempTags.split(";") : [tempTags];
+
     return tagsArray;
   }
 
   function trimStringInArray(array) {
 		return array = array.map(function (el) {
   			return el.trim();
-		});	
+		});
   }
   function getText(str, length) {
     let count = length === "undefined" ? 0 : length;
     let cleaned = str.replace(/(<([^>]+)>)/gi, "");
-    let out = cleaned; 
+    let out = cleaned;
     if(count) {
       if (cleaned.length > count-1) {
         out = cleaned.substring(0, length) + "...";
@@ -53,7 +54,7 @@ const utils = (() => {
     getText: getText
   }
 
-  
+
 })();
 
 export default utils;

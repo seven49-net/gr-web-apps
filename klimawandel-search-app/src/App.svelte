@@ -13,11 +13,16 @@
 	let value = "";
 	const env = "intklimawandel_gr_ch";
 	let searchUrl = utils.updateQueryStringParameter(configs.url, "tablename", configs[env].contentTable);
+  const  patt = /#[0-9a-z-@]+/gmi;
 
 	$: filteredResults = value == '' ? results : results.filter(result => {
 		console.log("keywords: " + result.Keywords);
-		let tagStr = result.hasOwnProperty("Keywords") ? result.Keywords.replace(/,/gmi, ";") : "";
-		let tagsArr = tagStr.indexOf(";") > -1 ? utils.trimStringInArray(tagStr.split(";")) : [tagStr];
+		//let tagStr = result.hasOwnProperty("Keywords") ? result.Keywords.replace(/,/gmi, ";") : "";
+		let tagsArr = [];
+    if (result.hasOwnProperty("Keywords")) {
+      let temp = result.Keywords.match(patt);
+      if (temp) tagsArr = temp;
+    }
 		return tagsArr.indexOf(value) > -1;
 	});
 
@@ -61,13 +66,13 @@
 			let kw = i.hasOwnProperty("Keywords") ? i.Keywords : [];
 			console.log(kw);
 			if (kw.length) {
-				kw = kw.replace(/,/gmi, ";");
-				console.log("new: " + kw)
-				kw.split(";").forEach(k => {
-					let keyword = k.trim();
-					console.log(keyword)
-					if (keyword.indexOf("#") > -1 && tagArray.indexOf(keyword) == -1) tagArray.push(keyword);
-				});
+				// let patt = /#[0-9a-z-@]+/gmi;
+        let tempTags = kw.match(patt);
+				if (tempTags) {
+          tempTags.forEach(function(t) {
+            if (tagArray.indexOf(t) == -1) tagArray.push(t);
+          });
+        }
 			}
 		});
 		return tagArray.sort();
