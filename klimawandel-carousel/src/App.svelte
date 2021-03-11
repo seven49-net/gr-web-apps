@@ -11,9 +11,18 @@
 	function makeCarousel(data) {
 		//console.log(data);
 		if (data.Items.length) {
-			items = data.Items;
+			items = filterType(data.Items);
 		}
 	}
+
+  function filterType(data) {
+    let o = [];
+    const term = "WCAG Blank WebPart Page";
+    if (data.length) {
+      o = data.filter(d=>d.Inhaltstyp.toLowerCase() !== term.toLocaleLowerCase());
+    }
+    return o;
+  }
 
 	function initCarousel() {
 		jQuery(".news-slick-carousel").slick({
