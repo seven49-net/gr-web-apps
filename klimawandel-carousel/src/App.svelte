@@ -4,8 +4,8 @@
 	} from 'svelte';
 	import utils from "../../defaults/js/utils.js";
 	import configs from "../../defaults/js/configs.js";
-	const env = "intklimawandel_gr_ch";
-	let url = utils.updateQueryStringParameter(configs.url, "tablename", configs[env].contentTable);
+	const env = utils.getTableSuffix();
+	let url = utils.updateQueryStringParameter(configs.url, "tablename", configs.contentTable + env);
 	let items = [];
 
 	function makeCarousel(data) {

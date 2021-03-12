@@ -1,5 +1,7 @@
 const configs = {
   url: "https://oeqtc4dy55.execute-api.eu-west-1.amazonaws.com/prod",
+  contentTable: "gr_content_",
+  tagTable: "gr_tags_",
   www_gr_ch: {
     tagTable: "gr_tags_www_gr_ch",
     contentTable: "gr_content_www_gr_ch"

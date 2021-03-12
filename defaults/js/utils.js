@@ -14,6 +14,15 @@ const utils = (() => {
     return uri + separator + key + "=" + value;
   }
 
+  function getTableSuffix() {
+    var host = location.hostname;
+    var tablesuffix = "intwww_gr_ch";
+    if (host.indexOf("gr.ch") > -1) {
+      tablesuffix = host.replace(/\./gmi, "_");
+    }
+    return tablesuffix;
+  }
+
   function getTags(tags) {
     let patt = /#[0-9a-z-@]+/gmi;
     let tempTags = tags.match(patt);
@@ -51,7 +60,8 @@ const utils = (() => {
     updateQueryStringParameter: updateQueryStringParameter,
     getTags: getTags,
     trimStringInArray: trimStringInArray,
-    getText: getText
+    getText: getText,
+    getTableSuffix: getTableSuffix
   }
 
 

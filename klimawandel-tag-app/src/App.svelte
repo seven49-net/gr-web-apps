@@ -6,9 +6,9 @@
 	import utils from "../../defaults/js/utils.js";
 	import configs from "../../defaults/js/configs.js";
 
-	const env = "intklimawandel_gr_ch";
-	const urlTags = utils.updateQueryStringParameter(configs.url, "tablename", configs[env].tagTable);
-	const urlPages = utils.updateQueryStringParameter(configs.url, "tablename", configs[env].contentTable);
+	const env = utils.getTableSuffix();
+	const urlTags = utils.updateQueryStringParameter(configs.url, "tablename", configs.tagTable + env);
+	const urlPages = utils.updateQueryStringParameter(configs.url, "tablename", configs.contentTable + env);
 	export let list = [];
 
 	function randomFs(min, max) {

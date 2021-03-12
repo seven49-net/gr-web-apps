@@ -11,8 +11,8 @@
 	export let tags;
 	let hits;
 	let value = "";
-	const env = "intklimawandel_gr_ch";
-	let searchUrl = utils.updateQueryStringParameter(configs.url, "tablename", configs[env].contentTable);
+	const env = utils.getTableSuffix();
+	let searchUrl = utils.updateQueryStringParameter(configs.url, "tablename", configs.contentTable + env);
   const  patt = /#[0-9a-z-@]+/gmi;
 
 	$: filteredResults = value == '' ? results : results.filter(result => {
