@@ -18,7 +18,7 @@ module.exports = {
       },
       "NewImage":{
         "Keywords":{
-          "S": "#Tag2; #Tag4, Test3; #Tag10, #Tag12"
+          "S": "#Natur"
         },
         "Modified":{
           "S":"2020-12-23T10:23:05.410Z"
@@ -114,7 +114,7 @@ module.exports = {
       "SizeBytes":1338,
       "StreamViewType":"NEW_AND_OLD_IMAGES"
     },
-    "eventSourceARN":"arn:aws:dynamodb:eu-west-1:322043043330:table/gr_content_klimawandel_gr_ch/stream/2020-12-28T15:07:50.764"
+    "eventSourceARN":"arn:aws:dynamodb:eu-west-1:322043043330:table/gr_content_intklimawandel_gr_ch/stream/2020-12-28T15:07:50.764"
   }
 ]
 };

@@ -37,16 +37,20 @@ exports.handler = async (event) => {
     let pagetitle = '';
     let keywords = null;
     let eventmode = "update";
+    let articledate = '';
     if (eventname == "REMOVE") eventmode = "delete";
     console.log(eventmode);
     if (eventmode == "update") {
       pagetitle = record.dynamodb.NewImage.Title.S;
+      articledate = getDate(record.dynamodb.NewImage);
+      console.log(articledate);
       if (record.dynamodb.NewImage.hasOwnProperty("Keywords")) {
         keywords = record.dynamodb.NewImage.hasOwnProperty("Keywords") ? record.dynamodb.NewImage.Keywords.S : null;
       }
     }
     if (eventmode == "delete") {
       pagetitle = record.dynamodb.OldImage.Title.S;
+      articledate = getDate(record.dynamodb.OldImage);
       keywords = record.dynamodb.OldImage.hasOwnProperty("Keywords") ? record.dynamodb.OldImage.Keywords.S : null;
     }
     const tags = keywords ? getTags(keywords) : [];
@@ -74,6 +78,7 @@ exports.handler = async (event) => {
               const item = getitem.body.Item;
               const pages = item.hasOwnProperty("pages") ? JSON.parse(item.pages.S) : [];
               let update = true;
+              let update4date = true; // => update article date
               //console.log("Pages:");
               //console.log(pages);
               const filter = pages.filter(o => {
@@ -84,20 +89,29 @@ exports.handler = async (event) => {
                 if (filter.length == 0) {
                   tempPages.push({
                     title: pagetitle,
-                    url: url
+                    url: url,
+                    published: articledate
                   });
-                  // console.log("Temp Pages");
-                  // console.log(tempPages);
+                  console.log("Temp Pages");
+                  console.log(tempPages);
 
                 } else {
 
-                  let fpos = pages.map(function (item) { return item.url; }).indexOf(url);
+                  let fpos = pages.map(function (item) {
+                    return item.url;
+                  }).indexOf(url);
                   console.log(fpos);
-                  let lpos = pages.map(function (item) { return item.url; }).lastIndexOf(url);
+                  let lpos = pages.map(function (item) {
+                    return item.url;
+                  }).lastIndexOf(url);
                   console.log(lpos);
                   if (fpos != lpos) {
-                    while (tempPages.map(function (item) { return item.url }).lastIndexOf(url) > fpos) {
-                      let p = tempPages.map(function (item) { return item.url }).lastIndexOf(url);
+                    while (tempPages.map(function (item) {
+                        return item.url
+                      }).lastIndexOf(url) > fpos) {
+                      let p = tempPages.map(function (item) {
+                        return item.url
+                      }).lastIndexOf(url);
                       console.log(p);
                       tempPages.splice(p, 1);
                     }
@@ -112,9 +126,15 @@ exports.handler = async (event) => {
 
                     tempPages[fpos].title = pagetitle;
                   }
+                  if (tempPages[fpos].hasOwnProperty("published") && tempPages[fpos].published == articledate) {
+                    update4date = false;
+                    console.log(`${tag} with  url: ${url} + published date: ${articledate} is already in ${tagTable}`);
+                  } else {
+                    tempPages[fpos].published = articledate;
+                  }
 
                 }
-                if (update) {
+                if (update || update4date) {
                   // try catch
                   try {
                     const updateItem = await putItem({
@@ -144,7 +164,9 @@ exports.handler = async (event) => {
                 console.log("if delete");
                 let del = false;
                 // console.log(tag, url);
-                let pos = pages.map(function (item) { return item.url; }).indexOf(url);
+                let pos = pages.map(function (item) {
+                  return item.url;
+                }).indexOf(url);
                 // console.log(tag, pos);
                 // console.log(tag, pages);
                 // console.log("filter", filter);
@@ -247,6 +269,7 @@ exports.handler = async (event) => {
   }
   return `Successfully processed ${event.Records.length} records.`;
 };
+
 function getTags(tags) {
   let patt = /#[0-9a-z-@]+/gmi;
   let tempTags = tags.match(patt);
@@ -260,6 +283,16 @@ function getTags(tags) {
   //const keywordsArray = tempTags.indexOf(";") > -1 ? tempTags.split(";") : [tempTags];
 
   return tagsArray;
+}
+
+function getDate(obj) {
+  let out = new Date(obj.Modified.S);
+  let temp = '';
+  if (obj.hasOwnProperty('ArticleDate')) {
+    temp = new Date(obj.ArticleDate.S);
+    if (temp.getFullYear() > 1) out = temp;
+  }
+  return out;
 }
 
 function setTableName(src) {
