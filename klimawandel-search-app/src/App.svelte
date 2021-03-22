@@ -14,6 +14,8 @@
 	const env = utils.getTableSuffix();
 	let searchUrl = utils.updateQueryStringParameter(configs.url, "tablename", configs.contentTable + env);
   const  patt = /#[0-9a-z-@]+/gmi;
+  const tagquery = utils.getUrlParameter("tag");
+  console.log(tagquery);
 
 	$: filteredResults = value == '' ? results : results.filter(result => {
 		console.log("keywords: " + result.Keywords);
@@ -32,6 +34,9 @@
 		if (results.length) {
 			tags = getTags(results);
 			console.log(tags);
+      if (tagquery && tags.indexOf(tagquery) > -1) {
+        value = tagquery;
+      }
 		}
 	});
 
