@@ -11,9 +11,18 @@
 	function makeCarousel(data) {
 		//console.log(data);
 		if (data.Items.length) {
-			items = filterType(data.Items);
+			items = filterNews(data.Items);
 		}
 	}
+
+  function filterNews(data) {
+    let o = [];
+    const regex = /seiten\/\d+_/gmi;
+    if (data.length) {
+      o = data.filter(d => d.Url.match(regex));
+    }
+    return o;
+  }
 
   function filterType(data) {
     let o = [];
@@ -32,8 +41,8 @@
 			dots: false,
 			speed: 500,
 			respondTo: "slider",
-			prevArrow: "<button type='button' data-role='none' class='slick-prev slick-arrow' aria-label='previous' role='button'><img src=\"https://cdn.gr.ch/redesign2016/images/icons-set/blau/arrows/pfeil-left.svg\" alt=''></button>",
-			nextArrow: "<button type='button' data-role='none' class='slick-next slick-arrow' aria-label='next' role='button'><img src=\"https://cdn.gr.ch/redesign2016/images/icons-set/blau/arrows/pfeil-right.svg\" alt=''></button>",
+			prevArrow: "<button type='button' data-role='none' class='slick-prev slick-arrow' aria-label='previous' role='button'><img src=\"https://cdn.gr.ch/gr/prod/images/icons-set/blau/arrows/pfeil-left.svg\" alt=''></button>",
+			nextArrow: "<button type='button' data-role='none' class='slick-next slick-arrow' aria-label='next' role='button'><img src=\"https://cdn.gr.ch/gr/prod/images/icons-set/blau/arrows/pfeil-right.svg\" alt=''></button>",
 			responsive: [{
 
 				breakpoint: 720,
