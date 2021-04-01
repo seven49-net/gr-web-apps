@@ -16,7 +16,7 @@ const utils = (() => {
 
   function getTableSuffix() {
     var host = location.hostname;
-    var tablesuffix = "intwww_gr_ch";
+    var tablesuffix = "klimawandel_gr_ch";
     if (host.indexOf("gr.ch") > -1) {
       tablesuffix = host.replace(/\./gmi, "_");
     }

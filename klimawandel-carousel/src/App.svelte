@@ -7,19 +7,26 @@
 	const env = utils.getTableSuffix();
 	let url = utils.updateQueryStringParameter(configs.url, "tablename", configs.contentTable + env);
 	let items = [];
-
+  const newsregex = /seiten\/\d+_/gmi;
 	function makeCarousel(data) {
 		//console.log(data);
 		if (data.Items.length) {
-			items = filterNews(data.Items);
+			items = sortByDate(filterNews(data.Items));
+      console.log(items);
 		}
 	}
 
+  function sortByDate(items) {
+    return items.sort((a,b) => {
+      return getDate(b) - getDate(a);
+    });
+  }
+
   function filterNews(data) {
     let o = [];
-    const regex = /seiten\/\d+_/gmi;
+
     if (data.length) {
-      o = data.filter(d => d.Url.match(regex));
+      o = data.filter(d => d.Url.match(newsregex));
     }
     return o;
   }
@@ -74,9 +81,28 @@
 		console.log("error: " + error);
 	});
 
-	function renderDate(date) {
-		let d = new Date(date);
-		return d.toLocaleDateString("de-CH");
+  function getDate(obj)  {
+    let date = obj.Modified;
+    let articleDate = obj.hasOwnProperty("ArticleDate") ? obj.ArticleDate : null;
+    let articleStartdate = obj.hasOwnProperty("ArticleDateStartDate") ? obj.ArticleDateStartDate : null;
+    if (articleDate && new Date(articleDate).getFullYear > 2000) {
+      date = articleDate;
+    }
+    if (articleStartdate && new Date(articleStartdate).getFullYear > 2000) {
+      date = articleStartdate;
+    }
+
+    return new Date(date);
+
+  }
+
+	function renderDate(item) {
+		let d = getDate(item);
+		return d.toLocaleDateString("de-CH", {
+      year: "numeric",
+      day: "2-digit",
+      month: "2-digit"
+    });
 	}
 	onMount(() => {
 		console.log('the component has mounted');
@@ -92,10 +118,10 @@
 						{#if item.PreviewImage}
 						<img src={item.PreviewImage} alt={item.Title} />
 						{:else}
-						<img src="https://cdn.gr.ch/dev-redesign2016/web-app/placeholder.png" alt={item.Title} />
+						<img src="https://cdn.gr.ch/apps/int/klimawandel-carousel/placeholder.png" alt={item.Title} />
 						{/if}
 					<h2 class="lead">{ item.Title }</h2>
-					<p class="date">{ renderDate(item.Created) }</p>
+					<p class="date">{ renderDate(item) }</p>
 					{#if item.Content }
 					<p class="summary">
 						{@html utils.getText(item.Content,200)}
