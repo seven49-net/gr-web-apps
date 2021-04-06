@@ -1,33 +1,21 @@
 <script>
+import { get_slot_changes } from "svelte/internal";
+
   import utils from "../../defaults/js/utils.js";
   export let items = [];
   function renderTags(item) {
     let tags = item.Keywords == undefined ? [] : item.Keywords;
     let out = [];
     if (tags.length) {
-      tags = tags.replace(/,/gmi, ";");
-      tags.split(";").forEach(k => {
-					let keyword = k.trim();
-					if (keyword.indexOf("#") > -1 && out.indexOf(keyword) == -1) out.push(keyword); 
-				});
+      let temp = utils.getTags(tags);
+      out = temp.map(t => "#" + t)
     }
     return out.join(" ");
   }
   let r;
-  // function getText(str, length) {
-  //   let count = length === "undefined" ? 0 : length;
-  //   let cleaned = str.replace(/(<([^>]+)>)/gi, "");
-  //   let out = cleaned; 
-  //   if(count) {
-  //     if (cleaned.length > count-1) {
-  //       out = cleaned.substring(0, length) + "...";
-  //     }
-  //   }
-  //   return out;
-  //   }
 </script>
 
-{#if items.length} 
+{#if items.length}
 		<div class="results row">
 			{#each items as r}
 				<div class="result column">
@@ -37,13 +25,13 @@
             {/if}
             {#if r.PreviewImage }<img src={r.PreviewImage} alt='' />{/if}
 					<span class="title">{#if r.LongTitle}{r.LongTitle}{:else}{r.Title}{/if}</span>
-					{#if r.Content}<div class="summary">{@html utils.getText(r.Content, 200)}</div>{/if}
+					{#if r.Content}<div class="summary">{@html utils.getText(r.Content, 100)}</div>{/if}
 					</a>
 				</div>
 			{/each}
 		</div>
   {/if}
-  
+
   <style>
     .result {
 		/* margin: 20px 0; */
