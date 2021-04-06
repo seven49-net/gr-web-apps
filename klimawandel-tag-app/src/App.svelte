@@ -28,6 +28,20 @@
 	  });
 	  return updatedTags;
 	}
+  function sortAZ(arr) {
+    let out = arr.sort((a,b) => {
+      let na = a.name.toLowerCase();
+      let nb = b.name.toLowerCase();
+      if (na < nb) {
+        return -1;
+      }
+      if (na > nb) {
+        return 1;
+      }
+      return 0;
+    });
+    return out;
+  }
 	fetch(urlTags).then(response => {
 	  return response.json();
 	}).then(data => {
@@ -38,11 +52,25 @@
 	  }
 	}).then(() => {
 
+    sortAZ(tags);
+    //console.log(tags);
+    // tags = tags.sort((a,b) => {
+    //   let na = a.name.toLowerCase();
+    //   let nb = b.name.toLowerCase();
+    //   if (na < nb) {
+    //     return -1;
+    //   }
+    //   if (na > nb) {
+    //     return 1;
+    //   }
+    //   return 0;
+    // });
+
 	  tags.forEach(function (t) {
 	    console.log(t);
 	    list.push(["#" + t.name, randomFs(20, 72), t.pages])
 	  });
-	  console.log(list);
+	  //console.log(list);
 	  wordcloud(list);
 	});
 
@@ -75,12 +103,17 @@
 	      getPages(item[0], urlPages); //item[2];
 	      clickedtag = item[0];
 	    },
-	    gridSize: 10,
-	    rotateRatio: 0.75,
-	    shape: "circle",
+	    gridSize: 5,
+	    rotateRatio: 0,
+      shuffle: 0,
+	    shape: "diamond",
 	    ellipticity: 1,
 	    shrinkToFit: true
 	  });
+
+    //gridSize: 10,
+	  //  rotateRatio: 0.75,
+	  //  shape: "circle",
 	}
 </script>
 
