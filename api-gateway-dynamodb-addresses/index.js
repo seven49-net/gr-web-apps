@@ -53,20 +53,31 @@ exports.handler = async (event, context) => {
 function buildParameters(iName, recArtName, value) {
 
   let keyConditionExpression = "#prim = :p and #sec = :s";
-  let secondaryKey = '';
+  let indexName = iName.toUpperCase();
+  let secondaryKey = indexName.replace("INDEX-", "");
   let s = value;
 
-  switch (iName.toUpperCase()) {
+  switch (indexName) {
     case "INDEX-POSTLEITZAHL":
       keyConditionExpression = "#prim = :p and #sec = :s";
-      secondaryKey = "POSTLEITZAHL";
+      s = parseInt(value);
+      break;
+    case "INDEX-ONRP":
       s = parseInt(value);
       break;
 
+    case "INDEX-ORTBEZ27":
+      keyConditionExpression = "#prim = :p and  begins_with(#sec,:s)";
+      break;
+    // case "INDEX-STRBEZ2L":
+    // break;
+    // case "INDEX-STRBEZL":
+    //   break;
+    case "INDEX-STRID":
+      s = parseInt(value);
+      break;
     default:
       keyConditionExpression = "#prim = :p and #sec = :s";
-      secondaryKey: "POSTLEITZAHL";
-      s = parseInt(value);
       break;
   }
 
