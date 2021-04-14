@@ -85,10 +85,11 @@
     let date = obj.Modified;
     let articleDate = obj.hasOwnProperty("ArticleDate") ? obj.ArticleDate : null;
     let articleStartdate = obj.hasOwnProperty("ArticleDateStartDate") ? obj.ArticleDateStartDate : null;
-    if (articleDate && new Date(articleDate).getFullYear > 2000) {
+    // console.log(new Date(articleDate).getFullYear());
+    if (articleDate && new Date(articleDate).getFullYear() > 2000) {
       date = articleDate;
     }
-    if (articleStartdate && new Date(articleStartdate).getFullYear > 2000) {
+    if (articleStartdate && new Date(articleStartdate).getFullYear() > 2000) {
       date = articleStartdate;
     }
 
