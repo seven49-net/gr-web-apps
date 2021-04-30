@@ -95,7 +95,8 @@
 
       $("#vac-chart").kendoChart({
         title: {
-          text: params.title
+          text: params.title,
+          color: "#000"
         },
         legend: {
           position: "bottom"
@@ -104,16 +105,34 @@
           type: "area",
           area: {
             line: {
-              style: "smooth"
+              style: "normal"
             }
           }
         },
         seriesColors: params.seriesColors,
         series: params.series,
+        plotArea: {
+          background: "#ccc"
+        },
+        chartArea: {
+          background: "#fff"
+        },
+        axisDefaults: {
+          background: "#fff"
+        },
         valueAxis: {
-          labels: {
-            format: "{0}"
+          title: {
+            text: "Einwohner Kt. Graubünden"
           },
+          labels: {
+            format: "{0}",
+            skip: 1,
+            step: 0,
+
+          },
+          min: 0,
+          max: 198000,
+          majorUnit: 9900,
           line: {
             visible: false
           },
