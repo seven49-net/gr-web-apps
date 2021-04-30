@@ -1,0 +1,30 @@
+
+.covid-19-vac-app-2 {
+  max-width: 960px;
+  margin: 0 auto;
+}
+.chart {
+  width: 100%;
+}
+.chart {
+  display: flex;
+  flex-flow: ro nowrap;
+  color: #fff;
+}
+.chart div {
+  padding: 80px 5px;
+  text-align: center;
+  vertical-align: middle;
+}
+.chart div span {
+  display: block;
+}
+.vac-1 {
+  background: #00588C;
+}
+.vac-2 {
+  background: #D24900;
+}
+.no-vac {
+  background: #999;
+}
