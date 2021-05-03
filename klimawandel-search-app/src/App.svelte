@@ -9,13 +9,45 @@
 	export let results;
 	export let message;
 	export let tags;
+
+  const translations = {
+    search_label: {
+      de: "Suchen",
+      it: "cercare"
+    },
+    filter_label: {
+      de: "Tag Filter",
+      it: "tag filtro"
+    },
+    placeholder: {
+      de: "Bitte geben Sie einen Suchbegriff ein"
+    }
+
+  };
+
+
+
 	let hits;
 	let value = "";
 	const env = utils.getTableSuffix();
-	let searchUrl = utils.updateQueryStringParameter(configs.url, "tablename", configs.contentTable + env);
+  const langIso = utils.getLangIso(".climate-change-search-app");
+
+	let searchUrl = utils.updateQueryStringParameter(utils.updateQueryStringParameter(configs.url, "tablename", configs.contentTable + env), "language", langIso);
   const  patt = /#[0-9a-z-@]+/gmi;
   const tagquery = utils.getUrlParameter("tag");
   console.log(tagquery);
+
+  function getTranslation(str) {
+    let out = "kein Text mit " + str + " gefunden";
+    if (translations.hasOwnProperty(str)) {
+      if (translations[str].hasOwnProperty(langIso)) {
+        out = translations[str][langIso];
+      } else {
+        out = "keine Übersetzung für '" + str + "' in '" + langIso + "' vorhanden";
+      }
+    }
+    return out;
+  }
 
 	$: filteredResults = value == '' ? results : results.filter(result => {
 		console.log("keywords: " + result.Keywords);
@@ -82,7 +114,7 @@
 		});
 		return tagArray.sort();
 	}
-
+/*
 	function getSearchresults() {
 		let url = searchterm == "" ? searchUrl : utils.updateQueryStringParameter(searchUrl,"searchterm" , searchterm.toLowerCase());
 		fetch(url).then((response) => {
@@ -100,6 +132,7 @@
 			}
 		});
 	}
+  */
 </script>
 <svelte:head>
 <title>{appName}</title>
@@ -109,13 +142,13 @@
 <div class="search-app">
 	<form class="row">
 		<div class="form-control column column-1-1">
-		<label for="searchterm">Suchen</label>
-		<input type="text" name="searchterm" bind:value={searchterm} id="searchterm" on:keyup={onkeyup} placeholder="bitte geben Sie einen Suchbegriff ein" on:keydown={onkeydown} />
+		<label for="searchterm">{getTranslation("search_label")}</label>
+		<input type="text" name="searchterm" bind:value={searchterm} id="searchterm" on:keyup={onkeyup} placeholder="{getTranslation('placeholder')}" on:keydown={onkeydown} />
 	</div>
 
 	{#if tags.length}
 	<div class="form-control column column-1-1">
-		<label for="tags">Tag Filter</label>
+		<label for="tags">{getTranslation("filter_label")}</label>
 		<select id="tags" name="tags" bind:value>
 			<option value="">--</option>
 			{#each tags as tag}

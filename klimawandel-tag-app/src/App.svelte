@@ -6,9 +6,10 @@
 	import utils from "../../defaults/js/utils.js";
 	import configs from "../../defaults/js/configs.js";
 
+  const langIso = utils.getLangIso(".climate-change-tag-cloud");
 	const env = utils.getTableSuffix();
-	const urlTags = utils.updateQueryStringParameter(configs.url, "tablename", configs.tagTable + env);
-	const urlPages = utils.updateQueryStringParameter(configs.url, "tablename", configs.contentTable + env);
+	const urlTags = utils.updateQueryStringParameter(utils.updateQueryStringParameter(configs.url, "tablename", configs.tagTable + env),"language", langIso);
+	const urlPages = utils.updateQueryStringParameter(utils.updateQueryStringParameter(configs.url, "tablename", configs.contentTable + env), "language", langIso);
 	export let list = [];
 
 	function randomFs(min, max) {

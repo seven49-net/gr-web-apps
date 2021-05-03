@@ -5,9 +5,16 @@
 	import utils from "../../defaults/js/utils.js";
 	import configs from "../../defaults/js/configs.js";
 	const env = utils.getTableSuffix();
+  // const embed =  utils.checkEmbed(".climate-change-carousel-app");
+  let langIso = utils.getLangIso(".climate-change-carousel-app");
+
 	let url = utils.updateQueryStringParameter(configs.url, "tablename", configs.contentTable + env);
+  url = utils.updateQueryStringParameter(url, "language", langIso);
 	let items = [];
   const newsregex = /seiten\/\d+_/gmi;
+
+
+
 	function makeCarousel(data) {
 		//console.log(data);
 		if (data.Items.length) {
