@@ -9,6 +9,36 @@
     var defaults = {
       seriesColors: ["rgb(45, 148, 6)", "rgb(0, 175, 8)", "rgb(55, 110, 34)"]
     };
+    var text = {
+      apptitle: {
+        de: "COVID-19 Impfungen Kanton Graubünden"
+      },
+      dosis1: {
+        de: "Dosis 1",
+        it:"dose 1"
+      },
+      dosis2: {
+        de: "Dosis 2",
+        it: "dose 2"
+      },
+      total: {
+        de: "Einwohner Kanton Graubünden Total 198'000"
+      }
+    };
+    function getLanguage() {
+      var lang = "de";
+      var pathname = location.pathname;
+      var pattern = /^\/[a-z]{2}\//gmi;
+      if (pathname.match(pattern)) lang = pathname.match(pattern)[0].replace(/\//gm, "");
+      return lang;
+    }
+
+    var langIso = getLanguage();
+    console.log(langIso);
+    function getText(prop, langIso) {
+      return text[prop].hasOwnProperty(langIso) ? text[prop][langIso] : text[prop].de;
+    }
+
     function makeIsoDate(d) {
       var pattern = /\d{2}\.\d{2}\.\d{4}/gm;
       var tempDate = d;
@@ -76,12 +106,12 @@
         var chartData = buildData(data);
         console.log(chartData);
         createChart({
-          title: "COVID-19 Impfungen Kt. Graubünden",
+          title: getText("apptitle", langIso),
           series: [{
-            name: "Dosis 1",
+            name: getText("dosis1", langIso),
             data: chartData.dose1
           }, {
-            name: "Dosis 2",
+            name: getText("dosis2", langIso),
             data: chartData.dose2
           }],
           seriesColors: defaults.seriesColors,
@@ -112,7 +142,7 @@
         seriesColors: params.seriesColors,
         series: params.series,
         plotArea: {
-          background: "#ccc"
+          background: "#fff"
         },
         chartArea: {
           background: "#fff"
@@ -122,7 +152,7 @@
         },
         valueAxis: {
           title: {
-            text: "Einwohner Kt. Graubünden"
+            text: getText("total", langIso)
           },
           labels: {
             format: "{0}",
@@ -130,9 +160,20 @@
             step: 0,
 
           },
+          plotBands: [
+            { from: 198000, to: 200000, color: "#e4e4e4" }
+          ],
+          // notes: {
+          //   line: {
+          //     color: "#aa00bb",
+          //     length: 400
+
+          //   },
+          //   data: [{ value: 198000 }]
+          // },
           min: 0,
-          max: 198000,
-          majorUnit: 9900,
+          max: 200000,
+          majorUnit: 10000,
           line: {
             visible: false
           },
@@ -227,11 +268,7 @@
 
     }
 
-    function getTitle(prop, langIso) {
 
-      return texts.title[prop].hasOwnProperty(langIso) ? texts.title[prop][langIso] : texts[prop].de;
-
-    }
 
     function setUrl(pl, url) {
       var out = urls.prod.url_1;
