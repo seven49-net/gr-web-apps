@@ -60,9 +60,11 @@
       }
 
       var date = new Date(tempDate);
-      console.log(date);
+      //console.log(date);
       var out = '';
       var day = date.getDay();
+      // console.log(day, params.c, params.t);
+
       if (params.c == 1 || day == 1 || params.c == params.t) out = leadingZero(date.getDate()) + "." + leadingZero((date.getMonth() + 1)) + "." + (year ? date.getFullYear() : '');
       return out;
     }
@@ -89,9 +91,11 @@
           dates.push(renderDate(v.Stand, { y: false, c: count, t: total }));
           dose1.push(v.verimpft1);
           dose2.push(v.verimpft2);
+          count++;
         });
 
       }
+      console.log(dates);
       return {
         "dates": dates,
         "dose1": dose1,
