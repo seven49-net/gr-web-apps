@@ -17,10 +17,11 @@
     },
     filter_label: {
       de: "Tag Filter",
-      it: "tag filtro"
+      it: "filtro hashtag"
     },
     placeholder: {
-      de: "Bitte geben Sie einen Suchbegriff ein"
+      de: "Bitte geben Sie einen Suchbegriff ein",
+      it: "Inserire un termine di ricerca"
     }
 
   };
