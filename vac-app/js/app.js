@@ -35,7 +35,7 @@
       var lang = "de";
       var pathname = location.pathname;
       var pattern = /^\/[a-z]{2}\//gmi;
-      if (pathname.match(pattern)) lang = pathname.match(pattern)[0].replace(/\//gm, "");
+      if (pathname.match(pattern)) lang = pathname.match(pattern)[0].replace(/\//gm, "").toLowerCase();
       return lang;
     }
 
