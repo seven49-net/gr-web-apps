@@ -80,8 +80,17 @@
 	    .then(response => response.json())
 	    .then(data => {
 	      console.log(data);
-	      pages = data.Items;
-	    })
+        let unfiltered = data.Items;
+
+        // let filtered = unfiltered.filter( o => {
+        //   let url = o.Url;
+        //   let pattern = new RegExp("/" + langIso + "/", "gmi");
+
+        //   return pattern.test(url);
+        // });
+
+	      pages = unfiltered;
+	    });
 	}
 
 	function wordcloud(list) {
