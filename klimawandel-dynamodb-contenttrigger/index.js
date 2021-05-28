@@ -36,6 +36,7 @@ exports.handler = async (event) => {
     const modifiedOn = new Date();
     let pagetitle = '';
     let keywords = null;
+    let oldkeywords = null;
     let eventmode = "update";
     let articledate = '';
     if (eventname == "REMOVE") eventmode = "delete";
@@ -46,6 +47,7 @@ exports.handler = async (event) => {
       console.log(articledate);
       if (record.dynamodb.NewImage.hasOwnProperty("Keywords")) {
         keywords = record.dynamodb.NewImage.hasOwnProperty("Keywords") ? record.dynamodb.NewImage.Keywords.S : null;
+        oldkeywords = record.dynamodb.hasOwnProperty("OldImage") && record.dynamodb.OldImage.hasOwnProperty("Keywords") ? record.dynamodb.OldImage.Keywords.S : null;
       }
     }
     if (eventmode == "delete") {
@@ -54,9 +56,16 @@ exports.handler = async (event) => {
       keywords = record.dynamodb.OldImage.hasOwnProperty("Keywords") ? record.dynamodb.OldImage.Keywords.S : null;
     }
     const tags = keywords ? getTags(keywords) : [];
+    const oldtags = oldkeywords ? getTags(oldkeywords) : [];
+    const markForDeletion = oldtags.filter(ot =>{
+      return keywords.indexOf(ot) == -1;
+    });
     console.log(tags);
-
-    if (tagTable && tags.length) {
+    console.log(oldtags);
+    console.log("mark for deletion");
+    console.log(markForDeletion);
+    // && tags.length
+    if (tagTable) {
       // looping through tags array
       for (var tag of tags) {
         console.log(`handle ${tag}`);
@@ -262,6 +271,117 @@ exports.handler = async (event) => {
         } catch (error) {
           console.log("something went wrong with getting item from tag table");
           console.log(error);
+        }
+      }
+      if (markForDeletion.length) {
+        for (var dtag of markForDeletion) {
+          console.log(`handle delete ${dtag}`);
+          const getDitem = await getItem({
+            "TableName": tagTable,
+            "Key": {
+              "name": {
+                "S": dtag
+              },
+              "language": {
+                "S": language
+              }
+            }
+          });
+          if (getDitem.statusCode === 200) {
+
+            if (getDitem.body.hasOwnProperty("Item")) {
+              console.log(`there is such tag (${dtag}) in ${tagTable}`);
+                const dItem = getDitem.body.Item;
+                const dPages = dItem.hasOwnProperty("pages") ? JSON.parse(dItem.pages.S) : [];
+                let update = true;
+                let update4date = true; // => update article date
+                console.log("Pages:");
+                console.log(dPages);
+                const dFilter = dPages.filter(o => {
+                  return o.url == url;
+                 });
+                console.log(dFilter);
+
+                // pasted in
+                console.log("if delete");
+                let del = false;
+                // console.log(tag, url);
+                let pos = dPages.map(function (item) {
+                  return item.url;
+                }).indexOf(url);
+                // console.log(tag, pos);
+                // console.log(tag, pages);
+                // console.log("filter", filter);
+                if (dPages.length == 0) {
+                  del = true;
+                  // no other pages with this tag - delete item
+                  console.log("no other")
+                } else if (dFilter.length == 1 && dPages.length == 1) {
+                  // it's the only page with this tag
+                  del = true;
+                } else if (dPages.length > 1) {
+                  let tempP = dPages;
+                  tempP.splice(pos, 1);
+                  //console.log(tag, tempP, tempP.length);
+
+                  if (tempP.length >= 1) {
+                    try {
+                      const updateItemOnDelete2 = await putItem({
+                        TableName: tagTable,
+                        Item: {
+                          "name": {
+                            "S": dtag
+                          },
+                          "language": {
+                            "S": language
+                          },
+                          "pages": {
+                            "S": JSON.stringify(tempP)
+                          },
+                          "modifiedOn": {
+                            "S": modifiedOn.toISOString()
+                          }
+                        }
+                      });
+                      if (updateItemOnDelete2 == "put item success") console.log(`update on delete ${dtag} success`);
+                    } catch (error) {
+                      console.log(`Error updating on delete ${dtag}`);
+                    }
+                  } else {
+                    del = true;
+                    console.log("there was only one and now delete tag item");
+                  }
+                }
+
+                // delete item
+                if (del) {
+                  console.log("delete", del)
+                  try {
+                    const delItem2 = await deleteItem({
+                      TableName: tagTable,
+                      Key: {
+                        "name": dtag,
+                        "language": language
+                      }
+                    });
+                    console.log(delItem2.body);
+                  } catch (error) {
+                    console.log(`Error deleting  ${dtag} from ${tagTable}`);
+                    console.log(error);
+                  }
+                }
+
+                // end pasted in
+
+            } else {
+
+              console.log(`there is no such tag (${dtag}) in ${tagTable}- so nothing to do`);
+            }
+
+          } else {
+            console.log(`Something went wrong`);
+          }
+
         }
       }
     }

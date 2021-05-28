@@ -18,7 +18,7 @@ module.exports = {
       },
       "NewImage":{
         "Keywords":{
-          "S": "#Natur"
+          "S": "#Natur #Klima #unvermeidlich"
         },
         "Modified":{
           "S":"2020-12-23T10:23:05.410Z"
@@ -30,7 +30,7 @@ module.exports = {
           "S":"193.247.20.51"
         },
         "Title":{
-          "S": "Webbears MODIFY"
+          "S": "Webbears MODIFY2"
         },
         "Host":{
           "S":"https://intwww.gr.ch"
@@ -65,7 +65,7 @@ module.exports = {
       },
       "OldImage":{
         "Keywords":{
-          "S":"#Tag2; #Tag4; Test3"
+          "S":"#Natur #nichtgut #unvermeidlich #Klimawandel"
         },
         "Modified":{
           "S":"2020-12-23T10:23:05.410Z"
