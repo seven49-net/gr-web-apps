@@ -17,8 +17,13 @@ const utils = (() => {
   function getTableSuffix() {
     var host = location.hostname;
     var tablesuffix = "klimawandel_gr_ch";
+    var url = location.href;
     if (host.indexOf("gr.ch") > -1) {
-      tablesuffix = host.replace(/\./gmi, "_");
+      if (host === "cdn.gr.ch") {
+        if (/\/int\//gmi.test(url)) tablesuffix = "intklimawandel_gr_ch";
+      } else {
+        tablesuffix = host.replace(/\./gmi, "_");
+      }
     }
     return tablesuffix;
   }
