@@ -5,7 +5,7 @@ const dynamo = new AWS.DynamoDB.DocumentClient();
 exports.handler = async (event, context) => {
   console.log('Received event:', JSON.stringify(event, null, 2));
 
-  let body;
+  let body = "no result";;
   let statusCode = '200';
   const headers = {
     'Content-Type': 'application/json',
@@ -14,15 +14,17 @@ exports.handler = async (event, context) => {
 
   let params;
   let qs = event.queryStringParameters;
-
+  let indexName;
+  let primaryKeyValue;
+  let searchterm;
   // https://vdk8qyhmsa.execute-api.eu-west-1.amazonaws.com/PROD/?index_name=index-postleitzahl&rec_art_name=plz1&searchterm=3000
 
   try {
     switch (event.httpMethod) {
       case "GET":
-        let indexName = qs.hasOwnProperty("index_name") ? qs.index_name.toUpperCase() : null;
-        let primaryKeyValue = qs.hasOwnProperty("rec_art_name") ? qs.rec_art_name.toUpperCase() : null;
-        let searchterm = qs.hasOwnProperty("searchterm") ? qs.searchterm : null;
+        indexName = qs.hasOwnProperty("index_name") ? qs.index_name.toUpperCase() : null;
+        primaryKeyValue = qs.hasOwnProperty("rec_art_name") ? qs.rec_art_name.toUpperCase() : null;
+        searchterm = qs.hasOwnProperty("searchterm") ? qs.searchterm : null;
 
 
         if (indexName && primaryKeyValue) {
@@ -35,7 +37,24 @@ exports.handler = async (event, context) => {
         }
 
     }
-    body = await dynamo.query(params).promise();
+    var first = await dynamo.query(params).promise();
+    // body = first;
+    if (first.Items.length) {
+      body = first;
+    } else {
+      // if ortbez27 plz2 = no result -> second with plz1
+      if (indexName === "INDEX-ORTBEZ27") {
+        if (primaryKeyValue === "PLZ2") {
+          params = buildParameters(indexName, "PLZ1", searchterm);
+        } else {
+          params = buildParameters(indexName, "PLZ2", searchterm);
+        }
+        var second = await dynamo.query(params).promise();
+        body = second;
+      }
+
+    }
+
   } catch (err) {
     statusCode = '400';
     body = err.message;
@@ -73,7 +92,7 @@ function buildParameters(iName, recArtName, value) {
   let keyConditionExpression = "#prim = :p and #sec = :s";
   let indexName = iName.toUpperCase();
   let secondaryKey = indexName.replace("INDEX-", "");
-  let s = capitalizeAll(value);
+  let s = capitalize(value);
   let rec_art_name = recArtName.toUpperCase();
 
   switch (indexName) {
