@@ -50,12 +50,31 @@ exports.handler = async (event, context) => {
   };
 };
 
+function capitalize(str) {
+  if(typeof str === 'string') {
+      return str.replace(/^\w/, function(c) {
+        return c.toUpperCase();
+      });
+  } else {
+      return '';
+  }
+}
+function capitalizeAll(phrase) {
+  if (typeof phrase === 'string') {
+    return phrase.replace(/\b\w/g, function(c) {
+      return c.toUpperCase();
+  });
+  } else {
+    return '';
+  }
+}
 function buildParameters(iName, recArtName, value) {
 
   let keyConditionExpression = "#prim = :p and #sec = :s";
   let indexName = iName.toUpperCase();
   let secondaryKey = indexName.replace("INDEX-", "");
-  let s = value;
+  let s = capitalizeAll(value);
+  let rec_art_name = recArtName.toUpperCase();
 
   switch (indexName) {
     case "INDEX-POSTLEITZAHL":
@@ -92,7 +111,7 @@ function buildParameters(iName, recArtName, value) {
     },
     ExpressionAttributeValues: {
       ":s": s,
-      ":p": recArtName
+      ":p": rec_art_name
     }
   };
   return params;
