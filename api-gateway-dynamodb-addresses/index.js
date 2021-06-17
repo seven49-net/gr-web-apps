@@ -5,7 +5,7 @@ const dynamo = new AWS.DynamoDB.DocumentClient();
 exports.handler = async (event, context) => {
   console.log('Received event:', JSON.stringify(event, null, 2));
 
-  let body = "no result";;
+  let body = [{Count: 0, Items: [], noresult: 1}];
   let statusCode = '200';
   const headers = {
     'Content-Type': 'application/json',
@@ -37,8 +37,20 @@ exports.handler = async (event, context) => {
         }
 
     }
-    var first = await dynamo.query(params).promise();
-    // body = first;
+    let first = await dynamo.query(params).promise();
+    if (indexName === "INDEX-STRBEZL") {
+      if (first.Items.length) {
+        let results = [];
+
+        for (const it of first.Items)  {
+          let onrp = it.ONRP;
+          let result = await dynamo.query(streetResultParameters(onrp)).promise();
+          results.push(result.Items[0]);
+        }
+        body = results;
+      }
+    } else {
+
     if (first.Items.length) {
       body = first;
     } else {
@@ -53,7 +65,9 @@ exports.handler = async (event, context) => {
         body = second;
       }
 
+      }
     }
+
 
   } catch (err) {
     statusCode = '400';
@@ -68,6 +82,22 @@ exports.handler = async (event, context) => {
     headers,
   };
 };
+function streetResultParameters(onrp) {
+  let s = parseInt(onrp);
+  return {
+    TableName: "gr_post_adressdaten",
+    IndexName: "INDEX-ONRP",
+    KeyConditionExpression: "#prim = :p and #sec = :s",
+    ExpressionAttributeNames: {
+      "#prim": "REC_ART_NAME",
+      "#sec": "ONRP"
+    },
+    ExpressionAttributeValues: {
+      ":s": s,
+      ":p": "PLZ1"
+    }
+  };
+}
 
 function capitalize(str) {
   if(typeof str === 'string') {
@@ -115,7 +145,7 @@ function buildParameters(iName, recArtName, value) {
       s = parseInt(value);
       break;
     default:
-      keyConditionExpression = "#prim = :p and #sec = :s";
+      keyConditionExpression = "#prim = :p and begins_with(#sec,:s)";
       break;
   }
 
