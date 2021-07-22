@@ -18,9 +18,9 @@ body {
   font: 100%/1.5 "Helvetica Neue", Arial, sans-serif;
 
 }
-a,
-a:visited,
-a:active {
+.standalone-app a,
+.standalone-app a:visited,
+.standalone-app a:active {
   color: #0069B4;
   text-decoration: none;
   font-weight: bold;
@@ -349,9 +349,9 @@ input[type=text]:active {
   display: inline-block;
   vertical-align: middle;
 }
-.standalone-app {
+/* .standalone-app {
   padding-top: 20px;
-}
+} */
 .build .standalone-app {
   padding-top: 0;
 }
