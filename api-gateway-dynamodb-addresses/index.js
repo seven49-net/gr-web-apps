@@ -41,12 +41,16 @@ exports.handler = async (event, context) => {
     if (indexName === "INDEX-STRBEZL") {
       if (first.Items.length) {
         let results = [];
-
-        for (const it of first.Items)  {
-          let onrp = it.ONRP;
-          let result = await dynamo.query(streetResultParameters(onrp)).promise();
-          results.push(result.Items[0]);
+        if (first.Items.length < 30) {
+          for (const it of first.Items)  {
+            let onrp = it.ONRP;
+            let result = await dynamo.query(streetResultParameters(onrp)).promise();
+            results.push(result.Items[0]);
+          }
+        } else {
+          results.push({message: "there are too many records (" + first.Items.length + ")"});
         }
+
         body = results;
       }
     } else {
