@@ -28,9 +28,8 @@ body {
 a:hover {
   text-decoration: underline;
 }
-.page-container {
+.build .page-container {
   min-height: 100vh;
-
   position: relative;
 }
 .build .page-container {
@@ -251,7 +250,7 @@ select:disabled:hover, select[aria-disabled=true] {
 }
 .copy-link {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   align-items: flex-end;
   align-content: space-between;
   padding: 5px;
@@ -259,7 +258,7 @@ select:disabled:hover, select[aria-disabled=true] {
 }
 input[type=text] {
   padding: 0 10px;
-  flex: 0 1 calc(100% - 220px);
+  flex: 0 1 calc(100% - 245px);
   /* width: calc(100% - 150px); */
   line-height: 40px;
   margin-right: 10px;
@@ -361,4 +360,14 @@ input[type=text]:active {
 
 .fancybox-slide--iframe .fancybox-content {
   max-width: 960px;
+}
+
+.hide-department-checkbox {
+  flex: 0 0 100%;
+  margin-bottom: 5px;
+}
+.hide-department-checkbox label {
+  display: inline-block;
+  margin-left: 10px;
+  font-size: .925rem;
 }

@@ -115,7 +115,7 @@
      function makeCopyLink(href) {
        var regex = /[a-z]{1,}=&/gmi;
        var regex2 = /[a-z]{1,}=$/gmi;
-       var link = updateQueryStringParameter(href, "standalone", "1");
+       var link =updateQueryStringParameter(updateQueryStringParameter(href, "standalone", "1"), "hidedepartment", "false");
        return link.replace(regex, "").replace(regex2, "");
      }
 
@@ -150,6 +150,8 @@
       console.log(langQuery);
       var typeQuery = base.attr("data-type") != undefined ? decodeURIComponent(base.attr("data-type")) : ''; // getUrlParameter("type");
       //console.log(typeQuery);
+      var hideDepartment = base.attr("data-hidedepartment") != undefined ? decodeURIComponent(base.attr("data-hidedepartment")) : '';
+      console.log(hideDepartment)
       var noResultText = base.attr("data-noresulttext") != undefined ? decodeURIComponent(base.attr("data-noresulttext")) : '';
       //console.log(noResultText)
       if (query) query = query.toLowerCase();
@@ -177,12 +179,15 @@
           tooltip: '',
           selectedlanguage: "de",
           noresulttext: '',
-          translations: translations
+          translations: translations,
+          hidedepartment: hideDepartment,
+          toggle: false
         },
         methods: {
           applicationLink(link, title) {
             return "<a data-fancybox data-type='iframe' data-src='" + link + "' href='javascript:;'>" + title + "</a>";
           },
+
           changeDepartment: function (event) {
             var query = event.target.value;
             query = (query) ? query.replace(/\(\d{1,}\)/gm, "").trim().toLowerCase() : '';
@@ -223,7 +228,8 @@
           },
           updateCopyLink() {
             var noResultText = this.noresulttext;
-            return this.copylink = updateQueryStringParameter(this.copylink, "noresulttext", encodeURIComponent(noResultText));
+            var hide = vm.toggle;
+            return this.copylink = updateQueryStringParameter(updateQueryStringParameter(this.copylink, "noresulttext", encodeURIComponent(noResultText)), "hidedepartment", hide);
           },
           updateonkeyup() {
             var link = this.copylink;
@@ -232,7 +238,7 @@
           showEditor(e) {
             e.preventDefault();
             document.querySelector(".no-result-text-editor").classList.toggle("hidden");
-            
+
           }
         },
         filters: {
@@ -246,7 +252,7 @@
         }
       });
 
-        
+
       json.then(function (response) {
         var data = response.data;
         var all = data.Items;
@@ -256,8 +262,8 @@
         var types = [];
         vm.standalone = standalone ? true : false;
         vm.languages = languages;
-        
-        
+        // console.log(vm.toggle);
+
         if (langQuery) {
           vm.lquery = langQuery;
           vm.selectedlanguage = langQuery;
@@ -272,6 +278,7 @@
           }
           vm.departments = departments;
           vm.copylink = makeCopyLink(location.href);//updateQueryStringParameter(location.href, "standalone", "1");
+          vm.hidedepartment = hideDepartment;
           vm.copylink = vm.updateCopyLink();
           if (query && !typeQuery) {
             vm.query = query;
@@ -281,7 +288,7 @@
             vm.typequery = '';
             vm.copylink = makeCopyLink(location.href); //updateQueryStringParameter(location.href, "standalone", "1");
             vm.copylink = vm.updateCopyLink();
-            
+
 
             } else if (typeQuery && !query) {
               vm.typequery = typeQuery;
@@ -290,7 +297,7 @@
               vm.departments = departmentList(filteredData, typeQuery);
               vm.copylink = makeCopyLink(location.href); // updateQueryStringParameter(location.href, "standalone", "1");
               vm.copylink = vm.updateCopyLink();
-               
+
             } else if (query && typeQuery) {
               vm.query = query;
               filteredData = filterObjects(filteredData, "Department", query);
@@ -299,17 +306,18 @@
               vm.departments = departmentList(filteredData, typeQuery);
               vm.copylink = makeCopyLink(location.href); // updateQueryStringParameter(location.href, "standalone", "1");
               vm.copylink = vm.updateCopyLink();
-              
+
+
             }
 
-            
+
         }
 
         //console.log(filteredData);
         vm.count = filteredData.length;
         vm.data = filteredData;
       });
-      
+
     }
 
     return {
@@ -324,7 +332,7 @@
     //               btns: [['strong', 'em',], ['link'],['viewHTML']],
     //               autogrow: true
     //           });
-         
+
   });
-  
+
 })();

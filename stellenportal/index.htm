@@ -28,12 +28,12 @@
           _qs[i[0]] = i[1];
         });
       }
-      
+
       document.addEventListener("DOMContentLoaded", function(event) {
         var body = document.getElementsByTagName("body")[0];
         for (var key in _qs) {
             if (_qs.hasOwnProperty(key)) {
-              body.setAttribute("data-" + key, encodeURIComponent(_qs[key]));
+              body.setAttribute("data-" + key, _qs[key]);
           }
         }
       });
@@ -52,7 +52,7 @@
         <div class='app'>
           <div class="builder">
             <form>
-              
+
               <div class="form-group language-selection">
                 <label for="languages">Sprache</label>
                 <select id="languages" name="languages" @change="changeLanguage($event)">
@@ -75,6 +75,9 @@
                 </select>
               </div>
               <div class="form-group copy-link" v-if="copylink">
+                <div class="hide-department-checkbox">
+                  <input type="checkbox" id="hide-department" name="hide-department" v-model="toggle" @change="updateCopyLink"><label for="hide-department">Amt nicht anzeigen</label>
+                </div>
                 <input type="text" id="copy-link-input"  name="copy-link-input" v-model="copylink" />
                 <button type="button" @click="copyLinkToClipord()" id="copy-link" class="button">Link kopieren</button>
                 <span class="button link-button"><a :href="copylink" target="_blank">Vorschau</a></span>
@@ -87,9 +90,9 @@
                   <label for="no-result-text" class="no-result-text-label">Kein Resultat-Text</label>
                   <div class="text-output" v-html="noresulttext"></div>
                   <div class="instructions"><span class="alert">Bitte den "Kein Resultat-Text" erst am Schluss vor dem Kopieren des Links anpassen!</span> <span class='toggle-button'><button class="button" @click="showEditor">Text bearbeiten</button></span></div>
-                  
+
                   <textarea class="no-result-text-editor hidden" id="no-result-text" v-model="noresulttext" v-on:keyup="updateonkeyup"></textarea>
-                  
+
               </div>
             </form>
           </div>
@@ -105,14 +108,14 @@
                 <thead>
                   <tr>
                     <th v-html="getTranslation('jobtitle', selectedlanguage)"></th>
-                    <th v-html="getTranslation('department', selectedlanguage)">Amt</th>
+                    <th v-if="hidedepartment == 'false'" v-html="getTranslation('department', selectedlanguage)">Amt</th>
                     <th v-html="getTranslation('application_due', selectedlanguage)">Anmeldefrist</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr class="job" v-for="item in data">
                     <td><span v-html="applicationLink(item.AdLink, item.Title)"></span> <span v-if="item.businessUnitId =='lehrstelle'" class="icon icon-apprentice"></span></td>
-                    <td v-html="item.Department"></td>
+                    <td  v-if="hidedepartment == 'false'" v-html="item.Department"></td>
                     <td>{{ item.pubEndDate|date }}</td>
                   </tr>
                 </tbody>
@@ -126,7 +129,7 @@
     </div>
   </div>
 
-  
+
   <script src="https://cdn.gr.ch/apps/prod/stellenportal/vendor/fancybox/jquery.fancybox.min.js" defer></script>
   <script src="https://cdn.gr.ch/apps/prod/stellenportal/vendor/axios.min.js"></script>
   <script src="https://cdn.gr.ch/apps/prod/stellenportal/vendor/vue.js"></script>
