@@ -13,15 +13,18 @@
   const translations = {
     search_label: {
       de: "Suchen",
-      it: "cercare"
+      it: "cercare",
+      rm: "Tschertgar"
     },
     filter_label: {
       de: "Tag Filter",
-      it: "filtro hashtag"
+      it: "filtro hashtag",
+      rm: "Filter tag"
     },
     placeholder: {
       de: "Bitte geben Sie einen Suchbegriff ein",
-      it: "Inserire un termine di ricerca"
+      it: "Inserire un termine di ricerca",
+      rm: "Endatai per plaschair la noziun che Vus tschertgais"
     }
 
   };
