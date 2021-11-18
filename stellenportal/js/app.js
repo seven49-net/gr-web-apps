@@ -17,7 +17,7 @@
         "application_due": "Termine di annuncio",
         "overview": "Panoramica impieghi",
         "open_jobs": "Posizioni abierti:",
-        "noresulttext": "Italienische Version fehlt - Derzeit sind keine offenen Stellen ausgeschrieben, weitere Stellen finden Sie unter <a href='https://www.gr.ch/stellen'>www.gr.ch/stellen</a>."
+        "noresulttext": "Attualmente non sono pubblicati posti vacanti, altri posti vacanti si trovano su <a href='https://www.gr.ch/impieghi'>www.gr.ch/impieghi</a>."
       },
       "rm": {
         "jobtitle": "Plazza",
@@ -25,7 +25,7 @@
         "application_due": "Termin d'annunzia",
         "overview": "Survista da las plazzas",
         "open_jobs": "Offene Stellen:",
-        "noresulttext": "Romanische Version fehlt - Derzeit sind keine offenen Stellen ausgeschrieben, weitere Stellen finden Sie unter <a href='https://www.gr.ch/stellen'>www.gr.ch/stellen</a>."
+        "noresulttext": "Actualmain n'èn publitgadas naginas plazzas libras. Ulteriuras plazzas chattais Vus sut <a href='https://www.gr.ch/plazzas'>www.gr.ch/plazzas</a>."
       }
     };
 
