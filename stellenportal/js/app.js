@@ -16,7 +16,7 @@
         "department": "Ufficio",
         "application_due": "Termine di annuncio",
         "overview": "Panoramica impieghi",
-        "open_jobs": "Posizioni abierti:",
+        "open_jobs": "Posti vacanti:",
         "noresulttext": "Attualmente non sono pubblicati posti vacanti, altri posti vacanti si trovano su <a href='https://www.gr.ch/impieghi'>www.gr.ch/impieghi</a>."
       },
       "rm": {
@@ -24,7 +24,7 @@
         "department": "Uffizi",
         "application_due": "Termin d'annunzia",
         "overview": "Survista da las plazzas",
-        "open_jobs": "Offene Stellen:",
+        "open_jobs": "Plazzas libras:",
         "noresulttext": "Actualmain n'èn publitgadas naginas plazzas libras. Ulteriuras plazzas chattais Vus sut <a href='https://www.gr.ch/plazzas'>www.gr.ch/plazzas</a>."
       }
     };
