@@ -1,0 +1,95 @@
+.ac-autocomplete,
+.ac-autocomplete * {
+  box-sizing: border-box;
+}
+
+.ac-autocomplete {
+  background-color: #dadada;
+  list-style: none;
+  width: 320px;
+  max-width: 100%;
+  margin: 0;
+  padding: 5px;
+  border: 1px solid #dadada;
+  position: absolute;
+  z-index: 2000;
+  display: none;
+  font-size: 0.825rem;
+}
+
+input.ac-alert {
+  color: #f05108 !important;
+  border-color: #f05108 !important;
+}
+
+input.ac-error {
+  color: #ac0909;
+  border-color: #ac0909;
+}
+
+.has-ac.ac-on {
+  position: relative;
+  z-index: 2000;
+}
+
+.has-ac.ac-on .ac-autocomplete {
+  display: block;
+}
+
+.filled.ac-on .ac-autocomplete {
+  display: none;
+}
+
+.ac-autocomplete li {
+  margin: 0 0 3px 0;
+}
+
+.ac-autocomplete[data-prop=POSTLEITZAHL] li {
+  display: inline-block;
+  margin: 0 5px 5px 0;
+}
+
+.ac-autocomplete[data-prop=ORTBEZ27] li {
+  display: inline-block;
+  margin: 0 5px 5px 0;
+}
+
+.ac-autocomplete .insert {
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px 10px;
+  background: #0069B4;
+  color: #fff;
+}
+
+.ac-autocomplete .insert:hover {
+  background: #E6F0F8;
+  color: #202020;
+}
+
+.ac-submit-text {
+  margin-top: 30px;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: 0.825rem;
+}
+
+.ac-submit-text .inner {
+  padding: 10px;
+  border: 1px solid #dadada;
+}
+.ac-submit-text .inner + .inner {
+  margin-top: 5px;
+}
+
+.ac-success {
+  color: #065814;
+}
+
+.ac-alert {
+  color: #f05108;
+}
+
+.ac-error {
+  color: #ac0909;
+}

@@ -1,0 +1,40 @@
+{
+  "name": "addresses",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "http-server",
+    "dev": "parcel ./index.html",
+    "start": "node index.js",
+    "sass:min": "sass --no-source-map ac-styles.scss ac-styles.min.css --style=compressed",
+    "sass": "sass --no-source-map ac-styles.scss ac-styles.css --style=expanded",
+    "sass_watch": "sass --watch ./:./ --no-source-map"
+  },
+  "keywords": [
+    "autocomplete",
+    "address",
+    "lookup"
+  ],
+  "browserslist": ">0.75%, not ie 11, not UCAndroid >0, not OperaMini all",
+  "author": "webbear",
+  "license": "ISC",
+  "dependencies": {
+    "@snowpack/plugin-sass": "^1.4.0",
+    "axios": "^0.21.1",
+    "cssnano": "^5.0.6",
+    "easy-autocomplete": "^1.3.5",
+    "postcss-preset-env": "^6.7.0",
+    "sass": "^1.37.5"
+  },
+  "devDependencies": {
+    "@snowpack/plugin-postcss": "^1.4.3",
+    "@snowpack/plugin-webpack": "^3.0.0",
+    "parcel-bundler": "^1.12.5",
+    "postcss": "^8.3.5",
+    "rollup": "^2.37.1",
+    "snowpack": "^3.7.1",
+    "snowpack-plugin-rollup-bundle": "^0.4.4"
+  }
+}

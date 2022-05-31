@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>autocomplete test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./app.css">
+    <link rel="stylesheet" href="./ac-styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous" defer></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js" defer></script>
+    <script src="./app.js" defer></script>
+  </head>
+  <body class="standalone">
+    <form>
+      <div class="form-group salutation dropdownlist">
+        <label for="addProp_Salutation">Anrede</label>
+        <select aria-invalid="false" class="valid" name="addProp_Salutation" id="addProp_Salutation" autocomplete="custom">
+        <option value="Herr" selected="true">Herr</option>
+        <option value="Frau">Frau</option>
+        </select> </div>
+
+      <div class="form-group">
+        <label for="first-name">Vorname</label>
+        <input type="text" name="first-name" id="first-name" />
+      </div>
+      <div class="form-group">
+        <label for="last-name">Nachname</label>
+        <input type="text" name="last-name" id="last-name" />
+      </div>
+      <div class="form-group">
+        <label for="street">Strasse</label>
+        <input type="text" name="street" id="street" />
+      </div>
+      <div class="form-group">
+        <label for="plz">PLZ</label>
+        <input type="text" name="plz" id="plz" />
+      </div>
+      <div class="form-group">
+        <label for="city">Ort</label>
+        <input type="text" name="city" id="city" />
+      </div>
+      <div class="form-group">
+        <label for="state">Kanton</label>
+        <input type="text" name="state" id="state" />
+      </div>
+      <div class="form-group">
+        <label for="countries">Land</label>
+        <select id="countries" class="countries">
+          <option value="">---</option>
+          <option value="DE">Deutschland</option>
+          <option value="CH">Schweiz</option>
+          <option value="IT">Italien</option>
+        </select>
+      </div>
+      <div class="form-group input-item stats dropdownlist">
+        <label for="addProp_Stats">Ich führe die Fangstatistik mit:</label>
+        <select id="addProp_Stats" name="addProp_Stats" size="1" required="required" value="-" aria-required="true" autocomplete="custom">
+        <option value="-">Bitte wählen</option>
+        <option value="Buechlein">Statistik Büchlein</option>
+        <option value="App">Statistik via FischereiApp</option>
+        </select>
+        </div>
+      <div class="form-group">
+        <button type="button" id="submit">Senden</button>
+      </div>
+      <div class="ac-submit-text"></div>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,102 @@
+$brand-color: #0069B4 !default;
+$light-brand-color: #E6F0F8 !default;
+$gray: #dadada !default;
+$black: #202020 !default;
+$white: #fff !default;
+$error: rgb(172, 9, 9) !default;
+$success: rgb(6, 88, 20) !default;
+$alert: rgb(240, 81, 8) !default;
+$border-color: $gray !default;
+$ac-background-color: $gray !default;
+$ac-insert-bg-color: $brand-color;
+$ac-insert-color: $white !default;
+$ac-insert-bg-color-hover: $light-brand-color !default;
+$ac-insert-color-hover: $black !default;
+
+$ac-width: 320px !default;
+$ac-max-width: 100% !default;
+$ac-font-size-large: 1rem !default;
+$ac-font-size-small: .825rem !default;
+
+.ac-autocomplete,
+.ac-autocomplete * {
+  box-sizing: border-box;
+}
+
+.ac-autocomplete {
+  background-color: $ac-background-color;
+  list-style: none;
+  width: $ac-width;
+  max-width: $ac-max-width;
+  margin: 0;
+  padding: 5px;
+  border: 1px solid $border-color;
+  position: absolute;
+  z-index: 2000;
+  display: none;
+  font-size: $ac-font-size-small
+}
+input.ac-alert {
+  color: $alert !important;
+  border-color: $alert !important;
+}
+input.ac-error {
+  color: $error;
+  border-color: $error;
+}
+.has-ac.ac-on {
+  position: relative;
+  z-index: 2000;
+}
+.has-ac.ac-on .ac-autocomplete {
+  display: block;
+}
+.filled.ac-on .ac-autocomplete {
+  display: none;
+}
+.ac-autocomplete li {
+  margin: 0 0 3px 0;
+}
+.ac-autocomplete[data-prop=POSTLEITZAHL] li {
+  display: inline-block;
+  margin: 0 5px 5px 0;
+}
+.ac-autocomplete[data-prop=ORTBEZ27] li {
+  display: inline-block;
+  margin: 0 5px 5px 0;
+}
+.ac-autocomplete .insert {
+  cursor:pointer;
+  display: inline-block;
+  padding: 5px 10px;
+  background: $ac-insert-bg-color;
+  color: $ac-insert-color;
+}
+.ac-autocomplete .insert:hover {
+  background: $ac-insert-bg-color-hover;
+  color: $ac-insert-color-hover;
+}
+
+.ac-submit-text {
+  margin-top: 30px;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: $ac-font-size-small;
+}
+.ac-submit-text .inner {
+  padding: 10px;
+  border: 1px solid $border-color;
+ & + .inner {
+   margin-top: 5px;
+ }
+}
+.ac-success {
+  color: $success;
+}
+.ac-alert {
+  color: $alert;
+}
+
+.ac-error {
+  color: $error;
+}
