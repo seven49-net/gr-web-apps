@@ -703,7 +703,7 @@
 
   $(function () {
     console.log("document ready");
-    var inapp = location.href.indexOf("localhost:") > -1 || location.href.indexOf('127.0.0.1:8080/') > -1 ? false : true;
+    var inapp = location.href.indexOf("localhost:") > -1 || location.href.indexOf('127.0.0.1:808') > -1 ? false : true;
     if (inapp) autocomplete.loadstyles(autocomplete.styles);
     autocomplete.markFocus();
     if (!inapp) autocomplete.init();
