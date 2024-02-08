@@ -146,7 +146,7 @@
 <style>
 
 .clima-change-carousel {
-	font-family: Aria, sans-serif;
+	font-family: Arial, sans-serif;
 }
 
 </style>
