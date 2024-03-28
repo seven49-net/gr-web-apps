@@ -1,0 +1,83 @@
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Address Check</title>
+  <link rel="stylesheet" href="./css/basic.css" />
+  <link rel="stylesheet" href="./css/app.css" />
+</head>
+<body class="standalone">
+  <form>
+      <div class="form-group salutation dropdownlist">
+          <label for="addProp_Salutation">Anrede</label>
+          <select
+              aria-invalid="false"
+              class="valid"
+              name="addProp_Salutation"
+              id="addProp_Salutation"
+              autocomplete="custom"
+          >
+              <option value="Herr" selected="true">Herr</option>
+              <option value="Frau">Frau</option>
+          </select>
+      </div>
+
+      <div class="form-group">
+          <label for="first-name">Vorname</label>
+          <input type="text" name="first-name" id="first-name" />
+      </div>
+      <div class="form-group">
+          <label for="last-name">Nachname</label>
+          <input type="text" name="last-name" id="last-name" />
+      </div>
+      <div class="form-group">
+          <label for="street">Strasse</label>
+          <input type="text" name="street" id="street" />
+      </div>
+      <div class="form-group">
+          <label for="zip-code">PLZ</label>
+          <input type="text" name="plz" id="zip-code" />
+      </div>
+      <div class="form-group">
+          <label for="city">Ort</label>
+          <input type="text" name="city" id="city" />
+      </div>
+      <div class="form-group">
+          <label for="canton">Kanton</label>
+          <input type="text" name="state" id="canton" />
+      </div>
+      <div class="form-group">
+          <label for="countries">Land</label>
+          <select id="countries" class="countries">
+              <option value="">---</option>
+              <option value="DE">Deutschland</option>
+              <option value="CH">Schweiz</option>
+              <option value="IT">Italien</option>
+          </select>
+      </div>
+      <div class="form-group input-item stats dropdownlist">
+          <label for="addProp_Stats"
+              >Ich führe die Fangstatistik mit:</label
+          >
+          <select
+              id="addProp_Stats"
+              name="addProp_Stats"
+              size="1"
+              required="required"
+              value="-"
+              aria-required="true"
+              autocomplete="custom"
+          >
+              <option value="-">Bitte wählen</option>
+              <option value="Buechlein">Statistik Büchlein</option>
+              <option value="App">Statistik via FischereiApp</option>
+          </select>
+      </div>
+      <div class="form-group">
+          <button type="button" id="submit">Senden</button>
+      </div>
+      <div class="ac-submit-text"></div>
+  </form>
+  <script type="module" src="./js/app.js" defer></script>
+</body>
+</html>

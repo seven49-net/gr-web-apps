@@ -10,3 +10,6 @@ jspm_packages
 
 # Serverless directories
 .serverless
+.parcel-cache
+
+address-check/dist

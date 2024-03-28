@@ -1,0 +1,16 @@
+{
+  "name": "address-check",
+  "version": "1.0.0",
+  "description": "connect to swiss post api and check the address",
+  "source": "src/index.html",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build"
+  },
+  "author": "webbear",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel": "^2.12.0"
+  }
+}
