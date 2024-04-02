@@ -108,6 +108,119 @@ async function postData(url= '', data = {}) {
   return response.json();
 }
 
+function turnOffBrowserAC(form) {
+  const container = typeof form === "undefined" ? document.querySelector('body') : form;
+  const inputs = container.querySelectorAll("input, textarea, select");
+  if (inputs.length) {
+    inputs.forEach(element => {
+      element.setAttribute("autocomplete", "custom")
+    });
+  }
+}
+
+function deleteClasses() {
+  const ac = document.querySelectorAll(".has-ac");
+  if (ac.length) {
+    ac.forEach(element => {
+      const classes = element.classList;
+      classes.remove('ac-on');
+      classes.remove('has-ac');
+    });
+  }
+}
+
+function deleteAc() {
+  const aca = document.querySelectorAll('.ac-autocomplete');
+  if (aca.length) {
+    aca.forEach(element => {
+      element.classList.remove('ac-autocomplete');
+    });
+  }
+  deleteClasses();
+}
+
+function testForCountriesList() {
+  const dd = document.querySelectorAll("select");
+  let out = null;
+  if (dd.length) {
+    dd.forEach(element => {
+      const html = element.innerHTML;
+      if (/value=["|']CH["|']/gmi.test(html)) out = element;
+    });
+  }
+  return out;
+}
+
+function fill(input, value) {
+  console.log(input, value)
+  input.value = value;
+  input.parentNode.classList.add("filled");
+}
+
+function empty(input) {
+  input.value = '';
+  input.parentNode.classList.remove('filled');
+}
+function removeAlerts() {
+  const alerts  = document.querySelectorAll('input.ac-alert');
+  const errors = document.querySelectorAll('ac-error');
+  if (alerts.length) {
+    alerts.forEach( element => {
+      element.classList.remove('ac-alert');
+    });
+  }
+  if (errors.length) {
+    errors.forEach(element => {
+      element.classList.remove("ac-alert");
+    });
+  }
+
+}
+
+function markFocus() {
+  var inputs = document.querySelectorAll(".form-group > input, .form-group > textarea, .wai-text-box input, .wai-text-box textarea, .input-item input, .input-item textarea, .WaiTextBox > input");
+  /*
+  $("body").on("keyup", inputClasses, function () {
+    $(this).parent().toggleClass("filled", $(this).val() !== "");
+  });
+  $("body").on("focus", inputClasses, function () {
+    $(this).parent().addClass("focused");
+    $(this).parent().siblings(".has-ac").removeClass("ac-on");
+  });
+  $
+  $("body").on("focus", inputClasses, function () {
+    $(this).parent('.has-ac').addClass("ac-on");
+  });
+  $("body").on("blur", inputClasses, function (e) {
+    $(this).parent().removeClass("focused");
+  });
+  */
+  inputs.forEach(el => {
+    const parent = el.parentNode;
+    const siblings  = [...parent.parentNode.children].filter((child) => child !== el);
+
+    el.addEventListener('keyup', e => {
+      if (el.value !== "") parent.classList.toggle('filled');
+    });
+
+    el.addEventListener('focus', e => {
+      parent.classList.add('focused');
+      if (parent.classList.contains('has-ac')) parent.classList.add('ac-on');
+      if (siblings.length) {
+        siblings.forEach(s => {
+          s.classList.remove('ac-on');
+        });
+      }
+    });
+
+    el.addEventListener('blur', e => {
+      parent.classList.remove('focused');
+    });
+  });
+
+}
+
+
 
 
 export {
@@ -116,5 +229,11 @@ export {
   extend,
   apiRequest,
   postData,
-  easyExtend
+  easyExtend,
+  turnOffBrowserAC,
+  deleteAc,
+  fill,
+  empty,
+  removeAlerts,
+  markFocus
 };
