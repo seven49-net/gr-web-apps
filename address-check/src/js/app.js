@@ -7,7 +7,8 @@ import {
   turnOffBrowserAC,
   deleteAc,
   empty,
-  markFocus } from "./utils";
+  markFocus,
+  buildAutoComplete } from "./utils";
   import {
     renderMsg,
     successMsg
@@ -43,12 +44,13 @@ function init(params) {
   markFocus();
   street.addEventListener('blur', () => {
     var sv = getStreetAndNumber(street.value);
-    console.log(sv);
+    //console.log(sv);
     deleteAc();
     if (sv) {
       postData(apiUrl, apiRequest(sv)).then((data) => {
-        console.log(data.QueryAutoComplete4Result);
+        //console.log(data.QueryAutoComplete4Result);
         const result = data.QueryAutoComplete4Result.AutoCompleteResult;
+        console.log(result, result.length)
         if (result.length === 1) {
           const r = result[0];
           // zipCode.value = r.ZipCode;
@@ -57,6 +59,18 @@ function init(params) {
           fill(canton, r.Canton);
           fill(country, r.CountryCode);
           renderMsg(successMsg('Glückliche Fügung'), true)
+        } else if (result.length > 1) {
+          // console.log('result', result);
+          buildAutoComplete({
+            data: result,
+            prop: "ZipCode",
+            id: zipCode,
+            zipCode: zipCode,
+            city: city,
+            canton: canton,
+            plz: zipCode,
+            form: form
+          });
         }
       });
     }
