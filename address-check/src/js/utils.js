@@ -133,7 +133,7 @@ function deleteAc() {
   const aca = document.querySelectorAll('.ac-autocomplete');
   if (aca.length) {
     aca.forEach(element => {
-      element.classList.remove('ac-autocomplete');
+      element.remove();
     });
   }
   deleteClasses();
@@ -207,7 +207,11 @@ function markFocus() {
     const siblings  = [...parent.parentNode.children].filter((child) => child !== el);
 
     el.addEventListener('keyup', e => {
-      if (el.value !== "") parent.classList.toggle('filled');
+      if (el.value !== "") {
+        parent.classList.toggle('filled');
+      } else {
+        parent.classList.remove('filled');
+      }
     });
 
     el.addEventListener('focus', e => {
@@ -249,13 +253,13 @@ function buildAutoComplete(params) {
       data = sortCity(data);
     }
     parent.classList.add('has-ac', 'ac-on');
-    out.push("<ul class='ac-autocomplete' data-prop='" + prop + "' data-id='" + id + "' id='ac-" + prop.toLowerCase() + "'>");
+    out.push("<div class='ac-autocomplete'><ul class='ac-list' data-prop='" + prop + "' data-id='" + id + "' id='ac-" + prop.toLowerCase() + "'>");
     var oIndex = 0;
     for (var d of data) {
       out.push("<li class='ac-item'><span class='insert' data-object='" + JSON.stringify(d) + "'>" + d[prop] + "</span></li>");
       oIndex++;
     }
-    out.push("</ul>");
+    out.push("</ul></div>");
   }
   console.log(out.join(''));
   parent.insertAdjacentHTML('beforeend', out.join(''));
@@ -276,7 +280,7 @@ function getParents(el, selector) {
 }
 
 function select(params) {
-  const ac = document.querySelectorAll('.ac-autocomplete'); //$(".ac-autocomplete");
+  const ac = document.querySelectorAll('.ac-autocomplete .ac-list'); //$(".ac-autocomplete");
   const city = params.city;
   const zipCode = params.zipCode;
   const canton = params.canton;
