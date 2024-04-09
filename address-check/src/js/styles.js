@@ -1,4 +1,4 @@
-:root {
+const css = `:root {
     --brand-color: rgb(33, 59, 175);
     --light-brand-color: rgb(153, 169, 238);
     --black: #202020;
@@ -116,4 +116,30 @@ input.ac-error {
 
 .ac-error {
     color: var(--error);
+}`;
+
+function minifyCssString(css) {
+  return css
+    .replace(/\n/g, "")
+    .replace(/\s\s+/g, " ")
+    .replace(/\s?{\s?/gm, "{")
+    .replace(/\s?}\s?/gm, "}")
+    .replace(/\s?:\s?/gm, ":")
+    .replace(/\s?;\s?/gm, ";")
+    .replace(/\s?;\s?}/gm, "}");
+}
+
+function loadstyles(str) {
+  const head = document.querySelector("head");
+  console.log(head.querySelector("#ac-styles"));
+  if (!head.querySelector("#ac-styles")) {
+    head.insertAdjacentHTML(
+      "beforeend",
+      "<style id='ac-styles'>" + minifyCssString(str) + "</style>",
+    );
+  }
+}
+
+export function acStyles() {
+  loadstyles(css);
 }
