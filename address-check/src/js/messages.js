@@ -7,6 +7,8 @@ const messages = {
       "Bitte korrigieren Sie die PLZ von {uzipcode} auf {pzipcode}.",
     check_townname:
       "Bitte die Schreibweise der Ortschaft von {utownname} auf {ptownname} anpassen.",
+    check_streetname:
+      "Bitte die Schreibweise der Strasse von {ustreetname})  auf {pstreetname} anpassen.",
     street_not_found:
       'Die Strasse "{street}" wurde nicht gefunden unter der PLZ {plz} - bitte prüfen Sie, ob die Adressdaten alle korrekt ausgefüllt sind.',
     no_ch_plz: "{plz} ist keine Schweizer Postleitzahl",

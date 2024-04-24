@@ -88,7 +88,7 @@ async function checkAddress(params, values = false) {
           ),
         );
       }
-      if (result.TownName !== city.toLowerCase()) {
+      if (result.TownName.toLowerCase() !== city.toLowerCase()) {
         addAlert(params.city);
         //"Bitte die Schreibweise der Ortschaft von {utownname})  auf {ptownname} anpassen."
         renderMsg(
@@ -96,6 +96,18 @@ async function checkAddress(params, values = false) {
             replace(messages.de.check_townname, {
               utownname: city,
               ptownname: result.TownName,
+            }),
+          ),
+        );
+      }
+      if (result.StreetName.toLowerCase() !== streetName.toLowerCase()) {
+        addAlert(params.street);
+        //"Bitte die Schreibweise der Strasse von {ustreetname})  auf {pstreetname} anpassen."
+        renderMsg(
+          alertMsg(
+            replace(messages.de.check_streetname, {
+              ustreetname: streetName,
+              pstreetname: result.StreetName,
             }),
           ),
         );
