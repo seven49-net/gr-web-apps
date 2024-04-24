@@ -4,14 +4,13 @@ import {
   deleteAc,
   fill,
   buildAutoComplete,
-  apiUrl,
   apiRequest,
 } from "./utils";
 
 import { messages, deleteAllMessages, renderMsg, successMsg } from "./messages";
 export function checkStreet(params) {
   const street = params.street;
-  const zipCode = params.zipCode;
+  const zipcode = params.zipcode;
   const city = params.city;
   const canton = params.canton;
   const country = params.country;
@@ -21,7 +20,7 @@ export function checkStreet(params) {
     deleteAc();
     deleteAllMessages();
     if (sv) {
-      const response = await postData(apiUrl, apiRequest(sv));
+      const response = await postData(apiRequest(sv));
       const result = response
         ? response.QueryAutoComplete4Result.AutoCompleteResult
         : [];
@@ -30,22 +29,22 @@ export function checkStreet(params) {
         deleteAllMessages();
         if (result.length === 1) {
           const r = result[0];
-          // zipCode.value = r.ZipCode;
-          fill(zipCode, r.ZipCode);
+          // zipcode.value = r.ZipCode;
+          fill(zipcode, r.ZipCode);
           fill(city, r.TownName);
           fill(canton, r.Canton);
           fill(country, r.CountryCode);
-          renderMsg(successMsg("Glückliche Fügung"), true);
+          //renderMsg(successMsg("Glückliche Fügung"), true);
         } else {
           // console.log('result', result);
           buildAutoComplete({
             data: result,
             prop: "ZipCode",
-            id: zipCode,
-            zipCode: zipCode,
+            id: zipcode,
+            zipcode: zipcode,
             city: city,
+            plz: zipcode,
             canton: canton,
-            plz: zipCode,
             form: form,
           });
         }

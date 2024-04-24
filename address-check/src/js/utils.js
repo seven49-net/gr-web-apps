@@ -1,31 +1,55 @@
-const apiUrl =
-  "https://02ds7tjzm7.execute-api.eu-west-1.amazonaws.com/Prod?method=autocomplete4";
+const apiUrl = "https://02ds7tjzm7.execute-api.eu-west-1.amazonaws.com/Prod";
+const apiUrlPost = apiUrl + "?method=autocomplete4";
 
-function translateUmlaute(str) {
+function specialCharacters(str) {
   return str
     .replace(/\u00dc/g, "Ue")
     .replace(/\u00fc/g, "ue")
     .replace(/\u00c4/g, "Ae")
     .replace(/\u00e4/g, "ae")
     .replace(/\u00d6/g, "Oe")
-    .replace(/\u00f6/g, "oe");
+    .replace(/\u00f6/g, "oe")
+    .replace(/\u00C9/g, "E")
+    .replace(/\u00E9/g, "e")
+    .replace(/\u00C8/g, "E")
+    .replace(/\u00E8/g, "e")
+    .replace(/\u00C0/g, "A")
+    .replace(/\u00E0/g, "a")
+    .replace(/\u00C1/g, "A")
+    .replace(/\u00E1/g, "a")
+    .replace(/,/g, " ")
+    .replace(/ç/g, "c")
+    .replace(/ê/g, "e")
+    .replace(/â/g, "a")
+    .replace(/á/g, "a")
+    .replace(/à/g, "a")
+    .replace(/é/g, "e")
+    .replace(/è/g, "e");
+}
+function clean(str = "") {
+  return str.trim();
 }
 
-function getStreetAndNumber(str = "") {
+function getStreetAndNumber(str = "", raw = false) {
   if (str.length) {
     str = str.trim();
     const s = str.split(" ");
     const regexStreet = /(.*?)(\s+\d+\s?[a-z]*)/gim;
     // str.length && str.match(regexStreet) ? regexStreet.exec(str)[1] : str;
     let street = str;
-    let streetNumber = "";
+    let houseNumber = "";
     if (str.match(regexStreet)) {
       const sArr = regexStreet.exec(str);
       console.log(sArr);
       street = sArr[1];
-      streetNumber = sArr[2].trim();
+      houseNumber = sArr[2].trim();
     }
-    return { StreetName: translateUmlaute(street), HouseNo: streetNumber };
+    return raw
+      ? [street, houseNumber]
+      : {
+          StreetName: specialCharacters(street),
+          HouseNo: houseNumber,
+        };
   }
   return false;
 }
@@ -97,7 +121,7 @@ function apiRequest(params = {}) {
   };
 }
 
-async function postData(url = "", data = {}) {
+async function postData(data = {}, url = apiUrlPost) {
   const response = await fetch(url, {
     method: "POST",
     mode: "cors",
@@ -167,10 +191,22 @@ function selectCountries(form) {
   if (select) select.value = "CH";
 }
 
+function resetCountries() {
+  // const container =
+  //   typeof form === "undefined" ? document.querySelector("body") : form;
+  const select = testForCountriesList();
+  console.log("reset", select);
+  if (select) select.value = "";
+}
+
 function fill(input, value) {
   console.log(input, value);
   input.value = value;
   input.parentNode.classList.add("filled");
+}
+
+function addAlert(el) {
+  el.classList.add("ac-alert");
 }
 
 function empty(input) {
@@ -246,7 +282,7 @@ function buildAutoComplete(params) {
   let data = params.data;
   const prop = params.prop;
   const tempid = params.id;
-  const zipCode = params.zipCode;
+  const zipcode = params.zipcode;
   const city = params.city;
   const canton = params.canton;
   const id = tempid.getAttribute("id");
@@ -258,7 +294,7 @@ function buildAutoComplete(params) {
   console.log("parent", parent);
   if (data.length) {
     deleteAc();
-    if (prop === "ZipCode") {
+    if (prop === "zipcode") {
       data = sortZipCode(data);
     } else if (prop === "TownName") {
       data = sortCities(data);
@@ -291,7 +327,7 @@ function buildAutoComplete(params) {
   // console.log(testForCountriesList())
   select({
     city: city,
-    zipCode: zipCode,
+    zipcode: zipcode,
     canton: canton,
     form: form,
   });
@@ -307,7 +343,7 @@ function getParents(el, selector) {
 function select(params) {
   const ac = document.querySelectorAll(".ac-autocomplete .ac-list"); //$(".ac-autocomplete");
   const city = params.city;
-  const zipCode = params.zipCode;
+  const zipcode = params.zipcode;
   const canton = params.canton;
   const form = params.form;
   if (ac.length) {
@@ -319,7 +355,7 @@ function select(params) {
           const object = JSON.parse(o.getAttribute("data-object"));
           console.log(object);
           console.log(prop);
-          if (prop === "ZipCode") fill(zipCode, object.ZipCode);
+          if (prop === "ZipCode") fill(zipcode, object.ZipCode);
           fill(city, object.TownName);
           fill(canton, object.Canton);
           selectCountries(form);
@@ -381,7 +417,7 @@ function testZipCode(str) {
 }
 
 export {
-  translateUmlaute,
+  specialCharacters,
   getStreetAndNumber,
   extend,
   apiRequest,
@@ -396,4 +432,8 @@ export {
   buildAutoComplete,
   testZipCode,
   apiUrl,
+  apiUrlPost,
+  clean,
+  resetCountries,
+  addAlert,
 };

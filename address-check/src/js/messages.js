@@ -1,5 +1,12 @@
 const messages = {
   de: {
+    valid_address: "Die Adresse wurde erfolgreich verfiziert.",
+    house_no_missing: `Um die Adresse zu verifizieren, wird noch die Hausnummer benötigt.`,
+    no_verfication: `Die eingegebene Adresse ({streetName} {houseNumber}, {zipcode} {city}) konnte leider nicht verifiziert werden!`,
+    check_zipcode:
+      "Bitte korrigieren Sie die PLZ von {uzipcode} auf {pzipcode}.",
+    check_townname:
+      "Bitte die Schreibweise der Ortschaft von {utownname} auf {ptownname} anpassen.",
     street_not_found:
       'Die Strasse "{street}" wurde nicht gefunden unter der PLZ {plz} - bitte prüfen Sie, ob die Adressdaten alle korrekt ausgefüllt sind.',
     no_ch_plz: "{plz} ist keine Schweizer Postleitzahl",
@@ -10,6 +17,12 @@ const messages = {
     state_not_correct: `Bitte verwenden Sie für die Angabe des Kantons die Abkürzung.<br>Richtig: <i>{state}</i><br>Eingegeben: <i>{entered_state}</i>.`,
   },
 };
+
+function createMessageArea() {
+  const submitText = document.createElement("div");
+  submitText.classList.add("ac-submit-text", "injected");
+  return submitText;
+}
 
 function renderMsg(content, e) {
   var clean = typeof e === "undefind" ? true : e;
@@ -80,4 +93,5 @@ export {
   successMsg,
   replace,
   deleteAllMessages,
+  createMessageArea,
 };

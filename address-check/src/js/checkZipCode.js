@@ -1,7 +1,6 @@
 import {
   testZipCode,
   postData,
-  apiUrl,
   apiRequest,
   fill,
   buildAutoComplete,
@@ -19,19 +18,18 @@ import {
 } from "./messages";
 
 export function checkZipCode(params) {
-  const zipCode = params.zipCode,
+  const zipcode = params.zipcode,
     city = params.city,
     canton = params.canton,
     country = params.country,
     form = params.form;
-  zipCode.addEventListener("blur", async () => {
-    const zipCodeVal = zipCode.value.trim();
+  zipcode.addEventListener("blur", async (e) => {
+    const zipcodeVal = zipcode.value.trim();
+    console.log("zip code val", zipcodeVal);
+    console.log(e.target);
     deleteAllMessages();
-    if (testZipCode(zipCodeVal)) {
-      const response = await postData(
-        apiUrl,
-        apiRequest({ ZipCode: zipCodeVal }),
-      );
+    if (testZipCode(zipcodeVal)) {
+      const response = await postData(apiRequest({ ZipCode: zipcodeVal }));
       const result = response
         ? response.QueryAutoComplete4Result.AutoCompleteResult
         : [];
@@ -39,37 +37,42 @@ export function checkZipCode(params) {
       if (result.length) {
         if (result.length === 1) {
           const r = result[0];
-          // zipCode.value = r.ZipCode;
-          fill(zipCode, r.ZipCode);
+          // zipcode.value = r.ZipCode;
+          fill(zipcode, r.ZipCode);
           fill(city, r.TownName);
           fill(canton, r.Canton);
           fill(country, r.CountryCode);
-          renderMsg(successMsg("Glückliche PLZ Fügung"), true);
+          // renderMsg(successMsg("Glückliche PLZ Fügung"), true);
         } else {
           // console.log('result', result);
           buildAutoComplete({
             data: result,
             prop: "TownName",
             id: city,
-            zipCode: zipCode,
+            zipcode: zipcode,
             city: city,
             canton: canton,
-            plz: zipCode,
+            plz: zipcode,
             form: form,
           });
         }
       }
-    } else if (zipCodeVal === "") {
+    } else if (zipcodeVal === "") {
       deleteAllMessages();
     } else {
-      zipCode.classList.add("ac-alert");
+      console.log("zipcode val", zipcodeVal);
+      console.log(e.target);
+      const target = e.target;
+
       renderMsg(
         alertMsg(
           replace(messages.de.no_ch_plz, {
-            plz: zipCodeVal,
+            plz: zipcodeVal,
           }),
         ),
       );
+      target.classList.add("ac-alert", "ac-test");
+      console.log(target.classList);
     }
   });
 }
