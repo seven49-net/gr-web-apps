@@ -4,11 +4,11 @@ const messages = {
     house_no_missing: `Um die Adresse zu verifizieren, wird noch die Hausnummer benötigt.`,
     no_verfication: `Die eingegebene Adresse ({streetName} {houseNumber}, {zipcode} {city}) konnte leider nicht verifiziert werden!`,
     check_zipcode:
-      "Bitte korrigieren Sie die PLZ von <s>{uzipcode}</s> auf <em>{pzipcode}</em>.",
+      "Bitte korrigieren Sie die PLZ von <s>{uzipcode}</s> auf <ins>{pzipcode}</ins>.",
     check_townname:
-      "Bitte die Schreibweise der Ortschaft von <s>{utownname}</s> auf <em>{ptownname}</em> anpassen.",
+      "Bitte die Schreibweise der Ortschaft von <s>{utownname}</s> auf <ins>{ptownname}</ins> anpassen.",
     check_streetname:
-      "Bitte die Schreibweise der Strasse von <s>{ustreetname}</s>  auf <em>{pstreetname}</em> anpassen.",
+      "Bitte die Schreibweise der Strasse von <s>{ustreetname}</s>  auf <ins>{pstreetname}</ins> anpassen.",
   },
 };
 
@@ -63,8 +63,9 @@ function errorMsg(content) {
   return div(content, "ac-error");
 }
 
-function alertMsg(content) {
-  return div(content, "ac-alert");
+function alertMsg(content, c = "") {
+  let cl = c.length ? ["ac-alert", c] : "ac-alert";
+  return div(content, cl);
 }
 
 function successMsg(content) {
@@ -74,7 +75,8 @@ function successMsg(content) {
 
 function div(txt = "", c = "") {
   const d = document.createElement("div");
-  d.classList.add(c);
+  const cl = typeof c === "string" ? [c] : c;
+  d.classList.add(...cl);
   d.innerHTML = txt;
   return d;
 }

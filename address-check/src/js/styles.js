@@ -116,6 +116,9 @@ input.ac-error {
 
 .ac-error {
     color: var(--error);
+}
+.ac-alert ins {
+    cursor: pointer;
 }`;
 
 function minifyCssString(css) {

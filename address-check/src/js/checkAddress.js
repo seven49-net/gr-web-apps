@@ -42,8 +42,10 @@ function requestData(params) {
 
 async function checkAddress(params, values = false) {
   const street = getStreetAndNumber(params.street.value, true);
+  const streetField = params.street;
   const zipcode = !values ? params.zipcode.value : params.zipcodeVal;
   const city = !values ? clean(params.city.value) : clean(params.cityVal);
+  const cityField = params.city;
   const canton = !values ? clean(params.canton.value) : clean(params.cantonVal);
   const country = !values
     ? clean(params.country.value)
@@ -93,12 +95,23 @@ async function checkAddress(params, values = false) {
         //"Bitte die Schreibweise der Ortschaft von {utownname})  auf {ptownname} anpassen."
         renderMsg(
           alertMsg(
-            replace(messages.de.check_townname, {
-              utownname: city,
-              ptownname: result.TownName,
-            }),
+            replace(
+              messages.de.check_townname,
+              {
+                utownname: city,
+                ptownname: result.TownName,
+              },
+              "ac-city",
+            ),
           ),
         );
+        fixValue({
+          fix: ".ac-city",
+          streetname: city,
+          streetname_fixed: result.TownName,
+          city: cityField,
+          params: params,
+        });
       }
       if (result.StreetName.toLowerCase() !== streetName.toLowerCase()) {
         addAlert(params.street);
@@ -109,8 +122,16 @@ async function checkAddress(params, values = false) {
               ustreetname: streetName,
               pstreetname: result.StreetName,
             }),
+            "ac-street",
           ),
         );
+        fixValue({
+          fix: ".ac-street",
+          streetname: streetName,
+          streetname_fixed: result.StreetName,
+          street: streetField,
+          params: params,
+        });
       }
     } else {
       if (
@@ -140,6 +161,40 @@ async function checkAddress(params, values = false) {
       }
     }
   }
+}
+
+function fixValue(params) {
+  const fix = params.fix;
+  document.activeElement.blur();
+  const clickField = document.querySelector(fix + " ins");
+  if (fix === ".ac-street") {
+    replaceValue(
+      clickField,
+      params.street,
+      params.streetname,
+      params.streetname_fixed,
+      params.params,
+    );
+  }
+  if (fix === ".ac-city") {
+    replaceValue(
+      clickField,
+      params.city,
+      params.cityname,
+      params.cityname_fixed,
+      params.params,
+    );
+  }
+}
+
+function replaceValue(cf, input, val, fix, params) {
+  const replaceValue = input.value.replace(new RegExp(val, "g"), fix);
+  cf.addEventListener("click", () => {
+    input.value = replaceValue;
+    input.classList.remove("ac-alert");
+    cf.parentNode.parentNode.remove();
+    checkAddress(params);
+  });
 }
 
 export { checkAddress };
