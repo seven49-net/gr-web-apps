@@ -172,8 +172,10 @@ function deleteAc() {
   deleteClasses();
 }
 
-function testForCountriesList() {
-  const dd = document.querySelectorAll("select");
+function testForCountriesList(form) {
+  const dd = form
+    ? form.querySelectorAll("select")
+    : document.querySelectorAll("select");
   let out = null;
   if (dd.length) {
     dd.forEach((element) => {
@@ -185,9 +187,7 @@ function testForCountriesList() {
 }
 
 function selectCountries(form) {
-  const container =
-    typeof form === "undefined" ? document.querySelector("body") : form;
-  const select = testForCountriesList();
+  const select = testForCountriesList(form);
   if (select) select.value = "CH";
 }
 
@@ -436,4 +436,5 @@ export {
   clean,
   resetCountries,
   addAlert,
+  testForCountriesList,
 };

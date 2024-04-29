@@ -5,6 +5,7 @@ import {
   empty,
   markFocus,
   resetCountries,
+  testForCountriesList,
 } from "./utils";
 import { createMessageArea } from "./messages";
 
@@ -25,7 +26,7 @@ function init(params) {
       city: document.querySelector("#city"),
       canton: document.querySelector("#canton"),
       country: document.querySelector("#countries"),
-      form: document.querySelector("form"),
+      form: testForCountriesList(),
       submitText: document.querySelector(".ac-submit-text"),
     },
     params,
@@ -60,5 +61,55 @@ function init(params) {
   checkZipCode(settings);
   initPeriodicallyCheck(settings);
 }
+// const dev =
+//   location.href.includes("localhost:") || location.href.includes("127.0.0.1")
+//     ? true
+//     : false;
+const digitalform = document.querySelector(".digital-product-property-form");
+const profile = document.querySelector(".ECRegisterManageAccount");
+const payment = document.querySelector(
+  ".CheckOutWizardControlViewAddresses > .Payment",
+);
+const delivery = document.querySelector(
+  ".CheckOutWizardControlViewAddresses > .Delivery",
+);
 
-init();
+if (digitalform) {
+  init({
+    street: digitalform.querySelector("#addProp_BillingAddress"),
+    zipcode: digitalform.querySelector("#addProp_BillingZipCode"),
+    city: digitalform.querySelector("#addProp_BillingCity"),
+    canton: digitalform.querySelector("#addProp_BillingKanton"),
+    country: testForCountriesList(digitalform),
+    form: digitalform,
+  });
+} else if (profile) {
+  init({
+    street: profile.querySelector(".Address input"),
+    plz: profile.querySelector(".ZipCode input"),
+    city: profile.querySelector(".City input"),
+    state: profile.querySelector(".State input"),
+    country: testForCountriesList(profile),
+    form: profile,
+  });
+} else if (payment) {
+  init({
+    street: payment.querySelector(".PaymentAddress input"),
+    plz: payment.querySelector(".PaymentZipCode input"),
+    city: payment.querySelector(".PaymentCity input"),
+    state: payment.querySelector(".PaymentState input"),
+    country: testForCountriesList(payment),
+    form: payment,
+  });
+} else if (delivery) {
+  init({
+    street: delivery.querySelector(".DeliveryAddress input"),
+    plz: delivery.querySelector(".DeliveryZipCode input"),
+    city: delivery.querySelector(".DeliveryCity input"),
+    state: delivery.querySelector(".DeliveryState input"),
+    country: testForCountriesList(delivery),
+    form: delivery,
+  });
+} else {
+  init();
+}

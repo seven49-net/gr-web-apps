@@ -1,5 +1,5 @@
 import { checkAddress } from "./checkAddress";
-import { removeAlerts, deleteAc, getStreetAndNumber } from "./utils";
+import { removeAlerts, getStreetAndNumber } from "./utils";
 
 function doCheck(params, values) {
   console.log(params.count + " check");
@@ -45,7 +45,7 @@ function checkPeriodically(params) {
     zipcode = params.zipcode,
     city = params.city,
     canton = params.canton,
-    country = params.country,
+    country = params.country ? params.country : "",
     submitText = params.submitText;
   let c = 0;
   let run = params.run;

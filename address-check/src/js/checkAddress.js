@@ -48,7 +48,9 @@ async function checkAddress(params, values = false) {
   const cityField = params.city;
   const canton = !values ? clean(params.canton.value) : clean(params.cantonVal);
   const country = !values
-    ? clean(params.country.value)
+    ? params.country.value
+      ? clean(params.country.value)
+      : ""
     : clean(params.countryVal);
   const streetName = !values ? street[0] : params.streetname;
   const houseNumber = !values ? street[1] : params.housenumber;
