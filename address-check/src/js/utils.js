@@ -200,14 +200,16 @@ function resetCountries(form) {
 }
 
 function fill(input, value) {
-  const parent = input.parentNode;
-  if (parent.classList.contains("drop-down-list") && value === "CH") {
-    value = "204";
+  if (input) {
+    const parent = input.parentNode;
+    if (parent.classList.contains("drop-down-list") && value === "CH") {
+      value = "204";
+    }
+    console.log(input, value);
+    console.log(parent.classList);
+    input.value = value;
+    parent.classList.add("filled");
   }
-  console.log(input, value);
-  console.log(parent.classList);
-  input.value = value;
-  parent.classList.add("filled");
 }
 
 function addAlert(el) {
