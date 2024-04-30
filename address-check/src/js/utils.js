@@ -191,18 +191,23 @@ function selectCountries(form) {
   if (select) select.value = "CH";
 }
 
-function resetCountries() {
+function resetCountries(form) {
   // const container =
   //   typeof form === "undefined" ? document.querySelector("body") : form;
-  const select = testForCountriesList();
+  const select = testForCountriesList(form);
   console.log("reset", select);
   if (select) select.value = "";
 }
 
 function fill(input, value) {
+  const parent = input.parentNode;
+  if (parent.classList.contains("drop-down-list") && value === "CH") {
+    value = "204";
+  }
   console.log(input, value);
+  console.log(parent.classList);
   input.value = value;
-  input.parentNode.classList.add("filled");
+  parent.classList.add("filled");
 }
 
 function addAlert(el) {
@@ -232,22 +237,7 @@ function markFocus() {
   var inputs = document.querySelectorAll(
     ".form-group > input, .form-group > textarea, .wai-text-box input, .wai-text-box textarea, .input-item input, .input-item textarea, .WaiTextBox > input",
   );
-  /*
-  $("body").on("keyup", inputClasses, function () {
-    $(this).parent().toggleClass("filled", $(this).val() !== "");
-  });
-  $("body").on("focus", inputClasses, function () {
-    $(this).parent().addClass("focused");
-    $(this).parent().siblings(".has-ac").removeClass("ac-on");
-  });
-  $
-  $("body").on("focus", inputClasses, function () {
-    $(this).parent('.has-ac').addClass("ac-on");
-  });
-  $("body").on("blur", inputClasses, function (e) {
-    $(this).parent().removeClass("focused");
-  });
-  */
+
   inputs.forEach((el) => {
     const parent = el.parentNode;
     const siblings = [...parent.parentNode.children].filter(
@@ -286,12 +276,12 @@ function buildAutoComplete(params) {
   const city = params.city;
   const canton = params.canton;
   const id = tempid.getAttribute("id");
-  console.log(id);
+  // console.log(id);
   const form = params.form;
   const out = [];
   console.log("data", data);
   const parent = document.getElementById(id).parentNode;
-  console.log("parent", parent);
+  // console.log("parent", parent);
   if (data.length) {
     deleteAc();
     if (prop === "zipcode") {
@@ -322,7 +312,7 @@ function buildAutoComplete(params) {
     }
     out.push("</ul></div>");
   }
-  console.log(out.join(""));
+  //console.log(out.join(""));
   parent.insertAdjacentHTML("beforeend", out.join(""));
   // console.log(testForCountriesList())
   select({
@@ -369,30 +359,6 @@ function select(params) {
       });
     });
   }
-
-  /* $ac.each(function () {
-    var $acl = $(this);
-    var prop = $(this).attr("data-prop");
-    $(".insert", $acl).each(function () {
-      $(this).on("click", function () {
-        var object = JSON.parse($(this).attr("data-object"));
-        console.log(object);
-        console.log(prop);
-        fill(city, object.ORTBEZ27);
-        fill(state, object.KANTON);
-        if (prop === "POSTLEITZAHL") {
-          fill(plz, object.POSTLEITZAHL);
-        }
-
-        selectCountries(form);
-        // if (prop === "ORTBEZ27") {
-        //   fill(city, object.ORTBEZ27);
-        //   fill(state, object.KANTON);
-        // }
-        $acl.parents(".has-ac").removeClass("ac-on");
-      });
-    });
-  });*/
 }
 
 function sortCities(c) {

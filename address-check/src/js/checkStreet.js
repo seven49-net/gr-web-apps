@@ -15,6 +15,7 @@ export function checkStreet(params) {
   const canton = params.canton;
   const country = params.country;
   const form = params.form;
+
   street.addEventListener("blur", async () => {
     var sv = getStreetAndNumber(street.value);
     deleteAc();

@@ -26,7 +26,7 @@ function init(params) {
       city: document.querySelector("#city"),
       canton: document.querySelector("#canton"),
       country: document.querySelector("#countries"),
-      form: testForCountriesList(),
+      form: document.querySelector("form"),
       submitText: document.querySelector(".ac-submit-text"),
     },
     params,
@@ -53,7 +53,7 @@ function init(params) {
     if (keyCode != 9 && keyCode != 13) {
       empty(city);
       empty(canton);
-      resetCountries();
+      resetCountries(form);
       deleteAc();
     }
   });
@@ -61,15 +61,16 @@ function init(params) {
   checkZipCode(settings);
   initPeriodicallyCheck(settings);
 }
-// const dev =
-//   location.href.includes("localhost:") || location.href.includes("127.0.0.1")
-//     ? true
-//     : false;
+const dev =
+  location.href.includes("localhost:") || location.href.includes("127.0.0.1")
+    ? true
+    : false;
 const digitalform = document.querySelector(".digital-product-property-form");
 const profile = document.querySelector(".ECRegisterManageAccount");
 const payment = document.querySelector(
   ".CheckOutWizardControlViewAddresses > .Payment",
 );
+
 const delivery = document.querySelector(
   ".CheckOutWizardControlViewAddresses > .Delivery",
 );
@@ -86,30 +87,31 @@ if (digitalform) {
 } else if (profile) {
   init({
     street: profile.querySelector(".Address input"),
-    plz: profile.querySelector(".ZipCode input"),
+    zipcode: profile.querySelector(".ZipCode input"),
     city: profile.querySelector(".City input"),
-    state: profile.querySelector(".State input"),
+    canton: profile.querySelector(".State input"),
     country: testForCountriesList(profile),
     form: profile,
   });
 } else if (payment) {
+  console.log(payment.querySelector(".DropDownList.Payment select"));
   init({
     street: payment.querySelector(".PaymentAddress input"),
-    plz: payment.querySelector(".PaymentZipCode input"),
+    zipcode: payment.querySelector(".PaymentPostalCode input"),
     city: payment.querySelector(".PaymentCity input"),
-    state: payment.querySelector(".PaymentState input"),
-    country: testForCountriesList(payment),
+    canton: payment.querySelector(".PaymentState input"),
+    country: payment.querySelector(".DropDownList.Payment select"),
     form: payment,
   });
 } else if (delivery) {
   init({
     street: delivery.querySelector(".DeliveryAddress input"),
-    plz: delivery.querySelector(".DeliveryZipCode input"),
+    zipcode: delivery.querySelector(".DeliveryPostalCode input"),
     city: delivery.querySelector(".DeliveryCity input"),
-    state: delivery.querySelector(".DeliveryState input"),
-    country: testForCountriesList(delivery),
+    canton: delivery.querySelector(".DeliveryState input"),
+    country: delivery.querySelector(".DropDownList.Delivery select"),
     form: delivery,
   });
-} else {
+} else if (dev) {
   init();
 }

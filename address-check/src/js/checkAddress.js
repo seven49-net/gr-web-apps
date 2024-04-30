@@ -44,6 +44,7 @@ async function checkAddress(params, values = false) {
   const street = getStreetAndNumber(params.street.value, true);
   const streetField = params.street;
   const zipcode = !values ? params.zipcode.value : params.zipcodeVal;
+  const zipcodeField = params.zipcode;
   const city = !values ? clean(params.city.value) : clean(params.cityVal);
   const cityField = params.city;
   const canton = !values ? clean(params.canton.value) : clean(params.cantonVal);
@@ -89,8 +90,16 @@ async function checkAddress(params, values = false) {
               uzipcode: zipcode,
               pzipcode: result.ZipCode,
             }),
+            "ac-zipcode",
           ),
         );
+        fixValue({
+          fix: ".ac-zipcode",
+          zipcode_value: zipcode,
+          zipcode_value_fixed: result.ZipCode,
+          zipcode: zipcodeField,
+          params: params,
+        });
       }
       if (result.TownName.toLowerCase() !== city.toLowerCase()) {
         addAlert(params.city);
@@ -184,6 +193,15 @@ function fixValue(params) {
       params.city,
       params.cityname,
       params.cityname_fixed,
+      params.params,
+    );
+  }
+  if (fix === ".ac-zipcode") {
+    replaceValue(
+      clickField,
+      params.zipcode,
+      params.zipcode_value,
+      params.zipcode_value_fixed,
       params.params,
     );
   }
