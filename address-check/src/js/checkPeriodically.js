@@ -109,4 +109,43 @@ function initPeriodicallyCheck(settings) {
     checkPeriodically(settings);
   });
 }
-export { checkPeriodically, initPeriodicallyCheck };
+function initCheckOnce(params) {
+  const street = params.street,
+    zipcode = params.zipcode,
+    city = params.city,
+    canton = params.canton,
+    country = params.country ? params.country : "";
+
+  let run = 1;
+  let values = {
+    count: 0,
+    run: run,
+    street: street,
+    streetVal: "",
+    streetname: "",
+    housenumber: "",
+    zipcode: zipcode,
+    zipcodeVal: "",
+    city: city,
+    cityVal: "",
+    canton: canton,
+    cantonVal: "",
+    country: country,
+    countryVal: "",
+  };
+
+  params.street.addEventListener("blur", () => {
+    checkAddress(params);
+  });
+  params.zipcode.addEventListener("blur", () => {
+    checkAddress(params);
+  });
+  params.city.addEventListener("blur", () => {
+    checkAddress(params);
+  });
+  params.canton.addEventListener("blur", () => {
+    checkAddress(params);
+  });
+}
+
+export { checkPeriodically, initPeriodicallyCheck, initCheckOnce };

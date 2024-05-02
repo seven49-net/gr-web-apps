@@ -55,8 +55,9 @@ async function checkAddress(params, values = false) {
     : clean(params.countryVal);
   const streetName = !values ? street[0] : params.streetname;
   const houseNumber = !values ? street[1] : params.housenumber;
-
-  if (streetName && zipcode && city) {
+  if (zipcode && zipcode.length > 4) {
+    console.log("no verfication");
+  } else if (streetName && zipcode && city) {
     deleteAllMessages();
     const address = await getVerification(
       requestData({
@@ -106,20 +107,17 @@ async function checkAddress(params, values = false) {
         //"Bitte die Schreibweise der Ortschaft von {utownname})  auf {ptownname} anpassen."
         renderMsg(
           alertMsg(
-            replace(
-              messages.de.check_townname,
-              {
-                utownname: city,
-                ptownname: result.TownName,
-              },
-              "ac-city",
-            ),
+            replace(messages.de.check_townname, {
+              utownname: city,
+              ptownname: result.TownName,
+            }),
+            "ac-city",
           ),
         );
         fixValue({
           fix: ".ac-city",
-          streetname: city,
-          streetname_fixed: result.TownName,
+          cityname: city,
+          cityname_fixed: result.TownName,
           city: cityField,
           params: params,
         });
@@ -154,9 +152,20 @@ async function checkAddress(params, values = false) {
         result.STRID.length
       ) {
         // Um die Adresse zu verifizieren, wird noch die Hausnummer benötigt
-        console.log(params.street);
-        addAlert(params.street);
-        renderMsg(alertMsg(messages.de.house_no_missing));
+        if (result.HouseNo === "") {
+          console.log(params.street);
+          addAlert(params.street);
+          renderMsg(alertMsg(messages.de.house_no_missing));
+         } else if (result.HouseNo.length && result.HouseKey === "0") {
+          addAlert(params.street);
+
+          // "In der {streetname} wurde keine Hausnummer {housenumber} gefunden."
+          renderMsg(alertMsg(replace(messages.de.no_housenumber_in_street, {
+            streetname: result.StreetName,
+            housenumber: result.HouseNo
+          })));
+         }
+
       } else {
         renderMsg(
           errorMsg(

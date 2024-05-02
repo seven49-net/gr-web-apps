@@ -17,7 +17,8 @@ export function checkStreet(params) {
   const form = params.form;
 
   street.addEventListener("blur", async () => {
-    var sv = getStreetAndNumber(street.value);
+    const sv = getStreetAndNumber(street.value);
+
     deleteAc();
     deleteAllMessages();
     if (sv) {
@@ -47,6 +48,7 @@ export function checkStreet(params) {
             plz: zipcode,
             canton: canton,
             form: form,
+            houseNo: sv.HouseNo,
           });
         }
       }

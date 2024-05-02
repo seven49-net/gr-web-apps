@@ -9,6 +9,8 @@ const messages = {
       "Bitte die Schreibweise der Ortschaft von <s>{utownname}</s> auf <ins>{ptownname}</ins> anpassen.",
     check_streetname:
       "Bitte die Schreibweise der Strasse von <s>{ustreetname}</s>  auf <ins>{pstreetname}</ins> anpassen.",
+    no_ch_zipcode: "Die eingegebene PLZ {zipcode} ist keine CH PLZ",
+    no_housenumber_in_street: "Unter {streetname} wurde keine Hausnummer {housenumber} gefunden."
   },
 };
 

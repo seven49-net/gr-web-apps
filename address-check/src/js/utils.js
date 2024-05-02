@@ -278,7 +278,8 @@ function buildAutoComplete(params) {
   const city = params.city;
   const canton = params.canton;
   const id = tempid.getAttribute("id");
-  // console.log(id);
+  const houseNo = params.hasOwnProperty("houseNo") ? params.houseNo : null;
+  console.log(houseNo);
   const form = params.form;
   const out = [];
   console.log("data", data);
@@ -292,27 +293,36 @@ function buildAutoComplete(params) {
       data = sortCities(data);
     }
     parent.classList.add("has-ac", "ac-on");
-    out.push(
-      "<div class='ac-autocomplete'><ul class='ac-list' data-prop='" +
-        prop +
-        "' data-id='" +
-        id +
-        "' id='ac-" +
-        prop.toLowerCase() +
-        "'>",
-    );
-    var oIndex = 0;
-    for (var d of data) {
-      out.push(
-        "<li class='ac-item'><span class='insert' data-object='" +
-          JSON.stringify(d) +
-          "'>" +
-          d[prop] +
-          "</span></li>",
-      );
+
+    let oIndex = 0;
+    for (let d of data) {
+      console.log(d);
+      if (houseNo && houseNo !== d.HouseNo) {
+        continue;
+      } else {
+        out.push(
+          "<li class='ac-item'><span class='insert' data-object='" +
+            JSON.stringify(d) +
+            "'>" +
+            d[prop] +
+            "</span></li>",
+        );
+      }
+
       oIndex++;
     }
-    out.push("</ul></div>");
+    if (out.length) {
+      out.unshift(
+        "<div class='ac-autocomplete'><ul class='ac-list' data-prop='" +
+          prop +
+          "' data-id='" +
+          id +
+          "' id='ac-" +
+          prop.toLowerCase() +
+          "'>",
+      );
+      out.push("</ul></div>");
+    }
   }
   //console.log(out.join(""));
   parent.insertAdjacentHTML("beforeend", out.join(""));

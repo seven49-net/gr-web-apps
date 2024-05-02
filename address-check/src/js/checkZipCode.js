@@ -66,8 +66,8 @@ export function checkZipCode(params) {
 
       renderMsg(
         alertMsg(
-          replace(messages.de.no_ch_plz, {
-            plz: zipcodeVal,
+          replace(messages.de.no_ch_zipcode, {
+            zipcode: zipcodeVal,
           }),
         ),
       );

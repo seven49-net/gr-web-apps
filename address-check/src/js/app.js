@@ -9,7 +9,7 @@ import {
 } from "./utils";
 import { createMessageArea } from "./messages";
 
-import { initPeriodicallyCheck } from "./checkPeriodically.js";
+import { initPeriodicallyCheck, initCheckOnce } from "./checkPeriodically.js";
 
 import { acStyles } from "./styles.js";
 import { checkZipCode } from "./checkZipCode.js";
@@ -46,7 +46,7 @@ function init(params) {
   markFocus();
 
   checkStreet(settings);
-
+  /*
   zipcode.addEventListener("keydown", (e) => {
     const keyCode = e.keyCode;
     console.log(keyCode);
@@ -57,9 +57,10 @@ function init(params) {
       deleteAc();
     }
   });
-
+ */
   checkZipCode(settings);
-  initPeriodicallyCheck(settings);
+  //initPeriodicallyCheck(settings);
+  initCheckOnce(settings);
 }
 const dev =
   location.href.includes("localhost:") ||
