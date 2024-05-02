@@ -187,33 +187,34 @@ function fixValue(params) {
   const fix = params.fix;
   document.activeElement.blur();
   const clickField = document.querySelector(fix + " ins");
-  if (fix === ".ac-street") {
-    replaceValue(
-      clickField,
-      params.street,
-      params.streetname,
-      params.streetname_fixed,
-      params.params,
-    );
+  if (clickField) {
+    if (fix === ".ac-street") {
+      replaceValue(
+        clickField,
+        params.street,
+        params.streetname,
+        params.streetname_fixed,
+        params.params,
+      );
+    } else if (fix === ".ac-city") {
+      replaceValue(
+        clickField,
+        params.city,
+        params.cityname,
+        params.cityname_fixed,
+        params.params,
+      );
+    } if (fix === ".ac-zipcode") {
+      replaceValue(
+        clickField,
+        params.zipcode,
+        params.zipcode_value,
+        params.zipcode_value_fixed,
+        params.params,
+      );
+    }
   }
-  if (fix === ".ac-city") {
-    replaceValue(
-      clickField,
-      params.city,
-      params.cityname,
-      params.cityname_fixed,
-      params.params,
-    );
-  }
-  if (fix === ".ac-zipcode") {
-    replaceValue(
-      clickField,
-      params.zipcode,
-      params.zipcode_value,
-      params.zipcode_value_fixed,
-      params.params,
-    );
-  }
+
 }
 
 function replaceValue(cf, input, val, fix, params) {
