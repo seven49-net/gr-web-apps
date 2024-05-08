@@ -4,13 +4,14 @@ const messages = {
     house_no_missing: `Um die Adresse zu verifizieren, wird noch die Hausnummer benötigt.`,
     no_verfication: `Die eingegebene Adresse ({streetName} {houseNumber}, {zipcode} {city}) konnte leider nicht verifiziert werden!`,
     check_zipcode:
-      "Bitte korrigieren Sie die PLZ von <s>{uzipcode}</s> auf <ins>{pzipcode}</ins>.",
+      "Klicken Sie auf den Korrekturvorschlag, um diesen zu übernehmen:  von <s>{uzipcode}</s> auf <ins>{pzipcode}</ins>.",
     check_townname:
-      "Bitte die Schreibweise der Ortschaft von <s>{utownname}</s> auf <ins>{ptownname}</ins> anpassen.",
+      "Klicken Sie auf den Korrekturvorschlag, um diesen zu übernehmen:  von <s>{utownname}</s> auf <ins>{ptownname}</ins> anpassen.",
     check_streetname:
-      "Bitte die Schreibweise der Strasse von <s>{ustreetname}</s>  auf <ins>{pstreetname}</ins> anpassen.",
+      "Klicken Sie auf den Korrekturvorschlag, um diesen zu übernehmen: von <s>{ustreetname}</s>  auf <ins>{pstreetname}</ins> anpassen.",
     no_ch_zipcode: "Die eingegebene PLZ {zipcode} ist keine CH PLZ",
-    no_housenumber_in_street: "Unter {streetname} wurde keine Hausnummer {housenumber} gefunden."
+    no_housenumber_in_street:
+      "Unter {streetname} wurde keine Hausnummer {housenumber} gefunden.",
   },
 };
 

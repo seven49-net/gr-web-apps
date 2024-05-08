@@ -49,6 +49,8 @@ export function checkStreet(params) {
             canton: canton,
             form: form,
             houseNo: sv.HouseNo,
+            street: params.street,
+            country: params.country,
           });
         }
       }

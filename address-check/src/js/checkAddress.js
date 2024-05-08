@@ -49,7 +49,7 @@ async function checkAddress(params, values = false) {
   const cityField = params.city;
   const canton = !values ? clean(params.canton.value) : clean(params.cantonVal);
   const country = !values
-    ? params.country.value
+    ? params.country
       ? clean(params.country.value)
       : ""
     : clean(params.countryVal);
@@ -156,16 +156,19 @@ async function checkAddress(params, values = false) {
           console.log(params.street);
           addAlert(params.street);
           renderMsg(alertMsg(messages.de.house_no_missing));
-         } else if (result.HouseNo.length && result.HouseKey === "0") {
+        } else if (result.HouseNo.length && result.HouseKey === "0") {
           addAlert(params.street);
 
           // "In der {streetname} wurde keine Hausnummer {housenumber} gefunden."
-          renderMsg(alertMsg(replace(messages.de.no_housenumber_in_street, {
-            streetname: result.StreetName,
-            housenumber: result.HouseNo
-          })));
-         }
-
+          renderMsg(
+            alertMsg(
+              replace(messages.de.no_housenumber_in_street, {
+                streetname: result.StreetName,
+                housenumber: result.HouseNo,
+              }),
+            ),
+          );
+        }
       } else {
         renderMsg(
           errorMsg(
@@ -204,7 +207,8 @@ function fixValue(params) {
         params.cityname_fixed,
         params.params,
       );
-    } if (fix === ".ac-zipcode") {
+    }
+    if (fix === ".ac-zipcode") {
       replaceValue(
         clickField,
         params.zipcode,
@@ -214,7 +218,6 @@ function fixValue(params) {
       );
     }
   }
-
 }
 
 function replaceValue(cf, input, val, fix, params) {

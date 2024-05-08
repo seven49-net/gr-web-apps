@@ -1,3 +1,5 @@
+import { checkAddress } from "./checkAddress";
+
 const apiUrl = "https://02ds7tjzm7.execute-api.eu-west-1.amazonaws.com/Prod";
 const apiUrlPost = apiUrl + "?method=autocomplete4";
 
@@ -282,24 +284,29 @@ function buildAutoComplete(params) {
   console.log(houseNo);
   const form = params.form;
   const out = [];
-  console.log("data", data);
+
   const parent = document.getElementById(id).parentNode;
   // console.log("parent", parent);
   if (data.length) {
     deleteAc();
-    if (prop === "zipcode") {
+    if (prop === "ZipCode") {
       data = sortZipCode(data);
     } else if (prop === "TownName") {
       data = sortCities(data);
     }
+    console.log("data", data);
     parent.classList.add("has-ac", "ac-on");
 
     let oIndex = 0;
+    const zipCodes = [];
     for (let d of data) {
       console.log(d);
       if (houseNo && houseNo !== d.HouseNo) {
         continue;
+      } else if (zipCodes.includes(d.ZipCode) && prop == "ZipCode") {
+        continue;
       } else {
+        zipCodes.push(d.ZipCode);
         out.push(
           "<li class='ac-item'><span class='insert' data-object='" +
             JSON.stringify(d) +
@@ -311,6 +318,7 @@ function buildAutoComplete(params) {
 
       oIndex++;
     }
+    // console.log(zipCodes);
     if (out.length) {
       out.unshift(
         "<div class='ac-autocomplete'><ul class='ac-list' data-prop='" +
@@ -332,6 +340,8 @@ function buildAutoComplete(params) {
     zipcode: zipcode,
     canton: canton,
     form: form,
+    street: params.street,
+    country: params.country,
   });
 }
 function getParents(el, selector) {
@@ -367,6 +377,7 @@ function select(params) {
               e.classList.remove("ac-on");
             });
           }
+          checkAddress(params);
         });
       });
     });

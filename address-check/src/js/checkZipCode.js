@@ -54,6 +54,8 @@ export function checkZipCode(params) {
             canton: canton,
             plz: zipcode,
             form: form,
+            street: params.street,
+            country: params.country,
           });
         }
       }
