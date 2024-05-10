@@ -2,7 +2,7 @@ const messages = {
   de: {
     valid_address: "Die Adresse wurde erfolgreich verfiziert.",
     house_no_missing: `Um die Adresse zu verifizieren, wird noch die Hausnummer benötigt.`,
-    no_verfication: `Die eingegebene Adresse ({streetName} {houseNumber}, {zipcode} {city}) konnte leider nicht verifiziert werden!`,
+    no_verfication: `Die eingegebene Adresse ({streetName} {houseNumber}, {zipcode} {city}) konnte leider nicht verifiziert werden. Wollen Sie wirklich fortfahren?`,
     check_zipcode:
       "Klicken Sie auf den Korrekturvorschlag, um diesen zu übernehmen:  von <s>{uzipcode}</s> auf <ins>{pzipcode}</ins>.",
     check_townname:
