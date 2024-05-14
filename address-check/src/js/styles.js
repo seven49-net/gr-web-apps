@@ -4,7 +4,7 @@ const css = `:root {
     --black: #202020;
     --white: #fff;
     --gray: #acacac;
-    --error: rgb(168, 21, 21);
+    --error: rgb(255, 47, 195);
     --success: rgb(4, 116, 22);
     --alert: #ff9300;
     --border-color: #ada2a2;

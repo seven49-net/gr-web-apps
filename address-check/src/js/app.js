@@ -65,7 +65,8 @@ function init(params) {
 const dev =
   location.href.includes("localhost:") ||
   location.href.includes("127.0.0.1") ||
-  location.href.includes("dev.devbear.ch")
+  location.href.includes("dev.devbear.ch") ||
+  location.href.includes("seven49.com")
     ? true
     : false;
 const digitalform = document.querySelector(".digital-product-property-form");
