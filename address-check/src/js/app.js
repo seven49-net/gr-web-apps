@@ -117,5 +117,5 @@ if (digitalform) {
     form: delivery,
   });
 } else if (dev) {
-  init();
+  init({ form: document.querySelector("fieldset") });
 }
