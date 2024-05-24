@@ -1,4 +1,4 @@
-import { checkAddress } from "./checkAddress";
+//import { checkAddress } from "./checkAddress";
 
 const apiUrl = "https://02ds7tjzm7.execute-api.eu-west-1.amazonaws.com/Prod";
 const apiUrlPost = apiUrl + "?method=autocomplete4";
@@ -211,6 +211,9 @@ function fill(input, value) {
     console.log(parent.classList);
     input.value = value;
     parent.classList.add("filled");
+    setTimeout(() => {
+      input.blur();
+    }, 100);
   }
 }
 
@@ -333,7 +336,8 @@ function buildAutoComplete(params) {
     }
   }
   //console.log(out.join(""));
-  parent.insertAdjacentHTML("beforeend", out.join(""));
+  //parent.insertAdjacentHTML("beforeend", out.join(""));
+  document.getElementById(id).insertAdjacentHTML("afterend", out.join(""));
   // console.log(testForCountriesList())
   select({
     city: city,
@@ -377,11 +381,20 @@ function select(params) {
               e.classList.remove("ac-on");
             });
           }
-          checkAddress(params);
+          // blurInputs(params);
         });
       });
     });
   }
+}
+
+function blurInputs(params) {
+  [params.zipcode, params.city, params.street, params.canton].forEach(
+    (input) => {
+      input.focus();
+      input.blur();
+    },
+  );
 }
 
 function sortCities(c) {
