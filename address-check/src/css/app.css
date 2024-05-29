@@ -100,21 +100,24 @@ input.ac-error {
 
 .ac-submit-text .inner {
     padding: 10px;
-    border: 1px solid var(--_ac-submit-text-border-color);
+    border: 1px dotted var(--_ac-submit-text-border-color);
 }
 .ac-submit-text .inner + .inner {
     margin-top: 5px;
 }
 
 .ac-success {
+    --_ac-submit-text-border-color: var(--success);
     color: var(--success);
 }
 
 .ac-alert {
+    --_ac-submit-text-border-color: var(--alert);
     color: var(--alert);
 }
 
 .ac-error {
+    --_ac-submit-text-border-color: var(--error);
     color: var(--error);
 }
 .ac-alert ins {

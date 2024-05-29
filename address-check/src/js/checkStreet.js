@@ -3,11 +3,12 @@ import {
   getStreetAndNumber,
   deleteAc,
   fill,
-  buildAutoComplete,
   apiRequest,
 } from "./utils";
+import { checkAddress } from "./checkAddress";
+import { buildAutoComplete } from "./build-autocomplete";
+import { deleteAllMessages } from "./messages";
 
-import { messages, deleteAllMessages, renderMsg, successMsg } from "./messages";
 export function checkStreet(params) {
   const street = params.street;
   const zipcode = params.zipcode;
@@ -31,12 +32,10 @@ export function checkStreet(params) {
         deleteAllMessages();
         if (result.length === 1) {
           const r = result[0];
-          // zipcode.value = r.ZipCode;
           fill(zipcode, r.ZipCode);
-          fill(city, r.TownName);
           fill(canton, r.Canton);
           fill(country, r.CountryCode);
-          //renderMsg(successMsg("Glückliche Fügung"), true);
+          fill(city, r.TownName);
         } else {
           // console.log('result', result);
           buildAutoComplete({
@@ -55,5 +54,6 @@ export function checkStreet(params) {
         }
       }
     }
+    checkAddress(params);
   });
 }

@@ -58,7 +58,6 @@ async function checkAddress(params, values = false) {
   if (zipcode && zipcode.length > 4) {
     console.log("no verfication");
   } else if (streetName && zipcode && city) {
-    deleteAllMessages();
     const address = await getVerification(
       requestData({
         streetname: streetName,
@@ -70,17 +69,19 @@ async function checkAddress(params, values = false) {
       }),
     );
 
-    console.log(streetName, houseNumber, zipcode, city, canton, country);
+    //console.log(streetName, houseNumber, zipcode, city, canton, country);
 
     const result =
       address.QueryBuildingVerification4Result.BuildingVerificationData;
-    console.log(result);
+    // console.log(result);
     const status = Number(result.PSTAT);
+
+    deleteAllMessages();
     if (status < 3) {
       if (result.Canton.toLowerCase() !== canton.toLowerCase()) {
         params.canton.value = result.Canton;
       }
-      renderMsg(successMsg(messages.de.valid_address), true);
+      renderMsg(successMsg(messages.de.valid_address), true, "ac-success");
     } else if (status === 3 || status === 4 || status === 5) {
       if (result.ZipCode !== zipcode) {
         addAlert(params.zipcode);
@@ -93,6 +94,7 @@ async function checkAddress(params, values = false) {
             }),
             "ac-zipcode",
           ),
+          "ac-zipcode",
         );
         fixValue({
           fix: ".ac-zipcode",
@@ -113,6 +115,7 @@ async function checkAddress(params, values = false) {
             }),
             "ac-city",
           ),
+          "ac-city",
         );
         fixValue({
           fix: ".ac-city",
@@ -133,6 +136,7 @@ async function checkAddress(params, values = false) {
             }),
             "ac-street",
           ),
+          "ac-street",
         );
         fixValue({
           fix: ".ac-street",
@@ -153,9 +157,9 @@ async function checkAddress(params, values = false) {
       ) {
         // Um die Adresse zu verifizieren, wird noch die Hausnummer benötigt
         if (result.HouseNo === "") {
-          console.log(params.street);
+          // console.log(params.street);
           addAlert(params.street);
-          renderMsg(alertMsg(messages.de.house_no_missing));
+          renderMsg(alertMsg(messages.de.house_no_missing), "ac-no-houseno");
         } else if (result.HouseNo.length && result.HouseKey === "0") {
           addAlert(params.street);
 
@@ -166,6 +170,7 @@ async function checkAddress(params, values = false) {
                 streetname: result.StreetName,
                 housenumber: result.HouseNo,
               }),
+              "ac-street",
             ),
           );
         }
@@ -178,8 +183,9 @@ async function checkAddress(params, values = false) {
               zipcode: zipcode,
               city: city,
             }),
+            true,
+            "ac-error",
           ),
-          true,
         );
       }
     }
@@ -225,7 +231,7 @@ function replaceValue(cf, input, val, fix, params) {
   cf.addEventListener("click", () => {
     input.value = replaceValue;
     input.classList.remove("ac-alert");
-    cf.parentNode.parentNode.remove();
+    cf.parentNode.remove();
     checkAddress(params);
   });
 }

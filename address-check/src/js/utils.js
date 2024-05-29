@@ -201,19 +201,20 @@ function resetCountries(form) {
   if (select) select.value = "";
 }
 
-function fill(input, value) {
+function fill(input, value, time = 0) {
   if (input) {
     const parent = input.parentNode;
     if (parent.classList.contains("drop-down-list") && value === "CH") {
       value = "204";
     }
-    console.log(input, value);
-    console.log(parent.classList);
     input.value = value;
     parent.classList.add("filled");
-    setTimeout(() => {
-      input.blur();
-    }, 100);
+    const err = parent.querySelector("label.error");
+    if (err) {
+      err.style = "display: none";
+    }
+
+    return;
   }
 }
 
@@ -253,7 +254,7 @@ function markFocus() {
 
     el.addEventListener("keyup", (e) => {
       if (el.value !== "") {
-        parent.classList.toggle("filled");
+        parent.classList.add("filled");
       } else {
         parent.classList.remove("filled");
       }
@@ -261,7 +262,9 @@ function markFocus() {
 
     el.addEventListener("focus", (e) => {
       parent.classList.add("focused");
+      console.log(el.value);
       if (parent.classList.contains("has-ac")) parent.classList.add("ac-on");
+      if (el.value < 4) parent.classList.toggle("filled");
       if (siblings.length) {
         siblings.forEach((s) => {
           s.classList.remove("ac-on");
@@ -397,22 +400,6 @@ function blurInputs(params) {
   );
 }
 
-function sortCities(c) {
-  return c.sort(function (a, b) {
-    var cityA = a.TownName.toLowerCase();
-    var cityB = b.TownName.toLowerCase();
-    if (cityA < cityB) return -1;
-    if (cityA > cityB) return 1;
-    return 0;
-  });
-}
-
-function sortZipCode(d) {
-  return d.sort(function (a, b) {
-    return a.ZipCode - b.ZipCode;
-  });
-}
-
 function testZipCode(str) {
   var regex = /^[1-9]\d{3}$/gm;
   return regex.test(str);
@@ -431,7 +418,8 @@ export {
   empty,
   removeAlerts,
   markFocus,
-  buildAutoComplete,
+  getParents,
+  selectCountries,
   testZipCode,
   apiUrl,
   apiUrlPost,

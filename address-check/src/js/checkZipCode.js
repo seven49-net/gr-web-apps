@@ -3,17 +3,17 @@ import {
   postData,
   apiRequest,
   fill,
-  buildAutoComplete,
   deleteAc,
+  removeAlerts,
 } from "./utils";
+import { buildAutoComplete } from "./build-autocomplete";
 
 import {
   renderMsg,
-  successMsg,
-  errorMsg,
   alertMsg,
   replace,
   messages,
+  deleteMessage,
   deleteAllMessages,
 } from "./messages";
 
@@ -25,15 +25,17 @@ export function checkZipCode(params) {
     form = params.form;
   zipcode.addEventListener("blur", async (e) => {
     const zipcodeVal = zipcode.value.trim();
-    console.log("zip code val", zipcodeVal);
-    console.log(e.target);
-    deleteAllMessages();
+    //console.log("zip code val", zipcodeVal);
+    //console.log(e.target);
+    //deleteAllMessages();
+    deleteMessage("ac-zip-message");
     if (testZipCode(zipcodeVal)) {
       const response = await postData(apiRequest({ ZipCode: zipcodeVal }));
       const result = response
         ? response.QueryAutoComplete4Result.AutoCompleteResult
         : [];
       deleteAc();
+
       if (result.length) {
         if (result.length === 1) {
           const r = result[0];
@@ -43,6 +45,8 @@ export function checkZipCode(params) {
           fill(canton, r.Canton);
           fill(country, r.CountryCode);
           // renderMsg(successMsg("Glückliche PLZ Fügung"), true);
+          removeAlerts();
+          return;
         } else {
           // console.log('result', result);
           buildAutoComplete({
@@ -60,21 +64,21 @@ export function checkZipCode(params) {
         }
       }
     } else if (zipcodeVal === "") {
-      deleteAllMessages();
+      deleteMessage("ac-zip-message");
     } else {
-      console.log("zipcode val", zipcodeVal);
-      console.log(e.target);
+      // console.log("zipcode val", zipcodeVal);
+      // console.log(e.target);
       const target = e.target;
-
+      deleteAllMessages();
       renderMsg(
         alertMsg(
           replace(messages.de.no_ch_zipcode, {
             zipcode: zipcodeVal,
           }),
         ),
+        "ac-zip-message",
       );
-      target.classList.add("ac-alert", "ac-test");
-      console.log(target.classList);
+      target.classList.add("ac-alert");
     }
   });
 }

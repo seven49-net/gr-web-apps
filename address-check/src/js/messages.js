@@ -21,17 +21,17 @@ function createMessageArea() {
   return submitText;
 }
 
-function renderMsg(content, e) {
-  var clean = typeof e === "undefind" ? true : e;
+function renderMsg(content, e, cl = "ac-alert") {
+  // console.log(typeof content);
+  var clean = typeof e === "string" ? e : true;
   const submitText = document.querySelector(".ac-submit-text");
-  if (clean) {
+  if (typeof clean === "boolean") {
     deleteAllMessages(submitText);
-    submitText.innerHTML = `<div class='inner'>${content.outerHTML}</div>`;
+    submitText.innerHTML = `<div class='inner ${cl}'>${content.outerHTML}</div>`;
   } else {
-    const a = document.createElement("div");
-    a.classList.add("inner");
-    a.appendChild(content);
-    submitText.appendChild(a);
+    deleteMessage(e);
+    content.classList.add(e, "inner");
+    submitText.appendChild(content);
   }
 }
 function deleteAllMessages(submitText) {
@@ -45,6 +45,17 @@ function deleteAllMessages(submitText) {
   if (alerts.length) {
     alerts.forEach((e) => {
       e.classList.remove("ac-alert");
+    });
+  }
+}
+
+function deleteMessage(cl) {
+  // const st = document.querySelector(".ac-submit-text");
+  let messages = document.querySelectorAll(`.${cl}`);
+  console.log("messages", messages);
+  if (messages) {
+    messages.forEach((e) => {
+      e.remove();
     });
   }
 }
@@ -93,4 +104,5 @@ export {
   replace,
   deleteAllMessages,
   createMessageArea,
+  deleteMessage,
 };
