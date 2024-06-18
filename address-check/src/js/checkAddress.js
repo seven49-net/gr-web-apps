@@ -75,13 +75,42 @@ async function checkAddress(params, values = false) {
       address.QueryBuildingVerification4Result.BuildingVerificationData;
     // console.log(result);
     const status = Number(result.PSTAT);
-
+    console.log(status);
     deleteAllMessages();
     if (status < 3) {
       if (result.Canton.toLowerCase() !== canton.toLowerCase()) {
         params.canton.value = result.Canton;
       }
-      renderMsg(successMsg(messages.de.valid_address), true, "ac-success");
+      if (status === 2) {
+        if (result.StreetName.toLowerCase() !== streetName.toLowerCase()) {
+          addAlert(params.street);
+          //"Bitte die Schreibweise der Strasse von {ustreetname})  auf {pstreetname} anpassen."
+          renderMsg(
+            alertMsg(
+              replace(messages.de.check_streetname, {
+                ustreetname: streetName,
+                pstreetname: result.StreetName,
+              }),
+              "ac-street",
+            ),
+            "ac-street",
+          );
+          fixValue({
+            fix: ".ac-street",
+            streetname: streetName,
+            streetname_fixed: result.StreetName,
+            street: streetField,
+            params: params,
+          });
+        } else if (
+          houseNumber.toLowerCase() ==
+          (result.HouseNo + result.HouseNoAddition).toLowerCase()
+        ) {
+          renderMsg(successMsg(messages.de.valid_address), true, "ac-success");
+        }
+      } else {
+        renderMsg(successMsg(messages.de.valid_address), true, "ac-success");
+      }
     } else if (status === 3 || status === 4 || status === 5) {
       if (result.ZipCode !== zipcode) {
         addAlert(params.zipcode);
