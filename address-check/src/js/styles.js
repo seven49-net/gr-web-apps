@@ -137,7 +137,7 @@ function minifyCssString(css) {
 
 function loadstyles(str) {
   const head = document.querySelector("head");
-  console.log(head.querySelector("#ac-styles"));
+  //console.log(head.querySelector("#ac-styles"));
   if (!head.querySelector("#ac-styles")) {
     head.insertAdjacentHTML(
       "beforeend",

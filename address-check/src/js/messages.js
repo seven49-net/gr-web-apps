@@ -39,7 +39,7 @@ function deleteAllMessages(submitText) {
     typeof submitText === "undefined"
       ? document.querySelector(".ac-submit-text")
       : submitText;
-  console.log("delete messages");
+  //console.log("delete messages");
   sT.innerHTML = "";
   const alerts = document.querySelectorAll(".ac-alert");
   if (alerts.length) {
@@ -52,7 +52,7 @@ function deleteAllMessages(submitText) {
 function deleteMessage(cl) {
   // const st = document.querySelector(".ac-submit-text");
   let messages = document.querySelectorAll(`.${cl}`);
-  console.log("messages", messages);
+  //console.log("messages", messages);
   if (messages) {
     messages.forEach((e) => {
       e.remove();
@@ -61,7 +61,7 @@ function deleteMessage(cl) {
 }
 
 function replace(str, r) {
-  console.log(r);
+  //console.log(r);
   var replacements = Object.entries(r);
   var out = str;
   for (var [key, value] of replacements) {
@@ -83,7 +83,7 @@ function alertMsg(content, c = "") {
 }
 
 function successMsg(content) {
-  console.log(content);
+  //console.log(content);
   return div(content, "ac-success");
 }
 

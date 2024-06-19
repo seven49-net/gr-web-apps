@@ -2,7 +2,7 @@ import { checkAddress } from "./checkAddress";
 import { removeAlerts, getStreetAndNumber } from "./utils";
 
 function doCheck(params, values) {
-  console.log(params.count + " check");
+  //console.log(params.count + " check");
   // $(params.submitText).html("");
   // removeAlerts();
   removeAlerts();
@@ -82,13 +82,13 @@ function checkPeriodically(params) {
         },
         values,
       );
-      console.log("check", values);
+      //console.log("check", values);
       c++;
       run = values.run;
       if (run == 1) {
         check();
       } else {
-        console.log("ok - get verification", values);
+        // console.log("ok - get verification", values);
         checkAddress(values, true);
       }
     }, 1000);

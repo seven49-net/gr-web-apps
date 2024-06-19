@@ -42,7 +42,7 @@ function getStreetAndNumber(str = "", raw = false) {
     let houseNumber = "";
     if (str.match(regexStreet)) {
       const sArr = regexStreet.exec(str);
-      console.log(sArr);
+      //console.log(sArr);
       street = sArr[1];
       houseNumber = sArr[2].trim();
     }
@@ -136,7 +136,7 @@ async function postData(data = {}, url = apiUrlPost) {
     referrerPolicy: "no-referrer",
     body: JSON.stringify(data),
   });
-  console.log(response.ok);
+  //console.log(response.ok);
   if (response.ok) {
     return response.json();
   }
@@ -197,7 +197,7 @@ function resetCountries(form) {
   // const container =
   //   typeof form === "undefined" ? document.querySelector("body") : form;
   const select = testForCountriesList(form);
-  console.log("reset", select);
+  //console.log("reset", select);
   if (select) select.value = "";
 }
 
@@ -262,7 +262,7 @@ function markFocus() {
 
     el.addEventListener("focus", (e) => {
       parent.classList.add("focused");
-      console.log(el.value);
+      //console.log(el.value);
       if (parent.classList.contains("has-ac")) parent.classList.add("ac-on");
       if (el.value < 4) parent.classList.toggle("filled");
       if (siblings.length) {
@@ -278,126 +278,12 @@ function markFocus() {
   });
 }
 
-function buildAutoComplete(params) {
-  let data = params.data;
-  const prop = params.prop;
-  const tempid = params.id;
-  const zipcode = params.zipcode;
-  const city = params.city;
-  const canton = params.canton;
-  const id = tempid.getAttribute("id");
-  const houseNo = params.hasOwnProperty("houseNo") ? params.houseNo : null;
-  console.log(houseNo);
-  const form = params.form;
-  const out = [];
-
-  const parent = document.getElementById(id).parentNode;
-  // console.log("parent", parent);
-  if (data.length) {
-    deleteAc();
-    if (prop === "ZipCode") {
-      data = sortZipCode(data);
-    } else if (prop === "TownName") {
-      data = sortCities(data);
-    }
-    console.log("data", data);
-    parent.classList.add("has-ac", "ac-on");
-
-    let oIndex = 0;
-    const zipCodes = [];
-    for (let d of data) {
-      console.log(d);
-      if (houseNo && houseNo !== d.HouseNo) {
-        continue;
-      } else if (zipCodes.includes(d.ZipCode) && prop == "ZipCode") {
-        continue;
-      } else {
-        zipCodes.push(d.ZipCode);
-        out.push(
-          "<li class='ac-item'><span class='insert' data-object='" +
-            JSON.stringify(d) +
-            "'>" +
-            d[prop] +
-            "</span></li>",
-        );
-      }
-
-      oIndex++;
-    }
-    // console.log(zipCodes);
-    if (out.length) {
-      out.unshift(
-        "<div class='ac-autocomplete'><ul class='ac-list' data-prop='" +
-          prop +
-          "' data-id='" +
-          id +
-          "' id='ac-" +
-          prop.toLowerCase() +
-          "'>",
-      );
-      out.push("</ul></div>");
-    }
-  }
-  //console.log(out.join(""));
-  //parent.insertAdjacentHTML("beforeend", out.join(""));
-  document.getElementById(id).insertAdjacentHTML("afterend", out.join(""));
-  // console.log(testForCountriesList())
-  select({
-    city: city,
-    zipcode: zipcode,
-    canton: canton,
-    form: form,
-    street: params.street,
-    country: params.country,
-  });
-}
 function getParents(el, selector) {
   const parents = [];
   while ((el = el.parentNode) && el !== document) {
     if (!selector || el.matches(selector)) parents.push(el);
   }
   return parents;
-}
-
-function select(params) {
-  const ac = document.querySelectorAll(".ac-autocomplete .ac-list"); //$(".ac-autocomplete");
-  const city = params.city;
-  const zipcode = params.zipcode;
-  const canton = params.canton;
-  const form = params.form;
-  if (ac.length) {
-    ac.forEach((acl) => {
-      const parents = getParents(acl, ".has-ac");
-      const prop = acl.getAttribute("data-prop");
-      acl.querySelectorAll(".insert").forEach((o) => {
-        o.addEventListener("click", (e) => {
-          const object = JSON.parse(o.getAttribute("data-object"));
-          console.log(object);
-          console.log(prop);
-          if (prop === "ZipCode") fill(zipcode, object.ZipCode);
-          fill(city, object.TownName);
-          fill(canton, object.Canton);
-          selectCountries(form);
-
-          if (parents.length) {
-            parents.forEach((e) => {
-              e.classList.remove("ac-on");
-            });
-          }
-          // blurInputs(params);
-        });
-      });
-    });
-  }
-}
-
-function blurInputs(params) {
-  [params.zipcode, params.city, params.street, params.canton].forEach(
-    (input) => {
-      input.focus();
-      input.blur();
-    },
-  );
 }
 
 function testZipCode(str) {

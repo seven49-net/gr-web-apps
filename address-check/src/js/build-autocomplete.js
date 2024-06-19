@@ -10,7 +10,7 @@ export function buildAutoComplete(params) {
   const canton = params.canton;
   const id = tempid.getAttribute("id");
   const houseNo = params.hasOwnProperty("houseNo") ? params.houseNo : null;
-  console.log(houseNo);
+  //console.log(houseNo);
   const form = params.form;
   const out = [];
 
@@ -23,13 +23,13 @@ export function buildAutoComplete(params) {
     } else if (prop === "TownName") {
       data = sortCities(data);
     }
-    console.log("data", data);
+    //console.log("data", data);
     parent.classList.add("has-ac", "ac-on");
 
     let oIndex = 0;
     const zipCodes = [];
     for (let d of data) {
-      console.log(d);
+      //console.log(d);
       if (houseNo && houseNo !== d.HouseNo) {
         continue;
       } else if (zipCodes.includes(d.ZipCode) && prop == "ZipCode") {
@@ -88,8 +88,8 @@ function select(params) {
       acl.querySelectorAll(".insert").forEach((o) => {
         o.addEventListener("click", (e) => {
           const object = JSON.parse(o.getAttribute("data-object"));
-          console.log(object);
-          console.log(prop);
+          // console.log(object);
+          // console.log(prop);
           if (prop === "ZipCode") fill(zipcode, object.ZipCode);
           fill(city, object.TownName);
           fill(canton, object.Canton);

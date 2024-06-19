@@ -75,7 +75,7 @@ async function checkAddress(params, values = false) {
       address.QueryBuildingVerification4Result.BuildingVerificationData;
     // console.log(result);
     const status = Number(result.PSTAT);
-    console.log(status);
+    //console.log(status);
     deleteAllMessages();
     if (status < 3) {
       if (result.Canton.toLowerCase() !== canton.toLowerCase()) {

@@ -5,5 +5,5 @@ export default {
     file: "dist/js/app.js",
     format: "umd",
   },
-  //plugins: [terser()],
+  plugins: [terser()],
 };
