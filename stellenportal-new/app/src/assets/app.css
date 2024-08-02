@@ -50,9 +50,13 @@ footer {
   left: 0;
   width: 100%;
 }
+.page-container {
+  position: relative;
+  padding-bottom: 60px;
+}
 
 .builder {
-  display: none;
+  /* display: none; */
 }
 .build .builder {
   display: block;
