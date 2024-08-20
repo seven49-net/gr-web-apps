@@ -36,7 +36,9 @@ function getTranslation(prop, lang, fallback = 'missing translation for ' + prop
   if (trans.hasOwnProperty(lang) && trans[lang].hasOwnProperty(prop)) out = trans[lang][prop]
   return out
 }
-
+function checkQuery(query) {
+  return query && query.length > 0
+}
 async function fetchData() {
   var response = await fetch(url)
   if (response.ok) {
@@ -118,4 +120,13 @@ function departmentList(objects, bi) {
   return out
 }
 
-export { fetchData, applicationLink, date, getTranslation, languageList, typeList, departmentList }
+export {
+  fetchData,
+  applicationLink,
+  date,
+  getTranslation,
+  languageList,
+  typeList,
+  departmentList,
+  checkQuery
+}

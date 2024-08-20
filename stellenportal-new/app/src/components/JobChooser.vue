@@ -1,5 +1,9 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
+import { Fancybox } from '@fancyapps/ui/dist/index.esm.js'
+import '@fancyapps/ui/dist/fancybox/fancybox.css'
+import { useRoute, useRouter } from 'vue-router'
+import _ from 'lodash'
 import {
   fetchData,
   applicationLink,
@@ -7,16 +11,24 @@ import {
   getTranslation,
   languageList,
   typeList,
-  departmentList
+  departmentList,
+  checkQuery
 } from './api.js'
-
+import { standalone } from '../stores/standalone'
 const data = ref([])
-const hidedepartment = ref(true)
+const hidedepartment = ref(false)
 const selectedlanguage = ref('')
 const languages = ref([])
 const types = ref([])
 const selectedtype = ref('')
 const departmentsearch = ref('')
+const selecteddepartment = ref('')
+const route = useRoute()
+const router = useRouter()
+const noresulttext = ref(getTranslation('noresulttext', selectedlanguage.value))
+const copylink = ref('')
+const tooltip = ref('')
+//const standalone = ref(false)
 
 onMounted(async () => {
   const response = await fetchData()
@@ -24,6 +36,36 @@ onMounted(async () => {
   console.log(data.value)
   languages.value = languageList(data.value)
   types.value = typeList(data.value)
+  if (!_.isEmpty(route.query)) {
+    let q = route.query
+    if (checkQuery(q.language)) {
+      selectedlanguage.value = q.language
+    }
+    if (checkQuery(q.type)) {
+      selectedtype.value = q.type
+    }
+    if (checkQuery(q.department)) {
+      selecteddepartment.value = q.department
+    }
+    if (checkQuery(q.department_search)) {
+      departmentsearch.value = q.department_search
+    }
+    if (checkQuery(q.hide_department)) {
+      hidedepartment.value = q.hide_department
+    }
+    if (checkQuery(q.noresulttext)) {
+      noresulttext.value = decodeURIComponent(q.noresulttext)
+    }
+    if (checkQuery(q.standalone)) {
+      standalone.state = JSON.parse(q.standalone)
+    } else {
+      standalone.state = false
+    }
+  } else {
+    standalone.state = false
+  }
+
+  Fancybox.bind('[data-fancybox]', {})
 })
 
 const filtered = computed(() => {
@@ -47,99 +89,166 @@ const filtered = computed(() => {
       return o.Department.toLowerCase().includes(searchkey)
     })
   }
+  if (selecteddepartment.value.length) {
+    jobs = jobs.filter((o) => {
+      return o.Department.toLowerCase() === selecteddepartment.value.toLowerCase()
+    })
+  }
   let departments = departmentList(jobs, selectedtype.value)
+  let count = jobs.length
+  return { jobs: jobs, departments: departments, count: count }
+})
 
-  return { jobs: jobs, departments: departments }
-})
-const departments = computed(() => {
-  let d = departmentList(data.value, selectedtype.value)
-  return d
-})
+watch(
+  [
+    selectedlanguage,
+    selectedtype,
+    departmentsearch,
+    selecteddepartment,
+    hidedepartment,
+    standalone
+  ],
+  () => {
+    let query = {}
+    if (selectedlanguage.value.length) {
+      query.language = selectedlanguage.value
+      noresulttext.value = getTranslation('noresulttext', selectedlanguage.value)
+      // query.noresulttext = encodeURIComponent(noresulttext.value)
+    }
+    if (selectedtype.value.length) {
+      query.type = selectedtype.value
+    }
+    if (departmentsearch.value.length) {
+      query.department_search = departmentsearch.value
+    }
+    if (selecteddepartment.value.length) {
+      query.department = selecteddepartment.value
+    }
+    if (hidedepartment.value) {
+      query.hide_department = hidedepartment.value
+    }
+    if (standalone.state) {
+      query.standalone = JSON.parse(standalone.state)
+    }
+    router.replace({
+      path: '/',
+      query: query
+    })
+    copylink.value = window.location.origin + '/' + makeUrlParams(query)
+  }
+)
+
+function makeUrlParams(object) {
+  let out = []
+  for (const key in object) {
+    const value = object[key]
+    out.push(`${key}=${value}`)
+  }
+  return out.length ? `?${out.join('&')}&standalone=true` : ''
+}
+
+function copyLinkToClipord() {
+  navigator.clipboard.writeText(copylink.value)
+  tooltip.value = copylink.value
+}
 </script>
 
 <template>
   <div class="app">
-    <div class="builder-test">
+    <div
+      class="configuration-panel"
+      :class="{ configurator: !standalone.state }"
+      v-if="!standalone.state"
+    >
+      <h1>Konfiguration</h1>
       <form>
-        <div class="form-group language-selection">
-          <label for="languages">Sprache</label>
-          <select id="languages" name="languages" v-model="selectedlanguage">
-            <option value="">alle</option>
-            <option v-for="l in languages" :key="l" :value="l.value">
-              {{ l.title }} ({{ l.count }})
-            </option>
-          </select>
-          <!-- <span class="selected"> {{ selectedlanguage }}</span> -->
-        </div>
-        <div class="form-group type-selection" v-if="types.length">
-          <label for="types">Typ</label>
-          <select id="types" name="types" v-model="selectedtype">
-            <option value="">Alle</option>
-            <option v-for="(type, index) in types" :key="index">{{ type }}</option>
-          </select>
-          {{ selectedtype }}
-        </div>
-        <div class="form-group department-selection">
-          <div class="search">
-            <label for="departments-search">Suchen</label>
-            <input type="text" id="departments-search" v-model="departmentsearch" />
+        <div class="form-row selection-row">
+          <div class="form-group language-selection">
+            <label for="languages">Sprache</label>
+            <span class="instruction" v-if="!selectedlanguage">Bitte Sprache auswählen</span>
+            <select id="languages" name="languages" v-model="selectedlanguage">
+              <option value="">alle</option>
+              <option v-for="l in languages" :key="l" :value="l.value">
+                {{ l.title }} ({{ l.count }})
+              </option>
+            </select>
           </div>
-          <label for="departments">Amt</label>
-          <select id="departments" name="departments">
-            <option value="">Alle</option>
-            <option v-for="(department, index) in filtered.departments" :key="index">
-              {{ department.title }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group copy-link">
-          <!--  v-if="copylink" -->
-          <div class="hide-department-checkbox">
-            <input type="checkbox" id="hide-department" name="hide-department" /><label
-              for="hide-department"
-              >Amt nicht anzeigen</label
-            >
+          <div class="form-group type-selection" v-if="types.length && selectedlanguage">
+            <label for="types">Typ</label>
+            <select id="types" name="types" v-model="selectedtype">
+              <option value="">Alle</option>
+              <option v-for="(type, index) in types" :key="index">{{ type }}</option>
+            </select>
           </div>
-          <input type="text" id="copy-link-input" name="copy-link-input" />
-          <button type="button" id="copy-link" class="button">Link kopieren</button>
-          <span class="button link-button"><a target="_blank">Vorschau</a></span>
+          <div class="form-group department-selection" v-if="selectedlanguage">
+            <div class="search">
+              <label for="departments-search">Suchen</label>
+              <input type="text" id="departments-search" v-model="departmentsearch" />
+            </div>
+            <div class="selection">
+              <label for="departments">Amt</label>
+              <select id="departments" name="departments" v-model="selecteddepartment">
+                <option value="">Alle</option>
+                <option v-for="(department, index) in filtered.departments" :key="index">
+                  {{ department.title }}
+                </option>
+              </select>
+            </div>
+          </div>
         </div>
-
-        <div class="form-group tooltip"><em></em> <span>in die Zwischenablage kopiert!</span></div>
-
-        <div class="form-group no-result-text">
-          <label for="no-result-text" class="no-result-text-label">Kein Resultat-Text</label>
-          <div class="text-output">v-html="noresulttext"</div>
-          <div class="instructions">
-            <span class="alert"
-              >Bitte den "Kein Resultat-Text" erst am Schluss vor dem Kopieren des Links
-              anpassen!</span
-            >
-            <span class="toggle-button"><button class="button">Text bearbeiten</button></span>
+        <div class="form-row">
+          <div class="form-group copy-link" v-if="copylink">
+            <!--   -->
+            <div class="hide-department-checkbox">
+              <input
+                type="checkbox"
+                id="hide-department"
+                name="hide-department"
+                v-model="hidedepartment"
+              /><label for="hide-department">Amt nicht anzeigen</label>
+            </div>
+            <input type="text" id="copy-link-input" name="copy-link-input" v-model="copylink" />
+            <button type="button" id="copy-link" class="button" @click="copyLinkToClipord">
+              Link kopieren
+            </button>
+            <span class="button link-button"><a :href="copylink" target="_blank">Vorschau</a></span>
           </div>
 
-          <textarea class="no-result-text-editor hidden" id="no-result-text"></textarea>
+          <div class="form-group tooltip" v-if="tooltip">
+            <em>{{ copylink }}</em> <span>in die Zwischenablage kopiert!</span>
+          </div>
+
+          <div class="form-group no-result-text">
+            <label for="no-result-text" class="no-result-text-label">Kein Resultat-Text</label>
+            <div class="text-output" v-html="noresulttext"></div>
+            <div class="instructions">
+              <span class="alert"
+                >Bitte den "Kein Resultat-Text" erst am Schluss vor dem Kopieren des Links
+                anpassen!</span
+              >
+              <span class="toggle-button"><button class="button">Text bearbeiten</button></span>
+            </div>
+
+            <textarea class="no-result-text-editor hidden" id="no-result-text"></textarea>
+          </div>
         </div>
       </form>
     </div>
-    <div class="standalone-app">
-      <div class="item-count">
-        <!--  v-if="count" -->
+    <div class="standalone-app" v-if="selectedlanguage">
+      <div class="item-count" v-if="filtered.count">
         <span v-html="getTranslation('open_jobs', selectedlanguage)"></span>
-        <span class="count"> {{ filtered.length }} </span>
+        <span class="count"> {{ filtered.jobs.length }} </span>
       </div>
-      <div class="no-result">
-        <!-- v-if="count == 0" -->
-        <!-- <div>v-html noresulttext</div> -->
+      <div class="no-result" v-if="filtered.count == 0">
+        <div v-html="noresulttext"></div>
       </div>
       <div class="responsive-table">
-        <table class="job-list" v-if="filtered.jobs.length">
+        <table class="job-list" v-if="filtered.count">
           <thead>
             <tr>
               <th v-html="getTranslation('jobtitle', selectedlanguage)"></th>
               <th
-                v-if="hidedepartment"
+                v-if="!hidedepartment"
                 v-html="getTranslation('department', selectedlanguage, 'Amt')"
               ></th>
               <th v-html="getTranslation('application_due', selectedlanguage, 'Anmeldefrist')"></th>
@@ -151,7 +260,7 @@ const departments = computed(() => {
                 <span v-html="applicationLink(item.AdLink, item.Title)"></span>
                 <!-- <span class="icon icon-apprentice">v-if="item.businessUnitId =='lehrstelle'"</span> -->
               </td>
-              <td v-if="hidedepartment" v-html="item.Department"></td>
+              <td v-if="!hidedepartment" v-html="item.Department"></td>
               <td v-html="date(item.pubEndDate)"></td>
             </tr>
           </tbody>

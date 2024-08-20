@@ -1,16 +1,17 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterView, useRoute } from 'vue-router'
+
 import GrFooter from './components/GrFooter.vue'
 import GrHeader from './components/GrHeader.vue'
+import { standalone } from './stores/standalone'
 </script>
 
 <template>
   <div class="page-container">
-    <GrHeader />
+    <GrHeader :configurator="standalone.state" />
     <div class="container">
       <RouterView />
     </div>
-    <gr-footer />
+    <gr-footer :configurator="standalone.state" />
   </div>
 </template>

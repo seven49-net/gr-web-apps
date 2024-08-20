@@ -1,5 +1,5 @@
 <template>
-  <header class="builder">
+  <header class="header" :class="{ configurator: !configurator }">
     <div class="branding">
       <span class="logo"
         ><img
@@ -9,3 +9,10 @@
     </div>
   </header>
 </template>
+<script setup>
+defineProps({
+  configurator: {
+    default: () => false
+  }
+})
+</script>

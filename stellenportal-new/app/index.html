@@ -5,9 +5,33 @@
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stellenportal App</title>
+    <script>
+      (function() {
+        var _query = location.search;
+        var _qs = {};
+
+        if (_query.length) {
+          var _qsarr = _query.replace(/\?/gmi, "").split("&");
+
+          _qsarr.forEach(function(val) {
+            var i = val.split("=");
+            _qs[i[0]] = i[1];
+          });
+        }
+
+        document.addEventListener("DOMContentLoaded", function(event) {
+          var body = document.getElementsByTagName("body")[0];
+          for (var key in _qs) {
+              if (_qs.hasOwnProperty(key)) {
+                body.setAttribute("data-" + key, _qs[key]);
+            }
+          }
+        });
+      })();
+    </script>
   </head>
   <body>
-    <div id="sp-app"></div>
+    <div id="sp-app" v-cloak></div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
