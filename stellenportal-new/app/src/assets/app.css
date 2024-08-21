@@ -5,7 +5,7 @@
   --light-gray: #e4e4e4;
   --form-row-flex-wrap: wrap;
   --selection-row-flex-wrap: wrap;
-  --instruction-color: #68b6ff;
+  --instruction-color: #ff6884;
 }
 @media (min-width: 820px) {
   :root {
@@ -137,14 +137,19 @@ footer {
 }
 .selection-row {
   flex-wrap: var(--selection-row-flex-wrap);
+  justify-content: space-between;
 }
+
 .form-group {
   flex-grow: 0;
   flex-shrink: 1;
 }
+.selection-row > .form-group {
+  flex-grow: 3;
+}
 .no-result-text {
   flex: 0 1 100%;
-  padding: 10px;
+  padding-block: 10px;
 }
 
 .no-result-text-editor {
@@ -170,11 +175,10 @@ footer {
 }
 .toggle-button {
   display: block;
-  margin-top: 0.25rem;
+  margin-top: 10px;
 }
 .instructions {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-block: 12px;
 }
 .instructions .alert {
   display: block;
@@ -195,29 +199,22 @@ footer {
   flex-flow: row var(--selection-row-flex-wrap);
   gap: 20px;
 }
-@media (min-width: 580px) {
-  /* .form-group.language-selection {
-    flex: 0 1 15%;
-  }
-  .form-group.type-selection {
-    flex: 0 1 20%;
-  }
-  .form-group.department-selection {
-    flex: 0 1 60%;
-  } */
+
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
 }
 
 label {
   display: block;
-  /* margin-right: 2rem; */
   font-size: 0.825rem;
 }
 .instruction {
   display: block;
   font-size: 0.825rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--instruction-color);
-  margin-blick: 10px;
+  margin-top: 10px;
 }
 select {
   display: inline-block;
@@ -226,7 +223,7 @@ select {
   font-weight: 700;
   color: #444;
   line-height: 1.3;
-  padding: 0.6rem 1.4rem 0.5rem 0.125rem;
+  padding: 0.6rem 1.8rem 0.5rem 0.125rem;
   width: auto;
   max-width: 100%;
   box-sizing: border-box;
@@ -396,14 +393,12 @@ input[type='text']:active {
   display: inline-block;
   vertical-align: middle;
 }
-/* .standalone-app {
+
+.standalone-app {
   padding-top: 20px;
-} */
-.build .standalone-app {
-  padding-top: 0;
 }
-[v-cloak] .standalone-app {
-  display: none;
+.has-configurator .standalone-app {
+  padding-top: 0;
 }
 
 .fancybox-slide--iframe .fancybox-content {
@@ -418,4 +413,7 @@ input[type='text']:active {
   display: inline-block;
   margin-left: 10px;
   font-size: 0.925rem;
+}
+.item-count .count {
+  margin-left: 5px;
 }

@@ -1,5 +1,7 @@
 <template>
-  <footer class="footer" :class="{ configurator: !configurator }">@2020 Kanton Graubünden</footer>
+  <footer class="footer" :class="{ configurator: !configurator }">
+    @ {{ date }} Kanton Graubünden
+  </footer>
 </template>
 <script setup>
 defineProps({
@@ -7,4 +9,5 @@ defineProps({
     default: () => false
   }
 })
+const date = new Date().getFullYear()
 </script>

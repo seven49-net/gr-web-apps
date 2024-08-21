@@ -25,9 +25,11 @@ const departmentsearch = ref('')
 const selecteddepartment = ref('')
 const route = useRoute()
 const router = useRouter()
-const noresulttext = ref(getTranslation('noresulttext', selectedlanguage.value))
+const noresulttext = ref('')
 const copylink = ref('')
 const tooltip = ref('')
+const showEditor = ref(0)
+const customtext = ref('')
 //const standalone = ref(false)
 
 onMounted(async () => {
@@ -99,44 +101,54 @@ const filtered = computed(() => {
   return { jobs: jobs, departments: departments, count: count }
 })
 
-watch(
-  [
-    selectedlanguage,
-    selectedtype,
-    departmentsearch,
-    selecteddepartment,
-    hidedepartment,
-    standalone
-  ],
-  () => {
-    let query = {}
-    if (selectedlanguage.value.length) {
-      query.language = selectedlanguage.value
-      noresulttext.value = getTranslation('noresulttext', selectedlanguage.value)
-      // query.noresulttext = encodeURIComponent(noresulttext.value)
+function toggleEditor() {
+  showEditor.value = !showEditor.value
+}
+if (!standalone.state) {
+  watch(
+    [
+      selectedlanguage,
+      selectedtype,
+      departmentsearch,
+      selecteddepartment,
+      hidedepartment,
+      standalone,
+      noresulttext
+    ],
+    () => {
+      let query = {}
+      if (selectedlanguage.value.length) {
+        query.language = selectedlanguage.value
+        //noresulttext.value = getTranslation('noresulttext', selectedlanguage.value)
+        // query.noresulttext = encodeURIComponent(noresulttext.value)
+      }
+      if (selectedtype.value.length) {
+        query.type = selectedtype.value
+      }
+      if (departmentsearch.value.length) {
+        query.department_search = departmentsearch.value
+      }
+      if (selecteddepartment.value.length) {
+        query.department = selecteddepartment.value
+      }
+      if (hidedepartment.value) {
+        query.hide_department = hidedepartment.value
+      }
+      if (noresulttext.value) {
+        query.noresulttext = encodeURIComponent(noresulttext.value)
+      }
+      if (standalone.state) {
+        query.standalone = standalone.state
+      }
+      tooltip.value = ''
+      router.replace({
+        path: '/',
+        query: query
+      })
+      copylink.value = window.location.origin + '/' + makeUrlParams(query)
     }
-    if (selectedtype.value.length) {
-      query.type = selectedtype.value
-    }
-    if (departmentsearch.value.length) {
-      query.department_search = departmentsearch.value
-    }
-    if (selecteddepartment.value.length) {
-      query.department = selecteddepartment.value
-    }
-    if (hidedepartment.value) {
-      query.hide_department = hidedepartment.value
-    }
-    if (standalone.state) {
-      query.standalone = JSON.parse(standalone.state)
-    }
-    router.replace({
-      path: '/',
-      query: query
-    })
-    copylink.value = window.location.origin + '/' + makeUrlParams(query)
-  }
-)
+  )
+}
 
 function makeUrlParams(object) {
   let out = []
@@ -151,10 +163,14 @@ function copyLinkToClipord() {
   navigator.clipboard.writeText(copylink.value)
   tooltip.value = copylink.value
 }
+
+function changeNoResultText() {
+  noresulttext.value = getTranslation('noresulttext', selectedlanguage.value)
+}
 </script>
 
 <template>
-  <div class="app">
+  <div class="app" :class="{ 'has-configurator': !standalone.state }">
     <div
       class="configuration-panel"
       :class="{ configurator: !standalone.state }"
@@ -165,13 +181,19 @@ function copyLinkToClipord() {
         <div class="form-row selection-row">
           <div class="form-group language-selection">
             <label for="languages">Sprache</label>
-            <span class="instruction" v-if="!selectedlanguage">Bitte Sprache auswählen</span>
-            <select id="languages" name="languages" v-model="selectedlanguage">
+
+            <select
+              id="languages"
+              name="languages"
+              v-model="selectedlanguage"
+              v-on:change="changeNoResultText"
+            >
               <option value="">alle</option>
               <option v-for="l in languages" :key="l" :value="l.value">
                 {{ l.title }} ({{ l.count }})
               </option>
             </select>
+            <span class="instruction" v-if="!selectedlanguage">Bitte Sprache auswählen</span>
           </div>
           <div class="form-group type-selection" v-if="types.length && selectedlanguage">
             <label for="types">Typ</label>
@@ -196,9 +218,8 @@ function copyLinkToClipord() {
             </div>
           </div>
         </div>
-        <div class="form-row">
+        <div class="form-row" v-if="selectedlanguage">
           <div class="form-group copy-link" v-if="copylink">
-            <!--   -->
             <div class="hide-department-checkbox">
               <input
                 type="checkbox"
@@ -226,10 +247,19 @@ function copyLinkToClipord() {
                 >Bitte den "Kein Resultat-Text" erst am Schluss vor dem Kopieren des Links
                 anpassen!</span
               >
-              <span class="toggle-button"><button class="button">Text bearbeiten</button></span>
+              <span class="toggle-button"
+                ><button class="button" @click.prevent="toggleEditor()">
+                  Text bearbeiten
+                </button></span
+              >
             </div>
 
-            <textarea class="no-result-text-editor hidden" id="no-result-text"></textarea>
+            <textarea
+              class="no-result-text-editor"
+              id="no-result-text"
+              v-if="showEditor"
+              v-model="noresulttext"
+            ></textarea>
           </div>
         </div>
       </form>
