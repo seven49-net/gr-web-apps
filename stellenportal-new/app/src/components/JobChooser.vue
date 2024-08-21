@@ -104,50 +104,57 @@ const filtered = computed(() => {
 function toggleEditor() {
   showEditor.value = !showEditor.value
 }
-if (!standalone.state) {
-  watch(
-    [
-      selectedlanguage,
-      selectedtype,
-      departmentsearch,
-      selecteddepartment,
-      hidedepartment,
-      standalone,
-      noresulttext
-    ],
-    () => {
-      let query = {}
-      if (selectedlanguage.value.length) {
-        query.language = selectedlanguage.value
-        //noresulttext.value = getTranslation('noresulttext', selectedlanguage.value)
-        // query.noresulttext = encodeURIComponent(noresulttext.value)
-      }
-      if (selectedtype.value.length) {
-        query.type = selectedtype.value
-      }
-      if (departmentsearch.value.length) {
-        query.department_search = departmentsearch.value
-      }
-      if (selecteddepartment.value.length) {
-        query.department = selecteddepartment.value
-      }
-      if (hidedepartment.value) {
-        query.hide_department = hidedepartment.value
-      }
-      if (noresulttext.value) {
-        query.noresulttext = encodeURIComponent(noresulttext.value)
-      }
-      if (standalone.state) {
-        query.standalone = standalone.state
-      }
-      tooltip.value = ''
-      router.replace({
-        path: '/',
-        query: query
-      })
-      copylink.value = window.location.origin + '/' + makeUrlParams(query)
+
+watch(
+  [
+    selectedlanguage,
+    selectedtype,
+    departmentsearch,
+    selecteddepartment,
+    hidedepartment,
+    standalone,
+    noresulttext
+  ],
+  () => {
+    // console.log(standalone.state)
+    //if (standalone.state == false) {
+    let query = {}
+    if (selectedlanguage.value.length) {
+      query.language = selectedlanguage.value
+      //noresulttext.value = getTranslation('noresulttext', selectedlanguage.value)
+      // query.noresulttext = encodeURIComponent(noresulttext.value)
     }
-  )
+    if (selectedtype.value.length) {
+      query.type = selectedtype.value
+    }
+    if (departmentsearch.value.length) {
+      query.department_search = departmentsearch.value
+    }
+    if (selecteddepartment.value.length) {
+      query.department = selecteddepartment.value
+    }
+    if (hidedepartment.value) {
+      query.hide_department = hidedepartment.value
+    }
+    if (noresulttext.value) {
+      query.noresulttext = encodeURIComponent(noresulttext.value)
+    }
+    if (standalone.state) {
+      query.standalone = standalone.state
+    }
+    tooltip.value = ''
+    router.replace({
+      path: '/',
+      query: query
+    })
+    copylink.value = baseUrl() + makeUrlParams(query)
+  }
+)
+
+function baseUrl() {
+  const url = location.href
+  let urlArr = url.split('#/')
+  return urlArr[0] + '#/'
 }
 
 function makeUrlParams(object) {
@@ -165,7 +172,17 @@ function copyLinkToClipord() {
 }
 
 function changeNoResultText() {
-  noresulttext.value = getTranslation('noresulttext', selectedlanguage.value)
+  noresulttext.value = ''
+  selectedtype.value = ''
+  selecteddepartment.value = ''
+  departmentsearch.value = ''
+  noresulttext.value = ''
+  hidedepartment.value = false
+
+  showEditor.value = 0
+  if (selectedlanguage.value !== '') {
+    noresulttext.value = getTranslation('noresulttext', selectedlanguage.value)
+  }
 }
 </script>
 
@@ -219,7 +236,7 @@ function changeNoResultText() {
           </div>
         </div>
         <div class="form-row" v-if="selectedlanguage">
-          <div class="form-group copy-link" v-if="copylink">
+          <div class="form-group copy-link">
             <div class="hide-department-checkbox">
               <input
                 type="checkbox"
@@ -243,10 +260,10 @@ function changeNoResultText() {
             <label for="no-result-text" class="no-result-text-label">Kein Resultat-Text</label>
             <div class="text-output" v-html="noresulttext"></div>
             <div class="instructions">
-              <span class="alert"
+              <!-- <span class="alert"
                 >Bitte den "Kein Resultat-Text" erst am Schluss vor dem Kopieren des Links
                 anpassen!</span
-              >
+              > -->
               <span class="toggle-button"
                 ><button class="button" @click.prevent="toggleEditor()">
                   Text bearbeiten

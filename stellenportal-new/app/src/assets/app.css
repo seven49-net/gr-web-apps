@@ -2,7 +2,7 @@
   --primary-color: #0069b4;
   --secondary-color: #e6f0f8;
   --gray: #c4c4c4;
-  --light-gray: #e4e4e4;
+  --light-gray: #fff;
   --form-row-flex-wrap: wrap;
   --selection-row-flex-wrap: wrap;
   --instruction-color: #ff6884;
@@ -135,6 +135,10 @@ footer {
   gap: 20px;
   margin-block: 20px;
 }
+.form-row:last-child {
+  margin-bottom: 0;
+}
+
 .selection-row {
   flex-wrap: var(--selection-row-flex-wrap);
   justify-content: space-between;
@@ -416,4 +420,10 @@ input[type='text']:active {
 }
 .item-count .count {
   margin-left: 5px;
+}
+
+.configuration-panel {
+  background: var(--secondary-color);
+  padding: 10px;
+  margin-block: 20px;
 }
