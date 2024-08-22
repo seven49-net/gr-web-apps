@@ -12,7 +12,8 @@ import {
   languageList,
   typeList,
   departmentList,
-  checkQuery
+  checkQuery,
+  attributesToObject
 } from './api.js'
 import { standalone } from '../stores/standalone'
 const data = ref([])
@@ -30,7 +31,13 @@ const copylink = ref('')
 const tooltip = ref('')
 const showEditor = ref(0)
 const customtext = ref('')
-//const standalone = ref(false)
+
+// EmbedExternalContent
+const embedded = document
+  .querySelector('#sp-app')
+  .parentNode.classList.contains('EmbedExternalContent')
+  ? true
+  : false
 
 onMounted(async () => {
   const response = await fetchData()
@@ -38,33 +45,17 @@ onMounted(async () => {
   console.log(data.value)
   languages.value = languageList(data.value)
   types.value = typeList(data.value)
+  console.log(embedded)
+
   if (!_.isEmpty(route.query)) {
     let q = route.query
-    if (checkQuery(q.language)) {
-      selectedlanguage.value = q.language
-    }
-    if (checkQuery(q.type)) {
-      selectedtype.value = q.type
-    }
-    if (checkQuery(q.department)) {
-      selecteddepartment.value = q.department
-    }
-    if (checkQuery(q.department_search)) {
-      departmentsearch.value = q.department_search
-    }
-    if (checkQuery(q.hide_department)) {
-      hidedepartment.value = q.hide_department
-    }
-    if (checkQuery(q.noresulttext)) {
-      noresulttext.value = decodeURIComponent(q.noresulttext)
-    }
-    if (checkQuery(q.standalone)) {
-      standalone.state = JSON.parse(q.standalone)
-    } else {
-      standalone.state = false
-    }
+    checkQueryOrAttributes(q, false)
   } else {
     standalone.state = false
+  }
+  if (embedded) {
+    let q = attributesToObject()
+    checkQueryOrAttributes(q, true)
   }
 
   Fancybox.bind('[data-fancybox]', {})
@@ -151,6 +142,32 @@ watch(
   }
 )
 
+function checkQueryOrAttributes(q, s) {
+  if (checkQuery(q.language)) {
+    selectedlanguage.value = decodeURIComponent(q.language)
+  }
+  if (checkQuery(q.type)) {
+    selectedtype.value = decodeURIComponent(q.type)
+  }
+  if (checkQuery(q.department)) {
+    selecteddepartment.value = decodeURIComponent(q.department)
+  }
+  if (checkQuery(q.department_search)) {
+    departmentsearch.value = decodeURIComponent(q.department_search)
+  }
+  if (checkQuery(q.hide_department)) {
+    hidedepartment.value = decodeURIComponent(q.hide_department)
+  }
+  if (checkQuery(q.noresulttext)) {
+    noresulttext.value = decodeURIComponent(q.noresulttext)
+  }
+  if (checkQuery(q.standalone)) {
+    standalone.state = JSON.parse(q.standalone)
+  } else {
+    standalone.state = s
+  }
+}
+
 function baseUrl() {
   const url = location.href
   let urlArr = url.split('#/')
@@ -161,7 +178,7 @@ function makeUrlParams(object) {
   let out = []
   for (const key in object) {
     const value = object[key]
-    out.push(`${key}=${value}`)
+    out.push(`${key}=${encodeURIComponent(value)}`)
   }
   return out.length ? `?${out.join('&')}&standalone=true` : ''
 }

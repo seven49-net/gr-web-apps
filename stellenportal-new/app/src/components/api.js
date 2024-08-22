@@ -120,6 +120,23 @@ function departmentList(objects, bi) {
   return out
 }
 
+function attributesToObject() {
+  const element = document.querySelector('#sp-app').parentNode
+  const attrs = element.getAttributeNames().reduce((acc, name) => {
+    return { ...acc, [name]: element.getAttribute(name) }
+  }, {})
+
+  const out = {}
+  for (const property in attrs) {
+    console.log(`${property}: ${attrs[property]}`)
+    if (property.indexOf('data-') == 0) {
+      out[property.replace('data-', '')] = attrs[property]
+    }
+  }
+  console.log('out', out)
+  return out
+}
+
 export {
   fetchData,
   applicationLink,
@@ -128,5 +145,6 @@ export {
   languageList,
   typeList,
   departmentList,
-  checkQuery
+  checkQuery,
+  attributesToObject
 }

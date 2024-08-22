@@ -8,6 +8,10 @@
     <script>
       (function() {
         var _query = location.search;
+        if (!_query && location.href.includes("#/?")) {
+          _query = location.href.split("#/?")[1]
+        }
+        console.log(_query)
         var _qs = {};
 
         if (_query.length) {
@@ -21,9 +25,11 @@
 
         document.addEventListener("DOMContentLoaded", function(event) {
           var body = document.getElementsByTagName("body")[0];
+           //var body = document.querySelector(".EmbedExternalContent");
+           console.log(body)
           for (var key in _qs) {
               if (_qs.hasOwnProperty(key)) {
-                body.setAttribute("data-" + key, _qs[key]);
+                body.setAttribute("data-" + key, encodeURIComponent(_qs[key]));
             }
           }
         });
@@ -31,7 +37,9 @@
     </script>
   </head>
   <body>
-    <div id="sp-app"></div>
+      <div class="EmbedExternalContent-test">
+          <div id="sp-app"></div>
+      </div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
