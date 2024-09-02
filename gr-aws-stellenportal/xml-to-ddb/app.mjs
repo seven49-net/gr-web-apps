@@ -22,7 +22,7 @@ import {
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
-const tableName = "dev-StellenPortal";
+const tableName = "StellenPortal";
 
 const parseOptions = {
   ignoreAttributes: false,

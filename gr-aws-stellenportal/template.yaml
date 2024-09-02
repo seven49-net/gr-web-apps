@@ -33,7 +33,7 @@ Resources:
         - DynamoDBCrudPolicy:
             # Region: Ireland eu-west-1
             AWS::Region: "eu-west-1"
-            TableName: "dev-StellenPortal"
+            TableName: "StellenPortal"
         - S3FullAccessPolicy:
             # EU: Zürich eu-central-2
             AWS::Region: "eu-west-1"
