@@ -315,6 +315,7 @@ function changeNoResultText() {
                 v-if="!hidedepartment"
                 v-html="getTranslation('department', selectedlanguage, 'Amt')"
               ></th>
+              <th>Arbeitsort</th>
               <th v-html="getTranslation('application_due', selectedlanguage, 'Anmeldefrist')"></th>
             </tr>
           </thead>
@@ -325,6 +326,7 @@ function changeNoResultText() {
                 <!-- <span class="icon icon-apprentice">v-if="item.businessUnitId =='lehrstelle'"</span> -->
               </td>
               <td v-if="!hidedepartment" v-html="item.Department"></td>
+              <td class="workplace">{{ item.workplace }}</td>
               <td v-html="date(item.pubEndDate)"></td>
             </tr>
           </tbody>
