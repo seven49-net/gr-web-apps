@@ -63,6 +63,11 @@
                 </select>
               </div>
               <div class="form-group department-selection" v-if="departments.length > 0">
+                  <div class="search">
+                      <label for="departments-search">Suchen</label>
+                      <input type="text" id="departments-search" :v-model="departmentssearch" />
+                      <span>{{departmentssearch}}   </span>
+                  </div>
                 <label for="departments">Amt</label>
                 <select id="departments" name="departments" @change="changeDepartment($event)">
                   <option value="">Alle</option>
@@ -107,15 +112,15 @@
                 <thead>
                   <tr>
                     <th v-html="getTranslation('jobtitle', selectedlanguage)"></th>
-                    <th v-if="hidedepartment == 'false'" v-html="getTranslation('department', selectedlanguage)">Amt</th>
-                    <th v-html="getTranslation('application_due', selectedlanguage)">Anmeldefrist</th>
+                    <th v-if="hidedepartment == 'false'" v-html="getTranslation('department', selectedlanguage, 'Amt')"></th>
+                    <th v-html="getTranslation('application_due', selectedlanguage, 'Anmeldefrist')"></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr class="job" v-for="item in data">
                     <td><span v-html="applicationLink(item.AdLink, item.Title)"></span> <span v-if="item.businessUnitId =='lehrstelle'" class="icon icon-apprentice"></span></td>
                     <td v-if="hidedepartment == 'false'" v-html="item.Department"></td>
-                    <td>{{ item.pubEndDate|date }}</td>
+                    <td>{{ date(item.pubEndDate) }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -129,9 +134,8 @@
   </div>
 
   <script src="./vendor/fancybox/fancybox.umd.js"></script>
-  <!-- <script src="./vendor/axios.min.js"></script> -->
-  <script src="./vendor/vue.js"></script>
-  <script src="./js/app.js"></script>
+  <script src="./vendor/vue.global.js"></script>
+  <script src="./js/app-dev.js"></script>
 
 </body>
 

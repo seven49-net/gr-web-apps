@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  gr-aws-stellenportal
+  read https://pub.refline.ch/514915/internet-browser.xml and write/update dynamodb
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 30
+    LoggingConfig:
+      LogFormat: JSON
+
+Resources:
+  XmlToDynamoDbFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: xml-to-ddb
+      CodeUri: xml-to-ddb/
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Events:
+        XmlToDynamoDb:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /xml
+            Method: get
+      Policies:
+        # Give Lambda basic execution Permission to the helloFromLambda
+        - AWSLambdaBasicExecutionRole
+        - DynamoDBCrudPolicy:
+            # Region: Ireland eu-west-1
+            AWS::Region: "eu-west-1"
+            TableName: "dev-StellenPortal"
+        - S3FullAccessPolicy:
+            # EU: Zürich eu-central-2
+            AWS::Region: "eu-west-1"
+            BucketName: "aws-deployment.gr.ch"
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  XmlToDynamoDbApi:
+    Description: "API Gateway endpoint URL for Prod stage for xml-to-ddb function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/xml-to-ddb/"
+  XmlToDynamoDbFunction:
+    Description: "xml-to-ddb Lambda Function ARN"
+    Value: !GetAtt XmlToDynamoDbFunction.Arn
+  XmlToDynamoDbFunctionIamRole:
+    Description: "Implicit IAM Role created for xml-to-ddb function"
+    Value: !GetAtt XmlToDynamoDbFunctionRole.Arn

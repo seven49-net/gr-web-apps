@@ -1,9 +1,7 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import JobChooser from '../components/JobChooser.vue'
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <JobChooser />
 </template>
