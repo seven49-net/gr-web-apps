@@ -152,8 +152,8 @@ async function putItem(obj) {
   const command = new PutCommand(params);
   const response = await docClient.send(command);
   // console.log(response);
-
-  if (JSON.stringify(response).includes(":200,")) {
+  // JSON.stringify(response).includes(":200,")
+  if (response["$metadata"]["httpStatusCode"] == 200) {
     return {
       statusCode: 200,
       body: obj.timestamp,
