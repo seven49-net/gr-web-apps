@@ -35,7 +35,7 @@ const customtext = ref('')
 // EmbedExternalContent
 const embedded = document
   .querySelector('#sp-app')
-  .parentNode.classList.contains('EmbedExternalContent')
+  .parentNode.parentNode.classList.contains('EmbedExternalContent')
   ? true
   : false
 
@@ -188,6 +188,12 @@ function copyLinkToClipord() {
   tooltip.value = copylink.value
 }
 
+function copySPLinkToClipboard() {
+  let link = copylink.value.replace(/#\//, '')
+  navigator.clipboard.writeText(link)
+  tooltip.value = link
+}
+
 function changeNoResultText() {
   noresulttext.value = ''
   selectedtype.value = ''
@@ -262,11 +268,18 @@ function changeNoResultText() {
                 v-model="hidedepartment"
               /><label for="hide-department">Amt nicht anzeigen</label>
             </div>
-            <input type="text" id="copy-link-input" name="copy-link-input" v-model="copylink" />
-            <button type="button" id="copy-link" class="button" @click="copyLinkToClipord">
-              Link kopieren
-            </button>
-            <span class="button link-button"><a :href="copylink" target="_blank">Vorschau</a></span>
+            <div class="input-button-wrapper">
+              <input type="text" id="copy-link-input" name="copy-link-input" v-model="copylink" />
+              <button type="button" id="copy-link" class="button" @click="copyLinkToClipord">
+                Link kopieren
+              </button>
+              <button type="button" id="sp-copy-link" class="button" @click="copySPLinkToClipboard">
+                WebPart Link kopieren)
+              </button>
+              <span class="button link-button"
+                ><a :href="copylink" target="_blank">Vorschau</a></span
+              >
+            </div>
           </div>
 
           <div class="form-group tooltip" v-if="tooltip">

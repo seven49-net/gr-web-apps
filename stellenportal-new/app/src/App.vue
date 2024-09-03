@@ -9,7 +9,7 @@ import { standalone } from './stores/standalone'
 <template>
   <div class="page-container">
     <GrHeader :configurator="standalone.state" />
-    <div class="container">
+    <div class="container" :class="{ standalone: standalone.state }">
       <RouterView />
     </div>
     <gr-footer :configurator="standalone.state" />
