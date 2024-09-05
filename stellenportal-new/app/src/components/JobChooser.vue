@@ -17,7 +17,7 @@ import {
 } from './api.js'
 import { standalone } from '../stores/standalone'
 const data = ref([])
-const hidedepartment = ref(false)
+const hidedepartment = ref(true)
 const selectedlanguage = ref('')
 const languages = ref([])
 const types = ref([])
@@ -46,6 +46,7 @@ onMounted(async () => {
   languages.value = languageList(data.value)
   types.value = typeList(data.value)
   console.log(embedded)
+  // hidedepartment.value = true
 
   if (!_.isEmpty(route.query)) {
     let q = route.query
@@ -124,15 +125,17 @@ watch(
     if (selecteddepartment.value.length) {
       query.department = selecteddepartment.value
     }
-    if (hidedepartment.value) {
-      query.hide_department = hidedepartment.value
-    }
+    query.show_department = hidedepartment.value
+    // if (hidedepartment.value) {
+
+    // }
     if (noresulttext.value) {
       query.noresulttext = encodeURIComponent(noresulttext.value)
     }
     if (standalone.state) {
       query.standalone = standalone.state
     }
+
     tooltip.value = ''
     router.replace({
       path: '/',
@@ -155,8 +158,8 @@ function checkQueryOrAttributes(q, s) {
   if (checkQuery(q.department_search)) {
     departmentsearch.value = decodeURIComponent(q.department_search)
   }
-  if (checkQuery(q.hide_department)) {
-    hidedepartment.value = decodeURIComponent(q.hide_department)
+  if (checkQuery(q.show_department)) {
+    hidedepartment.value = setBoolean(decodeURIComponent(q.show_department))
   }
   if (checkQuery(q.noresulttext)) {
     noresulttext.value = decodeURIComponent(q.noresulttext)
@@ -166,6 +169,13 @@ function checkQueryOrAttributes(q, s) {
   } else {
     standalone.state = s
   }
+}
+function setBoolean(str) {
+  let o = false
+  if (typeof str === 'string' && str.toLowerCase() === 'true') {
+    o = true
+  }
+  return o
 }
 
 function baseUrl() {
@@ -266,7 +276,7 @@ function changeNoResultText() {
                 id="hide-department"
                 name="hide-department"
                 v-model="hidedepartment"
-              /><label for="hide-department">Amt nicht anzeigen</label>
+              /><label for="hide-department">Amt anzeigen</label>
             </div>
             <div class="input-button-wrapper">
               <input type="text" id="copy-link-input" name="copy-link-input" v-model="copylink" />
@@ -325,10 +335,10 @@ function changeNoResultText() {
             <tr>
               <th v-html="getTranslation('jobtitle', selectedlanguage)"></th>
               <th
-                v-if="!hidedepartment"
+                v-if="hidedepartment"
                 v-html="getTranslation('department', selectedlanguage, 'Amt')"
               ></th>
-              <th>Arbeitsort</th>
+              <th v-html="getTranslation('workplace', selectedlanguage, 'Arbeitsort')"></th>
               <th v-html="getTranslation('application_due', selectedlanguage, 'Anmeldefrist')"></th>
             </tr>
           </thead>
@@ -338,7 +348,7 @@ function changeNoResultText() {
                 <span v-html="applicationLink(item.AdLink, item.Title)"></span>
                 <!-- <span class="icon icon-apprentice">v-if="item.businessUnitId =='lehrstelle'"</span> -->
               </td>
-              <td v-if="!hidedepartment" v-html="item.Department"></td>
+              <td v-if="hidedepartment" v-html="item.Department"></td>
               <td class="workplace">{{ item.workplace }}</td>
               <td v-html="date(item.pubEndDate)"></td>
             </tr>

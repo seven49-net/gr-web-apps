@@ -8,6 +8,7 @@ const translations = {
     application_due: 'Anmeldefrist',
     overview: 'Übersicht',
     open_jobs: 'Offene Stellen:',
+    workplace: 'Arbeitsort',
     noresulttext:
       "Derzeit sind keine offenen Stellen ausgeschrieben, weitere Stellen finden Sie unter <a href='https://www.gr.ch/stellen'>www.gr.ch/stellen</a>."
   },
@@ -17,6 +18,7 @@ const translations = {
     application_due: 'Termine di annuncio',
     overview: 'Panoramica impieghi',
     open_jobs: 'Posti vacanti:',
+    workplace: 'Luogo di lavoro',
     noresulttext:
       "Attualmente non sono pubblicati posti vacanti, altri posti vacanti si trovano su <a href='https://www.gr.ch/impieghi'>www.gr.ch/impieghi</a>."
   },
@@ -26,6 +28,7 @@ const translations = {
     application_due: "Termin d'annunzia",
     overview: 'Survista da las plazzas',
     open_jobs: 'Plazzas libras:',
+    workplace: 'Lieu da lavur',
     noresulttext:
       "Actualmain n'èn publitgadas naginas plazzas libras. Ulteriuras plazzas chattais Vus sut <a href='https://www.gr.ch/plazzas'>www.gr.ch/plazzas</a>."
   }
