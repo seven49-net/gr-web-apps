@@ -195,7 +195,7 @@ function makeUrlParams(object) {
   let out = []
   for (const key in object) {
     const value = object[key]
-    out.push(`${key}=${encodeURIComponent(value)}`)
+    out.push(`${key}=${value}`)
   }
   return out.length ? `?${out.join('&')}&standalone=true` : ''
 }
@@ -223,6 +223,10 @@ function changeNoResultText() {
   if (selectedlanguage.value !== '') {
     noresulttext.value = getTranslation('noresulttext', selectedlanguage.value)
   }
+}
+
+function embeddedUrl(str) {
+  return str.replace(/&#39;/g, "'")
 }
 </script>
 
@@ -334,7 +338,7 @@ function changeNoResultText() {
         <span class="count"> {{ filtered.jobs.length }} </span>
       </div>
       <div class="no-result" v-if="filtered.count == 0">
-        <div v-html="decodeURIComponent(noresulttext)"></div>
+        <div v-html="embeddedUrl(decodeURIComponent(noresulttext))"></div>
       </div>
       <div class="responsive-table">
         <table class="job-list" v-if="filtered.count">
