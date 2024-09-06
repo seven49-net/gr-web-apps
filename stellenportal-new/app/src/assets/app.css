@@ -82,6 +82,8 @@ footer {
 }
 .standalone.container {
   width: 100%;
+  display: block;
+  padding-inline: 0;
 }
 .embed .container {
   width: 100%;
@@ -333,8 +335,8 @@ input[type='text']:active {
 .input-button-wrapper input {
   flex-grow: 1;
 }
-.input-button-wrapper @media (min-width: 678px) {
-  input[type='text'] {
+@media (min-width: 678px) {
+  .input-button-wrapper input[type='text'] {
     font-size: 12px;
   }
 }
