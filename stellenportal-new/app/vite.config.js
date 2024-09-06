@@ -4,6 +4,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
+/*
 export default defineConfig(({ command, mode, ssrBuild }) => {
   if (command === 'serve') {
     return {
@@ -24,6 +25,17 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
           '@': fileURLToPath(new URL(',/src', import.meta.url))
         }
       }
+    }
+  }
+})
+*/
+
+export default defineConfig({
+  plugins: [vue()],
+  base: '/',
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   }
 })
