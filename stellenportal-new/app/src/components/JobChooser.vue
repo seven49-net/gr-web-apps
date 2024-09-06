@@ -327,7 +327,7 @@ function changeNoResultText() {
         <span class="count"> {{ filtered.jobs.length }} </span>
       </div>
       <div class="no-result" v-if="filtered.count == 0">
-        <div v-html="noresulttext"></div>
+        <div v-html="decodeURIComponent(noresulttext)"></div>
       </div>
       <div class="responsive-table">
         <table class="job-list" v-if="filtered.count">
