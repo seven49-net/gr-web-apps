@@ -226,7 +226,10 @@ function changeNoResultText() {
 }
 
 function embeddedUrl(str) {
-  return str.replace(/&#39;/g, "'")
+  // return str.replace(/&#39;/g, "'") &#34;
+  return str
+    .replace(/(href=&#39;)(.+)(&#39;)/g, `href='$2'`)
+    .replace(/(href=&#34;)(.+)(&#34;)/g, `href='$2'`)
 }
 </script>
 
