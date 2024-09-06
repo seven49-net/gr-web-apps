@@ -137,10 +137,17 @@ watch(
     }
 
     tooltip.value = ''
-    router.replace({
-      path: '/',
-      query: query
-    })
+    if (embedded) {
+      router.replace({
+        path: '/'
+      })
+    } else {
+      router.replace({
+        path: '/',
+        query: query
+      })
+    }
+
     copylink.value = baseUrl() + makeUrlParams(query)
   }
 )
