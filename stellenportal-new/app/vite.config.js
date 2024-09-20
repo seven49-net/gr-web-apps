@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import VitePluginEntryInject from 'vite-plugin-entry-inject'
 
 // https://vitejs.dev/config/
 /*
@@ -31,7 +32,13 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
 */
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    VitePluginEntryInject({
+      // head-prepend/head/body-prepend/body
+      injectTo: 'body'
+    })
+  ],
   base: '/',
   resolve: {
     alias: {
