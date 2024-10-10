@@ -2,7 +2,6 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-// import VitePluginEntryInject from 'vite-plugin-entry-inject'
 
 // https://vitejs.dev/config/
 /*
