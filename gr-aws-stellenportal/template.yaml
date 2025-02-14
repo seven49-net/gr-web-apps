@@ -18,7 +18,7 @@ Resources:
       FunctionName: xml-to-ddb
       CodeUri: xml-to-ddb/
       Handler: app.lambdaHandler
-      Runtime: nodejs20.x
+      Runtime: nodejs22.x
       Architectures:
         - x86_64
       Events:
