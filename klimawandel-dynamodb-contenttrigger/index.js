@@ -2,7 +2,7 @@ const aws = require("aws-sdk");
 // const util = require("util");
 
 aws.config.update({
-  region: "eu-west-1"
+  region: "eu-west-1",
 });
 
 const dynamo = new aws.DynamoDB();
@@ -34,11 +34,11 @@ exports.handler = async (event) => {
     const url = record.dynamodb.Keys.Url.S;
     const language = getLanguage(url);
     const modifiedOn = new Date();
-    let pagetitle = '';
+    let pagetitle = "";
     let keywords = null;
     let oldkeywords = null;
     let eventmode = "update";
-    let articledate = '';
+    let articledate = "";
     if (eventname == "REMOVE") eventmode = "delete";
     console.log(eventmode);
     if (eventmode == "update") {
@@ -46,18 +46,26 @@ exports.handler = async (event) => {
       articledate = getDate(record.dynamodb.NewImage);
       console.log(articledate);
       if (record.dynamodb.NewImage.hasOwnProperty("Keywords")) {
-        keywords = record.dynamodb.NewImage.hasOwnProperty("Keywords") ? record.dynamodb.NewImage.Keywords.S : null;
-        oldkeywords = record.dynamodb.hasOwnProperty("OldImage") && record.dynamodb.OldImage.hasOwnProperty("Keywords") ? record.dynamodb.OldImage.Keywords.S : null;
+        keywords = record.dynamodb.NewImage.hasOwnProperty("Keywords")
+          ? record.dynamodb.NewImage.Keywords.S
+          : null;
+        oldkeywords =
+          record.dynamodb.hasOwnProperty("OldImage") &&
+          record.dynamodb.OldImage.hasOwnProperty("Keywords")
+            ? record.dynamodb.OldImage.Keywords.S
+            : null;
       }
     }
     if (eventmode == "delete") {
       pagetitle = record.dynamodb.OldImage.Title.S;
       articledate = getDate(record.dynamodb.OldImage);
-      keywords = record.dynamodb.OldImage.hasOwnProperty("Keywords") ? record.dynamodb.OldImage.Keywords.S : null;
+      keywords = record.dynamodb.OldImage.hasOwnProperty("Keywords")
+        ? record.dynamodb.OldImage.Keywords.S
+        : null;
     }
     const tags = keywords ? getTags(keywords) : [];
     const oldtags = oldkeywords ? getTags(oldkeywords) : [];
-    const markForDeletion = oldtags.filter(ot =>{
+    const markForDeletion = oldtags.filter((ot) => {
       return keywords.indexOf(ot) == -1;
     });
     console.log(tags);
@@ -71,15 +79,15 @@ exports.handler = async (event) => {
         console.log(`handle ${tag}`);
         try {
           const getitem = await getItem({
-            "TableName": tagTable,
-            "Key": {
-              "name": {
-                "S": tag
+            TableName: tagTable,
+            Key: {
+              name: {
+                S: tag,
               },
-              "language": {
-                "S": language
-              }
-            }
+              language: {
+                S: language,
+              },
+            },
           });
           if (getitem.statusCode === 200) {
             // check if entry exist
@@ -90,7 +98,7 @@ exports.handler = async (event) => {
               let update4date = true; // => update article date
               //console.log("Pages:");
               //console.log(pages);
-              const filter = pages.filter(o => {
+              const filter = pages.filter((o) => {
                 return o.url == url;
               });
               if (eventmode == "update") {
@@ -99,49 +107,62 @@ exports.handler = async (event) => {
                   tempPages.push({
                     title: pagetitle,
                     url: url,
-                    published: articledate
+                    published: articledate,
                   });
                   console.log("Temp Pages");
                   console.log(tempPages);
-
                 } else {
-
-                  let fpos = pages.map(function (item) {
-                    return item.url;
-                  }).indexOf(url);
+                  let fpos = pages
+                    .map(function (item) {
+                      return item.url;
+                    })
+                    .indexOf(url);
                   console.log(fpos);
-                  let lpos = pages.map(function (item) {
-                    return item.url;
-                  }).lastIndexOf(url);
+                  let lpos = pages
+                    .map(function (item) {
+                      return item.url;
+                    })
+                    .lastIndexOf(url);
                   console.log(lpos);
                   if (fpos != lpos) {
-                    while (tempPages.map(function (item) {
-                        return item.url
-                      }).lastIndexOf(url) > fpos) {
-                      let p = tempPages.map(function (item) {
-                        return item.url
-                      }).lastIndexOf(url);
+                    while (
+                      tempPages
+                        .map(function (item) {
+                          return item.url;
+                        })
+                        .lastIndexOf(url) > fpos
+                    ) {
+                      let p = tempPages
+                        .map(function (item) {
+                          return item.url;
+                        })
+                        .lastIndexOf(url);
                       console.log(p);
                       tempPages.splice(p, 1);
                     }
                   }
 
-                  console.log(tempPages)
-                  console.log(tempPages[fpos])
+                  console.log(tempPages);
+                  console.log(tempPages[fpos]);
                   if (tempPages[fpos].title == pagetitle) {
                     update = false;
-                    console.log(`${tag} with  url: ${url} + title: ${pagetitle} is already in ${tagTable}`);
+                    console.log(
+                      `${tag} with  url: ${url} + title: ${pagetitle} is already in ${tagTable}`,
+                    );
                   } else {
-
                     tempPages[fpos].title = pagetitle;
                   }
-                  if (tempPages[fpos].hasOwnProperty("published") && tempPages[fpos].published == articledate) {
+                  if (
+                    tempPages[fpos].hasOwnProperty("published") &&
+                    tempPages[fpos].published == articledate
+                  ) {
                     update4date = false;
-                    console.log(`${tag} with  url: ${url} + published date: ${articledate} is already in ${tagTable}`);
+                    console.log(
+                      `${tag} with  url: ${url} + published date: ${articledate} is already in ${tagTable}`,
+                    );
                   } else {
                     tempPages[fpos].published = articledate;
                   }
-
                 }
                 if (update || update4date) {
                   // try catch
@@ -149,40 +170,42 @@ exports.handler = async (event) => {
                     const updateItem = await putItem({
                       TableName: tagTable,
                       Item: {
-                        "name": {
-                          "S": tag
+                        name: {
+                          S: tag,
                         },
-                        "language": {
-                          "S": language
+                        language: {
+                          S: language,
                         },
-                        "pages": {
-                          "S": JSON.stringify(tempPages)
+                        pages: {
+                          S: JSON.stringify(tempPages),
                         },
-                        "modifiedOn": {
-                          "S": modifiedOn.toISOString()
-                        }
-                      }
+                        modifiedOn: {
+                          S: modifiedOn.toISOString(),
+                        },
+                      },
                     });
-                    if (updateItem == "put item success") console.log(`update ${tag} success`);
+                    if (updateItem == "put item success")
+                      console.log(`update ${tag} success`);
                   } catch (error) {
                     console.log(`Error updating  ${tag}`);
                   }
                 }
-
               } else if (eventmode == "delete") {
                 console.log("if delete");
                 let del = false;
                 // console.log(tag, url);
-                let pos = pages.map(function (item) {
-                  return item.url;
-                }).indexOf(url);
+                let pos = pages
+                  .map(function (item) {
+                    return item.url;
+                  })
+                  .indexOf(url);
                 // console.log(tag, pos);
                 // console.log(tag, pages);
                 // console.log("filter", filter);
                 if (pages.length == 0) {
                   del = true;
                   // no other pages with this tag - delete item
-                  console.log("no other")
+                  console.log("no other");
                 } else if (filter.length == 1 && pages.length == 1) {
                   // it's the only page with this tag
                   del = true;
@@ -196,21 +219,22 @@ exports.handler = async (event) => {
                       const updateItemOnDelete = await putItem({
                         TableName: tagTable,
                         Item: {
-                          "name": {
-                            "S": tag
+                          name: {
+                            S: tag,
                           },
-                          "language": {
-                            "S": language
+                          language: {
+                            S: language,
                           },
-                          "pages": {
-                            "S": JSON.stringify(tempP)
+                          pages: {
+                            S: JSON.stringify(tempP),
                           },
-                          "modifiedOn": {
-                            "S": modifiedOn.toISOString()
-                          }
-                        }
+                          modifiedOn: {
+                            S: modifiedOn.toISOString(),
+                          },
+                        },
                       });
-                      if (updateItemOnDelete == "put item success") console.log(`update on delete ${tag} success`);
+                      if (updateItemOnDelete == "put item success")
+                        console.log(`update on delete ${tag} success`);
                     } catch (error) {
                       console.log(`Error updating on delete ${tag}`);
                     }
@@ -222,14 +246,14 @@ exports.handler = async (event) => {
 
                 // delete item
                 if (del) {
-                  console.log("delete", del)
+                  console.log("delete", del);
                   try {
                     const delItem = await deleteItem({
                       TableName: tagTable,
                       Key: {
-                        "name": tag,
-                        "language": language
-                      }
+                        name: tag,
+                        language: language,
+                      },
                     });
                     console.log(delItem.body);
                   } catch (error) {
@@ -245,22 +269,24 @@ exports.handler = async (event) => {
                 const newItem = await putItem({
                   TableName: tagTable,
                   Item: {
-                    "name": {
-                      "S": tag
+                    name: {
+                      S: tag,
                     },
-                    "language": {
-                      "S": language
+                    language: {
+                      S: language,
                     },
-                    "pages": {
-                      "S": JSON.stringify([{
-                        title: pagetitle,
-                        url: url
-                      }])
+                    pages: {
+                      S: JSON.stringify([
+                        {
+                          title: pagetitle,
+                          url: url,
+                        },
+                      ]),
                     },
-                    "modifiedOn": {
-                      "S": modifiedOn.toISOString()
-                    }
-                  }
+                    modifiedOn: {
+                      S: modifiedOn.toISOString(),
+                    },
+                  },
                 });
                 if (newItem == "put item success") console.log(`${tag} put success`);
               } catch (error) {
@@ -277,127 +303,128 @@ exports.handler = async (event) => {
         for (var dtag of markForDeletion) {
           console.log(`handle delete ${dtag}`);
           const getDitem = await getItem({
-            "TableName": tagTable,
-            "Key": {
-              "name": {
-                "S": dtag
+            TableName: tagTable,
+            Key: {
+              name: {
+                S: dtag,
               },
-              "language": {
-                "S": language
-              }
-            }
+              language: {
+                S: language,
+              },
+            },
           });
           if (getDitem.statusCode === 200) {
-
             if (getDitem.body.hasOwnProperty("Item")) {
               console.log(`there is such tag (${dtag}) in ${tagTable}`);
-                const dItem = getDitem.body.Item;
-                const dPages = dItem.hasOwnProperty("pages") ? JSON.parse(dItem.pages.S) : [];
-                let update = true;
-                let update4date = true; // => update article date
-                console.log("Pages:");
-                console.log(dPages);
-                const dFilter = dPages.filter(o => {
-                  return o.url == url;
-                 });
-                console.log(dFilter);
+              const dItem = getDitem.body.Item;
+              const dPages = dItem.hasOwnProperty("pages")
+                ? JSON.parse(dItem.pages.S)
+                : [];
+              let update = true;
+              let update4date = true; // => update article date
+              console.log("Pages:");
+              console.log(dPages);
+              const dFilter = dPages.filter((o) => {
+                return o.url == url;
+              });
+              console.log(dFilter);
 
-                // pasted in
-                console.log("if delete");
-                let del = false;
-                // console.log(tag, url);
-                let pos = dPages.map(function (item) {
+              // pasted in
+              console.log("if delete");
+              let del = false;
+              // console.log(tag, url);
+              let pos = dPages
+                .map(function (item) {
                   return item.url;
-                }).indexOf(url);
-                // console.log(tag, pos);
-                // console.log(tag, pages);
-                // console.log("filter", filter);
-                if (dPages.length == 0) {
-                  del = true;
-                  // no other pages with this tag - delete item
-                  console.log("no other")
-                } else if (dFilter.length == 1 && dPages.length == 1) {
-                  // it's the only page with this tag
-                  del = true;
-                } else if (dPages.length > 1) {
-                  let tempP = dPages;
-                  tempP.splice(pos, 1);
-                  //console.log(tag, tempP, tempP.length);
+                })
+                .indexOf(url);
+              // console.log(tag, pos);
+              // console.log(tag, pages);
+              // console.log("filter", filter);
+              if (dPages.length == 0) {
+                del = true;
+                // no other pages with this tag - delete item
+                console.log("no other");
+              } else if (dFilter.length == 1 && dPages.length == 1) {
+                // it's the only page with this tag
+                del = true;
+              } else if (dPages.length > 1) {
+                let tempP = dPages;
+                tempP.splice(pos, 1);
+                //console.log(tag, tempP, tempP.length);
 
-                  if (tempP.length >= 1) {
-                    try {
-                      const updateItemOnDelete2 = await putItem({
-                        TableName: tagTable,
-                        Item: {
-                          "name": {
-                            "S": dtag
-                          },
-                          "language": {
-                            "S": language
-                          },
-                          "pages": {
-                            "S": JSON.stringify(tempP)
-                          },
-                          "modifiedOn": {
-                            "S": modifiedOn.toISOString()
-                          }
-                        }
-                      });
-                      if (updateItemOnDelete2 == "put item success") console.log(`update on delete ${dtag} success`);
-                    } catch (error) {
-                      console.log(`Error updating on delete ${dtag}`);
-                    }
-                  } else {
-                    del = true;
-                    console.log("there was only one and now delete tag item");
-                  }
-                }
-
-                // delete item
-                if (del) {
-                  console.log("delete", del)
+                if (tempP.length >= 1) {
                   try {
-                    const delItem2 = await deleteItem({
+                    const updateItemOnDelete2 = await putItem({
                       TableName: tagTable,
-                      Key: {
-                        "name": dtag,
-                        "language": language
-                      }
+                      Item: {
+                        name: {
+                          S: dtag,
+                        },
+                        language: {
+                          S: language,
+                        },
+                        pages: {
+                          S: JSON.stringify(tempP),
+                        },
+                        modifiedOn: {
+                          S: modifiedOn.toISOString(),
+                        },
+                      },
                     });
-                    console.log(delItem2.body);
+                    if (updateItemOnDelete2 == "put item success")
+                      console.log(`update on delete ${dtag} success`);
                   } catch (error) {
-                    console.log(`Error deleting  ${dtag} from ${tagTable}`);
-                    console.log(error);
+                    console.log(`Error updating on delete ${dtag}`);
                   }
+                } else {
+                  del = true;
+                  console.log("there was only one and now delete tag item");
                 }
+              }
 
-                // end pasted in
+              // delete item
+              if (del) {
+                console.log("delete", del);
+                try {
+                  const delItem2 = await deleteItem({
+                    TableName: tagTable,
+                    Key: {
+                      name: dtag,
+                      language: language,
+                    },
+                  });
+                  console.log(delItem2.body);
+                } catch (error) {
+                  console.log(`Error deleting  ${dtag} from ${tagTable}`);
+                  console.log(error);
+                }
+              }
 
+              // end pasted in
             } else {
-
-              console.log(`there is no such tag (${dtag}) in ${tagTable}- so nothing to do`);
+              console.log(
+                `there is no such tag (${dtag}) in ${tagTable}- so nothing to do`,
+              );
             }
-
           } else {
             console.log(`Something went wrong`);
           }
-
         }
       }
     }
-
   }
   return `Successfully processed ${event.Records.length} records.`;
 };
 
 function getTags(tags) {
-  let patt = /#[0-9a-z-@]+/gmi;
+  let patt = /#[0-9a-z-@]+/gim;
   let tempTags = tags.match(patt);
   const tagsArray = [];
   if (tempTags && tempTags.length) {
     tempTags.forEach((tag) => {
       tag = tag.trim();
-      tagsArray.push(tag.replace('#', ''));
+      tagsArray.push(tag.replace("#", ""));
     });
   }
   //const keywordsArray = tempTags.indexOf(";") > -1 ? tempTags.split(";") : [tempTags];
@@ -407,8 +434,8 @@ function getTags(tags) {
 
 function getDate(obj) {
   let out = new Date(obj.Modified.S);
-  let temp = '';
-  if (obj.hasOwnProperty('ArticleDate')) {
+  let temp = "";
+  if (obj.hasOwnProperty("ArticleDate")) {
     temp = new Date(obj.ArticleDate.S);
     if (temp.getFullYear() > 1) out = temp;
   }
@@ -416,7 +443,6 @@ function getDate(obj) {
 }
 
 function setTableName(src) {
-
   const tagTableWWW = "gr_tags_www_gr_ch";
   const tagTableInt = "gr_tags_intwww_gr_ch";
   const tagTableClimate = "gr_tags_klimawandel_gr_ch";
@@ -441,7 +467,7 @@ function putItem(obj) {
         console.log("Error", err);
         reject({
           statusCode: statusCode,
-          body: responseText
+          body: responseText,
         });
       } else {
         statusCode = 200;
@@ -475,7 +501,7 @@ function getItem(obj) {
         console.log("Error", err);
         reject({
           statusCode: statusCode,
-          body: responseText
+          body: responseText,
         });
       } else {
         statusCode = 200;
@@ -483,7 +509,7 @@ function getItem(obj) {
         //console.log(data);
         resolve({
           statusCode: statusCode,
-          body: data
+          body: data,
         });
       }
     });
@@ -503,7 +529,7 @@ function deleteItem(obj) {
         console.log("Error", err);
         reject({
           statusCode: statusCode,
-          body: responseText
+          body: responseText,
         });
       } else {
         statusCode = 200;
@@ -511,7 +537,7 @@ function deleteItem(obj) {
         //console.log(data);
         resolve({
           statusCode: statusCode,
-          body: data
+          body: data,
         });
       }
     });
